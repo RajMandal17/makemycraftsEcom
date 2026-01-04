@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>How was your order?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .product-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .rating-stars {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .star {
+            font-size: 40px;
+            color: #ddd;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .star:hover {
+            color: #ffc107;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #f5576c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⭐ How was your order?</h1>
+        </div>
+        <div class="content">
+            <p>Hello <span th:text="${name}">Customer</span>,</p>
+            <p>We hope you're enjoying your recent purchase from MakeMyCrafts!</p>
+
+            <div class="product-box">
+                <h3>Your Order</h3>
+                <p><strong>Order ID:</strong> <span th:text="${orderId}">#12345</span></p>
+                <p><strong>Delivered on:</strong> <span th:text="${deliveredDate}">Dec 4, 2025</span></p>
+            </div>
+
+            <p style="text-align: center; font-size: 18px; margin: 30px 0;">
+                <strong>We'd love to hear your feedback!</strong>
+            </p>
+
+            <p style="text-align: center;">
+                Your review helps other customers make informed decisions and helps our artists improve their craft.
+            </p>
+
+            <p style="text-align: center; margin: 30px 0;">
+                <a th:href="${reviewUrl}" class="button">Write a Review</a>
+            </p>
+
+            <p style="text-align: center; font-size: 12px; color: #666;">
+                As a thank you, you'll earn loyalty points for each review you submit!
+            </p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 MakeMyCrafts. All rights reserved.</p>
+            <p>Need help? Contact us at <a href="mailto:mail@makemycrafts.com">mail@makemycrafts.com</a></p>
+        </div>
+    </div>
+</body>
+
+</html>

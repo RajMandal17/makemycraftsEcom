@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Price Drop Alert!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .price-alert {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 20px;
+        }
+
+        .new-price {
+            color: #28a745;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .savings {
+            color: #28a745;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .artwork-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Price Drop Alert!</h1>
+        </div>
+        <div class="content">
+            <p>Hello <span th:text="${name}">Customer</span>,</p>
+            <p>Great news! An item in your wishlist just got cheaper!</p>
+
+            <div class="artwork-box">
+                <h3><span th:text="${artworkTitle}">Artwork Title</span></h3>
+                <p>by <span th:text="${artistName}">Artist Name</span></p>
+            </div>
+
+            <div class="price-alert">
+                <p style="margin: 0;">Was: <span class="old-price">₹<span th:text="${oldPrice}">1000</span></span></p>
+                <p style="margin: 10px 0;">Now: <span class="new-price">₹<span th:text="${newPrice}">800</span></span>
+                </p>
+                <p style="margin: 0;" class="savings">You save ₹<span th:text="${savings}">200</span>!</p>
+            </div>
+
+            <p style="text-align: center;">
+                This price won't last forever. Grab it before it's gone!
+            </p>
+
+            <p style="text-align: center; margin: 30px 0;">
+                <a th:href="${artworkUrl}" class="button">Buy Now</a>
+            </p>
+
+            <p style="text-align: center; font-size: 12px; color: #666;">
+                You're receiving this because you added this item to your wishlist.
+            </p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 MakeMyCrafts. All rights reserved.</p>
+            <p><a th:href="${frontendUrl + '/dashboard/customer/wishlist'}">Manage Wishlist</a></p>
+        </div>
+    </div>
+</body>
+
+</html>

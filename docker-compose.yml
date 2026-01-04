@@ -1,0 +1,113 @@
+# ===========================================
+# DOCKER COMPOSE FOR LOCAL DEVELOPMENT
+# ===========================================
+# Run: docker-compose up -d
+# This starts MySQL, Redis and optionally the backend
+# ===========================================
+
+version: '3.8'
+
+services:
+  # MySQL Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: makemycrafts-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-localbackend}
+      MYSQL_USER: ${MYSQL_USER:-artwork_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-artwork_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - makemycrafts-network
+
+  # Redis Service
+  redis:
+    image: redis:7-alpine
+    container_name: makemycrafts-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - makemycrafts-network
+
+  # Backend Service (optional - for full local stack)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: makemycrafts-backend
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      # Database Configuration
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-localbackend}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=${MYSQL_USER:-artwork_user}
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD:-artwork_password}
+      # Redis Configuration
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_DATA_REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      # JWT Configuration
+      - JWT_SECRET=${JWT_SECRET:-CHANGE_ME_IN_PRODUCTION}
+      - JWT_EXPIRATION=3600000
+      - JWT_REFRESH_EXPIRATION=604800000
+      # Cloudinary Configuration
+      - CLOUDINARY_ENABLED=${CLOUDINARY_ENABLED:-false}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      # Gemini Configuration
+      - GEMINI_ENABLED=${GEMINI_ENABLED:-false}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      # Email Configuration
+      - SPRING_MAIL_HOST=${SPRING_MAIL_HOST:-smtpout.secureserver.net}
+      - SPRING_MAIL_PORT=${SPRING_MAIL_PORT:-587}
+      - SPRING_MAIL_USERNAME=${SPRING_MAIL_USERNAME:-mail@makemycrafts.com}
+      - SPRING_MAIL_PASSWORD=${SPRING_MAIL_PASSWORD}
+      - SPRING_MAIL_FROM=${SPRING_MAIL_FROM:-mail@makemycrafts.com}
+      # Razorpay Configuration
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET}
+      # Application URLs
+      - APP_BASE_URL=${APP_BASE_URL:-http://localhost:8081}
+      - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-http://localhost:3000}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - makemycrafts-network
+
+networks:
+  makemycrafts-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local

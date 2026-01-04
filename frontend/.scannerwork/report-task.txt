@@ -1,0 +1,6 @@
+projectKey=makemycrafts-frontend
+serverUrl=http://localhost:9000
+serverVersion=10.3.0.82913
+dashboardUrl=http://localhost:9000/dashboard?id=makemycrafts-frontend
+ceTaskId=AZtzD5cjn6VzEkPqWgo-
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AZtzD5cjn6VzEkPqWgo-

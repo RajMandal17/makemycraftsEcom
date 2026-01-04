@@ -1,0 +1,24 @@
+# MakeMyCrafts - Robots.txt
+# https://makemycrafts.com
+
+User-agent: *
+Allow: /
+
+# Allow all crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Disallow admin and dashboard areas from indexing
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+
+# Sitemap location
+Sitemap: https://makemycrafts.com/sitemap.xml
+
+# Crawl-delay (optional, be nice to the server)
+Crawl-delay: 1

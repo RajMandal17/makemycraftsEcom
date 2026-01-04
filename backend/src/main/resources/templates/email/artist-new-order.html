@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New Order Received!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .order-summary {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .artwork-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .artwork-item:last-child {
+            border-bottom: none;
+        }
+
+        .earnings-box {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .earnings-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 New Order Received!</h1>
+        </div>
+        <div class="content">
+            <p>Hello <span th:text="${artistName}">Artist</span>,</p>
+            <p>Great news! You have a new order for your artwork on MakeMyCrafts!</p>
+
+            <div class="order-summary">
+                <h3>Order Information</h3>
+                <p><strong>Order ID:</strong> <span th:text="${orderId}">#12345</span></p>
+                <p><strong>Order Date:</strong> <span th:text="${orderDate}">Dec 4, 2025</span></p>
+                <p><strong>Customer:</strong> <span th:text="${customerName}">John Doe</span></p>
+            </div>
+
+            <div class="order-summary">
+                <h3>Your Items in This Order</h3>
+                <div th:each="item : ${items}" class="artwork-item">
+                    <p><strong><span th:text="${item.title}">Artwork Title</span></strong></p>
+                    <p>Quantity: <span th:text="${item.quantity}">1</span> × ₹<span th:text="${item.price}">0.00</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="earnings-box">
+                <p style="margin: 0; font-size: 14px;">Your Earnings from This Order</p>
+                <div class="earnings-amount">₹<span th:text="${artistEarnings}">0.00</span></div>
+                <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">
+                    (After platform commission)
+                </p>
+            </div>
+
+            <p><strong>Next Steps:</strong></p>
+            <ul>
+                <li>Prepare your artwork for shipping</li>
+                <li>Update the order status once shipped</li>
+                <li>Add tracking information for the customer</li>
+            </ul>
+
+            <p style="text-align: center; margin: 30px 0;">
+                <a th:href="${orderUrl}" class="button">View Order Details</a>
+            </p>
+
+            <p>Thank you for being a valued artist on MakeMyCrafts!</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 MakeMyCrafts. All rights reserved.</p>
+            <p>Artist Support: <a href="mailto:mail@makemycrafts.com">mail@makemycrafts.com</a></p>
+        </div>
+    </div>
+</body>
+
+</html>

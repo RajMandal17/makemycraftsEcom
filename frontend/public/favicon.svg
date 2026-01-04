@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="paintGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    <filter id="dropShadow">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <style>
+    /* Dasharray needs to be long enough to cover the path length */
+    .draw-path { stroke-dasharray: 600; }
+    
+    @keyframes drawLeft {
+      0% { stroke-dashoffset: 600; }
+      45%, 100% { stroke-dashoffset: 0; }
+    }
+    @keyframes drawRight {
+      0%, 45% { stroke-dashoffset: 600; }
+      90%, 100% { stroke-dashoffset: 0; }
+    }
+    
+    @keyframes movePencil {
+      0% { transform: translate(110px, 400px) rotate(-10deg); opacity: 1; }
+      15% { transform: translate(110px, 120px) rotate(-10deg); }
+      30% { transform: translate(256px, 300px) rotate(-10deg); }
+      45% { transform: translate(256px, 300px) rotate(-10deg); opacity: 0; }
+      100% { transform: translate(256px, 300px); opacity: 0; }
+    }
+    
+    @keyframes moveBrush {
+      0%, 45% { transform: translate(256px, 300px) rotate(10deg); opacity: 0; }
+      46% { opacity: 1; }
+      65% { transform: translate(402px, 120px) rotate(10deg); }
+      85% { transform: translate(402px, 400px) rotate(10deg); opacity: 1; }
+      95% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+  </style>
+
+  <rect width="512" height="512" rx="120" fill="white"/>
+
+  <!-- Left Part (Pencil Sketch) - Sharp corners for clean M -->
+  <path d="M110 400 L110 120 L256 300" 
+        fill="none" 
+        stroke="#94A3B8" 
+        stroke-width="50" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        class="draw-path"
+        style="animation: drawLeft 4s ease-in-out infinite;"/>
+
+  <!-- Right Part (Paint Stroke) - Smooth connection -->
+  <path d="M256 300 L402 120 L402 400" 
+        fill="none" 
+        stroke="url(#paintGrad)" 
+        stroke-width="60" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        class="draw-path"
+        style="animation: drawRight 4s ease-in-out infinite;"/>
+
+  <!-- Realistic Pencil Icon -->
+  <g style="animation: movePencil 4s ease-in-out infinite;" filter="url(#dropShadow)">
+    <!-- Wood body -->
+    <path d="M-10 -70 L-10 -20 L0 0 L10 -20 L10 -70 Z" fill="#FCD34D"/>
+    <!-- Graphite Tip -->
+    <path d="M-3 -6 L0 0 L3 -6 Z" fill="#333"/>
+    <!-- Collar -->
+    <rect x="-10" y="-85" width="20" height="15" fill="#E2E8F0"/>
+    <!-- Eraser -->
+    <path d="M-10 -85 V-100 Q0 -105 10 -100 V-85 Z" fill="#FB7185"/>
+  </g>
+
+  <!-- Realistic Paintbrush Icon -->
+  <g style="animation: moveBrush 4s ease-in-out infinite;" filter="url(#dropShadow)">
+    <!-- Bristles (Soft tip) -->
+    <path d="M-12 0 Q0 15 12 0 L10 -25 L-10 -25 Z" fill="#3B82F6"/>
+    <!-- Metal Ferrule (Crimped) -->
+    <path d="M-12 -25 L-12 -55 L12 -55 L12 -25 Z" fill="#CBD5E1"/>
+    <!-- Ferrule Shine -->
+    <path d="M-6 -25 L-6 -55" stroke="white" stroke-width="2" opacity="0.5"/>
+    <!-- Wooden Handle (Tapered) -->
+    <path d="M-10 -55 L-8 -110 Q0 -115 8 -110 L10 -55 Z" fill="#475569"/>
+  </g>
+
+</svg>

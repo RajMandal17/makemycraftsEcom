@@ -1,0 +1,420 @@
+/* Deer Loading Animation Styles */
+
+.deer-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.95) 0%, rgba(236, 72, 153, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.deer-loading-container {
+  text-align: center;
+  position: relative;
+  padding: 2rem;
+}
+
+/* Deer Animation Styles */
+.deer-animation {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 2rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.deer-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3));
+}
+
+/* Deer Body Parts */
+.deer-body {
+  fill: #f59e0b;
+  animation: breathe 2s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.deer-head {
+  fill: #fbbf24;
+  animation: headBob 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes headBob {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+.deer-ear {
+  fill: #f59e0b;
+  animation: earWiggle 1.5s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.left-ear {
+  animation-delay: 0s;
+}
+
+.right-ear {
+  animation-delay: 0.3s;
+}
+
+@keyframes earWiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+}
+
+.antler {
+  stroke: #92400e;
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  animation: antlerGlow 2s ease-in-out infinite;
+}
+
+.antler-main {
+  stroke-width: 4;
+}
+
+.antler-branch {
+  stroke-width: 2.5;
+}
+
+@keyframes antlerGlow {
+  0%, 100% {
+    stroke: #92400e;
+    filter: drop-shadow(0 0 0px #fbbf24);
+  }
+  50% {
+    stroke: #d97706;
+    filter: drop-shadow(0 0 8px #fbbf24);
+  }
+}
+
+.deer-eye {
+  fill: #1f2937;
+  animation: blink 4s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 48%, 52%, 100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0;
+    transform: scaleY(0.1);
+  }
+}
+
+.deer-nose {
+  fill: #991b1b;
+  animation: noseSniff 1.5s ease-in-out infinite;
+}
+
+@keyframes noseSniff {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.deer-leg {
+  fill: #d97706;
+  animation: legKick 1s ease-in-out infinite;
+  transform-origin: center top;
+}
+
+.deer-leg:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.deer-leg:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+@keyframes legKick {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+.deer-tail {
+  fill: #f59e0b;
+  animation: tailWag 1.2s ease-in-out infinite;
+  transform-origin: left center;
+}
+
+@keyframes tailWag {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+}
+
+.deer-spot {
+  fill: #ffffff;
+  opacity: 0.6;
+  animation: spotPulse 2s ease-in-out infinite;
+}
+
+.spot-1 {
+  animation-delay: 0s;
+}
+
+.spot-2 {
+  animation-delay: 0.3s;
+}
+
+.spot-3 {
+  animation-delay: 0.6s;
+}
+
+@keyframes spotPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+}
+
+/* Floating Art Palettes */
+.floating-palette {
+  position: absolute;
+  font-size: 2rem;
+  animation: orbit 4s linear infinite;
+}
+
+.palette-1 {
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.palette-2 {
+  top: 70%;
+  right: 10%;
+  animation-delay: 1.3s;
+}
+
+.palette-3 {
+  top: 40%;
+  left: 5%;
+  animation-delay: 2.6s;
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateX(40px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(40px) rotate(-360deg);
+  }
+}
+
+/* Loading Text */
+.loading-text {
+  color: white;
+  margin-top: 1rem;
+}
+
+.loading-text h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  animation: textPulse 2s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  animation: dotBounce 1.4s ease-in-out infinite;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  40% {
+    transform: scale(1.3) translateY(-15px);
+  }
+}
+
+/* Circular Progress Indicator */
+.circular-progress {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 120px;
+}
+
+.progress-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 4;
+  stroke-dasharray: 339.292;
+  stroke-dashoffset: 0;
+  animation: progressAnimation 2s ease-in-out infinite;
+  stroke-linecap: round;
+}
+
+@keyframes progressAnimation {
+  0% {
+    stroke-dashoffset: 339.292;
+    stroke: rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    stroke-dashoffset: 84.823;
+    stroke: rgba(255, 255, 255, 1);
+  }
+  100% {
+    stroke-dashoffset: 0;
+    stroke: rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .deer-animation {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .loading-text h3 {
+    font-size: 1.2rem;
+  }
+  
+  .floating-palette {
+    font-size: 1.5rem;
+  }
+  
+  .circular-progress {
+    width: 80px;
+    height: 80px;
+    bottom: -30px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .deer-loading-overlay {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.95) 0%, rgba(219, 39, 119, 0.95) 100%);
+  }
+}
+
+/* Accessibility - Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .deer-animation,
+  .deer-body,
+  .deer-head,
+  .deer-ear,
+  .antler,
+  .deer-eye,
+  .deer-nose,
+  .deer-leg,
+  .deer-tail,
+  .deer-spot,
+  .floating-palette,
+  .loading-text h3,
+  .dot,
+  .progress-ring-circle {
+    animation: none;
+  }
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Alert - New Order</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #17a2b8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .stat-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #17a2b8;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 New Order Alert</h1>
+        </div>
+        <div class="content">
+            <p>Hello Admin,</p>
+            <p>A new order has been placed on MakeMyCrafts.</p>
+
+            <div class="alert-box" th:if="${isHighValue}">
+                <strong>⚠️ High Value Order Alert!</strong><br>
+                This order exceeds the high-value threshold.
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">₹<span th:text="${orderAmount}">0.00</span></div>
+                    <div>Order Amount</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value"><span th:text="${itemCount}">0</span></div>
+                    <div>Items</div>
+                </div>
+            </div>
+
+            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                <h3>Order Details</h3>
+                <p><strong>Order ID:</strong> <span th:text="${orderId}">#12345</span></p>
+                <p><strong>Customer:</strong> <span th:text="${customerName}">John Doe</span></p>
+                <p><strong>Customer Email:</strong> <span th:text="${customerEmail}">customer@example.com</span></p>
+                <p><strong>Order Date:</strong> <span th:text="${orderDate}">Dec 4, 2025</span></p>
+                <p><strong>Payment Method:</strong> <span th:text="${paymentMethod}">Credit Card</span></p>
+            </div>
+
+            <p style="text-align: center; margin: 30px 0;">
+                <a th:href="${orderUrl}" class="button">View Order in Admin Panel</a>
+            </p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 MakeMyCrafts Admin Panel</p>
+        </div>
+    </div>
+</body>
+
+</html>

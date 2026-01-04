@@ -1,0 +1,113 @@
+.oauth2-callback-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+}
+
+.oauth2-callback-content {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.oauth2-callback-content h2 {
+  margin: 1.5rem 0 1rem;
+  color: #333;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.oauth2-callback-content p {
+  color: #666;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.oauth2-success-icon {
+  font-size: 4rem;
+  color: #4caf50;
+  animation: scaleIn 0.5s ease-out;
+}
+
+.oauth2-error-icon {
+  font-size: 4rem;
+  color: #f44336;
+  animation: shake 0.5s ease-out;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-weight: 500;
+  margin: 1rem 0;
+}
+
+.redirect-notice {
+  color: #999;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+/* Animations */
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .oauth2-callback-content {
+    background: #1e1e1e;
+  }
+
+  .oauth2-callback-content h2 {
+    color: #fff;
+  }
+
+  .oauth2-callback-content p {
+    color: #aaa;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .oauth2-callback-content {
+    padding: 2rem;
+  }
+
+  .oauth2-callback-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .oauth2-success-icon,
+  .oauth2-error-icon {
+    font-size: 3rem;
+  }
+}
