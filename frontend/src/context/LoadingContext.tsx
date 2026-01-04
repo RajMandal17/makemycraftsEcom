@@ -27,7 +27,7 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setLoadingCount(prev => {
       const newCount = Math.max(0, prev - 1);
       if (newCount === 0) {
-        // Add a small delay to prevent flickering
+        
         setTimeout(() => {
           setIsLoading(false);
           setLoadingMessage('Loading beautiful artworks...');

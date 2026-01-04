@@ -31,7 +31,7 @@ const EditArtwork: React.FC = () => {
   const [newImages, setNewImages] = useState<File[]>([]);
   const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]);
 
-  // Categories from admin backend
+  
   const [categories, setCategories] = useState<PublicCategory[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
 
@@ -51,7 +51,7 @@ const EditArtwork: React.FC = () => {
 
         const artwork = await artworkAPI.getById(artworkId);
 
-        // Populate form data
+        
         setFormData({
           title: artwork.title,
           description: artwork.description,
@@ -65,7 +65,7 @@ const EditArtwork: React.FC = () => {
           isAvailable: artwork.isAvailable
         });
 
-        // Set existing images
+        
         setExistingImages(artwork.images || []);
       } catch (error) {
         console.error('Error fetching artwork:', error);
@@ -78,7 +78,7 @@ const EditArtwork: React.FC = () => {
     fetchArtwork();
   }, [artworkId]);
 
-  // Fetch active categories from backend
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -109,7 +109,7 @@ const EditArtwork: React.FC = () => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
 
-      // Validate files
+      
       const validFiles = newFiles.filter(file => {
         if (!file.type.startsWith('image/')) {
           toast.error(`${file.name} is not an image file`);
@@ -125,10 +125,10 @@ const EditArtwork: React.FC = () => {
       });
 
       if (validFiles.length > 0) {
-        // Add to selected images
+        
         setNewImages(prev => [...prev, ...validFiles]);
 
-        // Generate previews
+        
         validFiles.forEach(file => {
           const reader = new FileReader();
           reader.onload = () => {
@@ -161,13 +161,13 @@ const EditArtwork: React.FC = () => {
     try {
       setLoading(true);
 
-      // Parse tags
+      
       const tagsList = formData.tags
         .split(',')
         .map(tag => tag.trim())
         .filter(tag => tag.length > 0);
 
-      // Create update payload
+      
       const artworkUpdateData: Partial<Artwork> = {
         title: formData.title,
         description: formData.description,
@@ -181,24 +181,24 @@ const EditArtwork: React.FC = () => {
         },
         tags: tagsList,
         isAvailable: formData.isAvailable,
-        // Keep existing images minus removed ones
+        
         images: existingImages
       };
 
-      // For new images, we would typically upload them separately first
-      // Then add their URLs to the artwork
-      // This depends on your API implementation
+      
+      
+      
       if (newImages.length > 0) {
-        // In a real app, you would upload these and get URLs back
-        // For now, we'll just log them
+        
+        
         console.log(`Would upload ${newImages.length} new images`);
 
-        // Normally, you'd do something like:
-        // const uploadedImageUrls = await uploadImages(newImages);
-        // artworkUpdateData.images = [...existingImages, ...uploadedImageUrls];
+        
+        
+        
       }
 
-      // Update the artwork
+      
       if (artworkId) {
         await artworkAPI.update(artworkId, artworkUpdateData);
         toast.success('Artwork updated successfully!');
@@ -250,7 +250,7 @@ const EditArtwork: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Title & Price */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -282,7 +282,7 @@ const EditArtwork: React.FC = () => {
           </div>
         </div>
 
-        {/* Category & Medium */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -327,7 +327,7 @@ const EditArtwork: React.FC = () => {
           </div>
         </div>
 
-        {/* Dimensions */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -375,7 +375,7 @@ const EditArtwork: React.FC = () => {
           </div>
         </div>
 
-        {/* Description */}
+        {}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Description *
@@ -390,7 +390,7 @@ const EditArtwork: React.FC = () => {
           ></textarea>
         </div>
 
-        {/* Tags */}
+        {}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Tags <span className="text-gray-400">(comma separated)</span>
@@ -405,7 +405,7 @@ const EditArtwork: React.FC = () => {
           />
         </div>
 
-        {/* Availability */}
+        {}
         <div className="flex items-center">
           <input
             type="checkbox"
@@ -420,7 +420,7 @@ const EditArtwork: React.FC = () => {
           </label>
         </div>
 
-        {/* Image Management */}
+        {}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Artwork Images * <span className="text-gray-400">(at least one image required)</span>
@@ -455,7 +455,7 @@ const EditArtwork: React.FC = () => {
           <div>
             <h4 className="text-sm font-medium text-gray-500 mb-2">Add New Images</h4>
             <div className="flex flex-wrap gap-4 mb-4">
-              {/* New image previews */}
+              {}
               {newImagePreviews.map((preview, index) => (
                 <div key={`new-${index}`} className="relative">
                   <img
@@ -473,7 +473,7 @@ const EditArtwork: React.FC = () => {
                 </div>
               ))}
 
-              {/* Upload button */}
+              {}
               <label className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
                 <Upload className="h-8 w-8 text-gray-400 mb-2" />
                 <span className="text-xs text-gray-500">Upload Images</span>
@@ -493,7 +493,7 @@ const EditArtwork: React.FC = () => {
           )}
         </div>
 
-        {/* Submit Button */}
+        {}
         <div className="flex justify-end">
           <button
             type="button"

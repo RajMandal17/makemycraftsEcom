@@ -13,9 +13,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Controller for health checks and system information
- */
+
 @RestController
 @RequestMapping("/api/health")
 @CrossOrigin(origins = "*")
@@ -38,10 +36,7 @@ public class HealthCheckController {
     
     private final LocalDateTime startTime = LocalDateTime.now();
 
-    /**
-     * Health check endpoint for Railway
-     * @return Health status and basic system information
-     */
+    
     @GetMapping
     public ResponseEntity<Map<String, Object>> healthCheck() {
         log.info("Health check requested");
@@ -52,7 +47,7 @@ public class HealthCheckController {
         response.put("timezone", ZoneId.systemDefault().toString());
         response.put("message", "Backend API is running successfully!");
         
-        // System information
+        
         Map<String, String> systemInfo = new HashMap<>();
         systemInfo.put("projectName", projectName);
         systemInfo.put("environmentName", environmentName);
@@ -61,7 +56,7 @@ public class HealthCheckController {
         systemInfo.put("freeMemory", String.valueOf(Runtime.getRuntime().freeMemory() / 1024 / 1024) + " MB");
         systemInfo.put("uptime", java.time.Duration.between(startTime, LocalDateTime.now()).toString());
         
-        // Database connectivity check
+        
         Map<String, String> databaseInfo = new HashMap<>();
         if (dataSource != null) {
             try (Connection connection = dataSource.getConnection()) {
@@ -75,7 +70,7 @@ public class HealthCheckController {
             databaseInfo.put("status", "NO_DATASOURCE");
         }
         
-        // Feature flags
+        
         Map<String, Object> features = new HashMap<>();
         features.put("cloudinaryEnabled", cloudinaryEnabled);
         
@@ -86,10 +81,7 @@ public class HealthCheckController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Log a custom message from frontend/client
-     * POST /api/health/log
-     */
+    
     @PostMapping("/log")
     public ResponseEntity<Map<String, Object>> logMessage(@RequestBody Map<String, Object> logData) {
         String level = (String) logData.getOrDefault("level", "INFO");
@@ -119,10 +111,7 @@ public class HealthCheckController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Ping endpoint for simple connectivity test
-     * GET /api/health/ping
-     */
+    
     @GetMapping("/ping")
     public ResponseEntity<Map<String, String>> ping() {
         log.debug("Ping request received");
@@ -134,10 +123,7 @@ public class HealthCheckController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Echo endpoint for testing request/response
-     * POST /api/health/echo
-     */
+    
     @PostMapping("/echo")
     public ResponseEntity<Map<String, Object>> echo(@RequestBody(required = false) Map<String, Object> data) {
         log.info("Echo request received with data: {}", data);
@@ -150,16 +136,7 @@ public class HealthCheckController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * View current application logs
-     * GET /api/health/logs
-     * ADMIN-ONLY endpoint for viewing Spring Boot application logs
-     * 
-     * @param from Starting line number (0-indexed)
-     * @param to Ending line number (exclusive)
-     * @param limit Maximum number of lines to return (default: 500)
-     * @return Log file content as plain text
-     */
+    
     @GetMapping("/logs")
     @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> getCurrentLogs(
@@ -167,46 +144,46 @@ public class HealthCheckController {
             @RequestParam(value = "to", required = false) Integer to,
             @RequestParam(value = "limit", required = false, defaultValue = "500") Integer limit) {
         
-        String logFileName = "artwork-app.log"; // Hardcoded for security
-        String logDirectory = "logs"; // Hardcoded base directory
+        String logFileName = "artwork-app.log"; 
+        String logDirectory = "logs"; 
         
         try {
-            // Construct path safely
+            
             java.nio.file.Path logDir = java.nio.file.Paths.get(logDirectory).toAbsolutePath().normalize();
             java.nio.file.Path logFile = logDir.resolve(logFileName).normalize();
             
-            // SECURITY: Validate that the resolved path is within the log directory
+            
             if (!logFile.startsWith(logDir)) {
                 log.error("Path traversal attempt detected in log access: {}", logFile);
                 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN)
                     .body("Access denied: Invalid log file path");
             }
             
-            // Check if log file exists
+            
             if (!java.nio.file.Files.exists(logFile)) {
                 log.warn("Log file not found: {}", logFile);
                 return ResponseEntity.status(org.springframework.http.HttpStatus.NOT_FOUND)
                     .body("Log file not found: " + logFileName + "\nNote: Logs may not be written to file yet or logging to file may not be configured.");
             }
             
-            // Read all lines from the log file
+            
             java.util.List<String> allLines = java.nio.file.Files.readAllLines(
                 logFile, 
                 java.nio.charset.StandardCharsets.UTF_8
             );
             int totalLines = allLines.size();
             
-            // Calculate line range
-            // Default to last 'limit' lines if no range specified
+            
+            
             int start = (from != null) ? Math.max(0, from) : Math.max(0, totalLines - limit);
             int end = (to != null) ? Math.min(totalLines, to) : totalLines;
             
-            // Ensure we don't exceed the limit
+            
             if (end - start > limit) {
                 start = end - limit;
             }
             
-            // Validate range
+            
             if (start > end) {
                 start = end;
             }
@@ -217,11 +194,11 @@ public class HealthCheckController {
                 end = totalLines;
             }
             
-            // Extract requested lines
+            
             String content = allLines.subList(start, end).stream()
                     .collect(java.util.stream.Collectors.joining("\n"));
             
-            // Add metadata header
+            
             String header = String.format(
                 "=== Application Logs ===\n" +
                 "Total lines: %d\n" +
@@ -250,24 +227,20 @@ public class HealthCheckController {
         }
     }
     
-    /**
-     * Get log file information
-     * GET /api/health/logs/info
-     * ADMIN-ONLY endpoint - Returns metadata about the log file
-     */
+    
     @GetMapping("/logs/info")
     @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getLogInfo() {
-        String logFileName = "artwork-app.log"; // Hardcoded for security
-        String logDirectory = "logs"; // Hardcoded base directory
+        String logFileName = "artwork-app.log"; 
+        String logDirectory = "logs"; 
         Map<String, Object> info = new HashMap<>();
         
         try {
-            // Construct path safely
+            
             java.nio.file.Path logDir = java.nio.file.Paths.get(logDirectory).toAbsolutePath().normalize();
             java.nio.file.Path logFile = logDir.resolve(logFileName).normalize();
             
-            // SECURITY: Validate that the resolved path is within the log directory
+            
             if (!logFile.startsWith(logDir)) {
                 log.error("Path traversal attempt detected in log info access: {}", logFile);
                 info.put(ERROR_KEY, "Access denied: Invalid log file path");
@@ -302,9 +275,7 @@ public class HealthCheckController {
         }
     }
     
-    /**
-     * Helper method to format file size in human-readable format
-     */
+    
     private String formatFileSize(long bytes) {
         if (bytes < 1024) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(1024));

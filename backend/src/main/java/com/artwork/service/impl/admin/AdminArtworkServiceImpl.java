@@ -37,7 +37,7 @@ public class AdminArtworkServiceImpl implements AdminArtworkService {
     private ArtworkDto convertToDto(Artwork artwork) {
         ArtworkDto dto = modelMapper.map(artwork, ArtworkDto.class);
         
-        // Ensure artist details are properly mapped, especially ID
+        
         if (artwork.getArtist() != null) {
             com.artwork.dto.ArtistDto artistDto = modelMapper.map(artwork.getArtist(), com.artwork.dto.ArtistDto.class);
             if (artistDto.getId() == null && artwork.getArtist().getId() != null) {
@@ -114,7 +114,7 @@ public class AdminArtworkServiceImpl implements AdminArtworkService {
                 .pendingApproval(pendingArtworks)
                 .approvedArtworks(approvedArtworks)
                 .rejectedArtworks(rejectedArtworks)
-                .totalValue(0.0) // Placeholder, would need sum query
+                .totalValue(0.0) 
                 .build();
     }
     
@@ -181,7 +181,7 @@ public class AdminArtworkServiceImpl implements AdminArtworkService {
 
         for (String id : artworkIds) {
             try {
-                // Reuse existing approve method to ensure consistency
+                
                 approveArtwork(id, "Bulk approved");
                 success++;
             } catch (Exception e) {
@@ -216,13 +216,13 @@ public class AdminArtworkServiceImpl implements AdminArtworkService {
     public ArtworkDto approveArtworkWithCategory(String artworkId, String notes) {
         Artwork artwork = getArtworkById(artworkId);
         
-        // Get the category name from the artwork
+        
         String categoryName = artwork.getCategory();
         
-        // If category exists and is inactive, activate it first
+        
         if (categoryName != null && !categoryName.isEmpty()) {
-            // We need to use AdminCategoryService to activate the category
-            // For now, we'll directly interact with the repository
+            
+            
             try {
                 com.artwork.entity.Category category = categoryRepository.findByNameIgnoreCase(categoryName)
                     .or(() -> categoryRepository.findByNameIgnoreCase(categoryName.toUpperCase().replaceAll("\\s+", "_")))
@@ -240,7 +240,7 @@ public class AdminArtworkServiceImpl implements AdminArtworkService {
             }
         }
         
-        // Now approve the artwork
+        
         artwork.setApprovalStatus(ApprovalStatus.APPROVED);
         artwork.setModerationNotes(notes != null ? notes : "Approved with category activation");
         artwork.setUpdatedAt(java.time.LocalDateTime.now());

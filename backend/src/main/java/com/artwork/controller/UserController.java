@@ -53,7 +53,7 @@ public class UserController {
             ));
         }
         
-        // Validate passwords match
+        
         if (!passwordRequest.getNewPassword().equals(passwordRequest.getConfirmPassword())) {
             return ResponseEntity.badRequest().body(Map.of(
                 "status", "error",

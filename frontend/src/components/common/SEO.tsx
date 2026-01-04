@@ -1,12 +1,6 @@
 import React from 'react';
 
-/**
- * SEO Component for MakeMyCrafts
- * 
- * Provides dynamic meta tags for better search engine optimization.
- * Since React doesn't natively support document head manipulation,
- * this component uses useEffect to update meta tags dynamically.
- */
+
 
 export interface SEOProps {
     title?: string;
@@ -30,9 +24,7 @@ const BASE_URL = 'https://makemycrafts.com';
 const DEFAULT_IMAGE = `${BASE_URL}/og-image.jpg`;
 const SITE_NAME = 'MakeMyCrafts';
 
-/**
- * Updates document head with SEO meta tags
- */
+
 export const updateMetaTags = ({
     title = 'MakeMyCrafts - Buy Handmade Artwork, Custom Made Crafts & Homemade Art Online India',
     description = 'MakeMyCrafts - India\'s best marketplace for handmade artwork, custom made crafts & homemade art. Buy unique handcrafted paintings, sculptures & artworks directly from skilled artists.',
@@ -48,10 +40,10 @@ export const updateMetaTags = ({
     author,
     noIndex = false,
 }: SEOProps) => {
-    // Update title
+    
     document.title = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
 
-    // Helper to set or create meta tag
+    
     const setMetaTag = (property: string, content: string, isProperty = false) => {
         const attributeName = isProperty ? 'property' : 'name';
         let element = document.querySelector(`meta[${attributeName}="${property}"]`);
@@ -65,12 +57,12 @@ export const updateMetaTags = ({
         element.setAttribute('content', content);
     };
 
-    // Primary Meta Tags
+    
     setMetaTag('description', description);
     setMetaTag('keywords', keywords);
     setMetaTag('robots', noIndex ? 'noindex, nofollow' : 'index, follow');
 
-    // Open Graph
+    
     setMetaTag('og:type', type, true);
     setMetaTag('og:url', url, true);
     setMetaTag('og:title', title, true);
@@ -78,14 +70,14 @@ export const updateMetaTags = ({
     setMetaTag('og:image', image, true);
     setMetaTag('og:site_name', SITE_NAME, true);
 
-    // Twitter
+    
     setMetaTag('twitter:card', 'summary_large_image', true);
     setMetaTag('twitter:url', url, true);
     setMetaTag('twitter:title', title, true);
     setMetaTag('twitter:description', description, true);
     setMetaTag('twitter:image', image, true);
 
-    // Product specific tags
+    
     if (type === 'product' && price !== undefined) {
         setMetaTag('product:price:amount', price.toString(), true);
         setMetaTag('product:price:currency', currency, true);
@@ -94,12 +86,12 @@ export const updateMetaTags = ({
         }
     }
 
-    // Author for articles
+    
     if (author) {
         setMetaTag('author', author);
     }
 
-    // Update canonical link
+    
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
         canonical = document.createElement('link');
@@ -109,9 +101,7 @@ export const updateMetaTags = ({
     canonical.setAttribute('href', url);
 };
 
-/**
- * Generates JSON-LD structured data for a product (artwork)
- */
+
 export const generateProductSchema = (artwork: {
     id: string;
     title: string;
@@ -166,9 +156,7 @@ export const generateProductSchema = (artwork: {
     return schema;
 };
 
-/**
- * Generates JSON-LD structured data for a review
- */
+
 export const generateReviewSchema = (review: {
     id: string;
     rating: number;
@@ -199,9 +187,7 @@ export const generateReviewSchema = (review: {
     };
 };
 
-/**
- * Generates JSON-LD structured data for breadcrumbs
- */
+
 export const generateBreadcrumbSchema = (items: { name: string; url: string }[]) => {
     return {
         '@context': 'https://schema.org',
@@ -215,17 +201,15 @@ export const generateBreadcrumbSchema = (items: { name: string; url: string }[])
     };
 };
 
-/**
- * Injects JSON-LD schema into the document head
- */
+
 export const injectSchema = (schema: object, id: string) => {
-    // Remove existing schema with same id
+    
     const existing = document.getElementById(id);
     if (existing) {
         existing.remove();
     }
 
-    // Create new script element
+    
     const script = document.createElement('script');
     script.id = id;
     script.type = 'application/ld+json';
@@ -233,20 +217,18 @@ export const injectSchema = (schema: object, id: string) => {
     document.head.appendChild(script);
 };
 
-/**
- * React component that uses useEffect to update SEO
- */
+
 const SEO: React.FC<SEOProps> = (props) => {
     React.useEffect(() => {
         updateMetaTags(props);
 
-        // Cleanup function to reset to defaults when component unmounts
+        
         return () => {
-            // Optional: Reset to default meta tags
+            
         };
     }, [props]);
 
-    return null; // This component doesn't render anything
+    return null; 
 };
 
 export default SEO;

@@ -27,11 +27,11 @@ const ArtistReviews: React.FC = () => {
         return;
       }
       
-      // Fetch all artworks by the artist
+      
       const artistArtworksResponse = await artworkAPI.getByArtist(artistId);
       setArtworks(artistArtworksResponse.artworks);
       
-      // Fetch reviews for each artwork
+      
       let allReviews: Review[] = [];
       for (const artwork of artistArtworksResponse.artworks) {
         try {
@@ -46,7 +46,7 @@ const ArtistReviews: React.FC = () => {
         }
       }
       
-      // Sort reviews by date (newest first)
+      
       allReviews.sort((a, b) => 
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
@@ -80,7 +80,7 @@ const ArtistReviews: React.FC = () => {
     return sum / reviewsToAverage.length;
   };
 
-  // Star rating display component
+  
   const StarRating = ({ rating }: { rating: number }) => {
     return (
       <div className="flex">
@@ -149,9 +149,9 @@ const ArtistReviews: React.FC = () => {
         <h1 className="text-2xl font-semibold">Customer Reviews</h1>
       </div>
 
-      {/* Stats */}
+      {}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Summary Card */}
+        {}
         <div className="col-span-1 bg-white rounded-lg border shadow-sm p-5">
           <h3 className="text-lg font-medium mb-4">Review Summary</h3>
           <div className="flex items-center mb-4">
@@ -218,9 +218,9 @@ const ArtistReviews: React.FC = () => {
           </div>
         </div>
 
-        {/* Reviews List */}
+        {}
         <div className="col-span-1 lg:col-span-2">
-          {/* Filter by artwork */}
+          {}
           <div className="mb-4 bg-white border rounded-lg p-4 shadow-sm">
             <h3 className="font-medium mb-2">Filter by Artwork</h3>
             <div className="flex flex-wrap gap-2">
@@ -250,7 +250,7 @@ const ArtistReviews: React.FC = () => {
             </div>
           </div>
 
-          {/* Reviews */}
+          {}
           <div className="space-y-4">
             {filteredReviews.length > 0 ? (
               filteredReviews.map((review) => {

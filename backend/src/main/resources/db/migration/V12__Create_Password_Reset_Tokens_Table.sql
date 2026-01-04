@@ -1,4 +1,4 @@
--- Create password_reset_tokens table
+
 CREATE TABLE IF NOT EXISTS password_reset_tokens (
     id VARCHAR(36) PRIMARY KEY,
     token VARCHAR(255) NOT NULL UNIQUE,

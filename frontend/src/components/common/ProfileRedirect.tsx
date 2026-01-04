@@ -5,7 +5,7 @@ const ProfileRedirect: React.FC = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Redirect to the customer profile page
+    
     navigate('/dashboard/customer/profile', { replace: true });
   }, [navigate]);
   

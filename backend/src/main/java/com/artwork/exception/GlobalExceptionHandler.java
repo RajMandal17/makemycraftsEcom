@@ -145,7 +145,7 @@ public class GlobalExceptionHandler {
             httpRequest.getRequestURI()
         );
         
-        // Log detailed stack trace for general exceptions
+        
         log.error("Unhandled exception at URI: {}", httpRequest.getRequestURI(), ex);
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }

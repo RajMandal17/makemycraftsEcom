@@ -12,11 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * REST Controller for category-related endpoints
- * Provides public APIs for category browsing and statistics
- * Follows RESTful design principles
- */
+
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
@@ -25,22 +21,16 @@ public class CategoryController {
     
     private final CategoryService categoryService;
     
-    /**
-     * Get top selling categories
-     * Public endpoint - no authentication required
-     * 
-     * @param limit Maximum number of categories to return (default: 10)
-     * @return Response with top selling categories
-     */
+    
     @GetMapping("/top-selling")
     public ResponseEntity<Map<String, Object>> getTopSellingCategories( @RequestParam(defaultValue = "10") int limit) {
         
         log.info("Request to get top {} selling categories", limit);
         
         try {
-            // Validate limit
+            
             if (limit < 1 || limit > 50) {
-                limit = 10; // Default to 10 if invalid
+                limit = 10; 
             }
             
             List<CategoryStatsDto> topCategories = categoryService.getTopSellingCategories(limit);
@@ -68,12 +58,7 @@ public class CategoryController {
         }
     }
     
-    /**
-     * Get all unique categories
-     * Public endpoint - no authentication required
-     * 
-     * @return Response with all categories
-     */
+    
     @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> getAllCategories() {
         log.info("Request to get all categories");
@@ -103,14 +88,7 @@ public class CategoryController {
         }
     }
     
-    /**
-     * Get all active categories with full details
-     * Public endpoint - no authentication required
-     * Returns only admin-approved active categories
-     * Used for category dropdowns in artwork creation/editing
-     * 
-     * @return Response with active categories including full details
-     */
+    
     @GetMapping("/active")
     public ResponseEntity<Map<String, Object>> getActiveCategories() {
         log.info("Request to get active categories with details");
@@ -140,13 +118,7 @@ public class CategoryController {
         }
     }
     
-    /**
-     * Get statistics for a specific category
-     * Public endpoint - no authentication required
-     * 
-     * @param categoryName Category name
-     * @return Response with category statistics
-     */
+    
     @GetMapping("/{categoryName}/stats")
     public ResponseEntity<Map<String, Object>> getCategoryStats(
             @PathVariable String categoryName) {

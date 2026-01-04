@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# ===========================================
-# MakeMyCrafts Docker Quick Start Script
-# ===========================================
+
+
+
 
 set -e
 
-# Colors for output
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -15,13 +15,13 @@ NC='\033[0m' # No Color
 echo -e "${GREEN}🚀 MakeMyCrafts Docker Setup${NC}"
 echo "========================================"
 
-# Check if Docker is installed
+
 if ! command -v docker &> /dev/null; then
     echo -e "${RED}❌ Docker is not installed. Please install Docker first.${NC}"
     exit 1
 fi
 
-# Check if Docker Compose is installed
+
 if ! command -v docker-compose &> /dev/null; then
     echo -e "${RED}❌ Docker Compose is not installed. Please install Docker Compose first.${NC}"
     exit 1
@@ -29,14 +29,14 @@ fi
 
 echo -e "${GREEN}✅ Docker and Docker Compose found${NC}"
 
-# Check if .env file exists
+
 if [ ! -f .env ]; then
     echo -e "${YELLOW}⚠️  .env file not found. Creating from .env.example...${NC}"
     cp .env.example .env
     echo -e "${GREEN}✅ Created .env file. Please update it with your configuration.${NC}"
 fi
 
-# Function to show usage
+
 show_usage() {
     echo ""
     echo "Usage: ./docker-start.sh [OPTION]"
@@ -52,7 +52,7 @@ show_usage() {
     echo ""
 }
 
-# Parse command
+
 case "${1:-db-only}" in
     db-only)
         echo -e "${GREEN}🔧 Starting MySQL and Redis only...${NC}"

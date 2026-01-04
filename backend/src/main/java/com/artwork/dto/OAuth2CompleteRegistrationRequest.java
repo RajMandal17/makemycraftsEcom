@@ -16,7 +16,7 @@ public class OAuth2CompleteRegistrationRequest {
     @Pattern(regexp = "CUSTOMER|ARTIST", message = "Role must be either CUSTOMER or ARTIST")
     private String role;
     
-    // Optional additional fields
+    
     private String phoneNumber;
     private String address;
     private String city;
@@ -24,7 +24,7 @@ public class OAuth2CompleteRegistrationRequest {
     private String country;
     private String zipCode;
     
-    // Artist-specific fields (required if role is ARTIST)
+    
     private String bio;
     private String specialization;
 }

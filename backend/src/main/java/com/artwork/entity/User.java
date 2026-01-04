@@ -26,7 +26,7 @@ public class User {
     private String email;
 
     @Column(unique = true, nullable = false, length = 50)
-    private String username; // LinkedIn-style unique username for profile sharing
+    private String username; 
 
     @Column(nullable = false)
     private String password;
@@ -44,18 +44,18 @@ public class User {
     @Builder.Default
     private Boolean enabled = true;
     
-    // OAuth2 fields
+    
     @Column(name = "oauth2_provider")
-    private String oauth2Provider; // google, facebook, github
+    private String oauth2Provider; 
     @Column(name = "oauth2_id")
-    private String oauth2Id; // OAuth2 provider's user ID
+    private String oauth2Id; 
     @Column(name = "profile_picture_url")
-    private String profilePictureUrl; // OAuth2 profile picture
+    private String profilePictureUrl; 
     @Builder.Default
     @Column(name = "email_verified")
-    private Boolean emailVerified = false; // Email verification status
+    private Boolean emailVerified = false; 
     
-    // Artist specific fields
+    
     private String bio;
     private String website;
     
@@ -71,7 +71,7 @@ public class User {
     @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // Relations
+    
     @OneToMany(mappedBy = "artist")
     @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"artist"})
     private List<Artwork> artworks;

@@ -19,13 +19,13 @@ const ArtistDetailPage: React.FC = () => {
 
       setLoading(true);
       try {
-        // Fetch artist details - support both ID and username (LinkedIn-style)
+        
         let artistData: Artist;
         if (username) {
-          // Fetch by username (LinkedIn-style URL)
+          
           artistData = await artistsAPI.getArtistByUsername(username);
         } else if (id) {
-          // Fetch by ID (legacy URL)
+          
           artistData = await artistsAPI.getArtistById(id);
         } else {
           throw new Error('No artist identifier provided');
@@ -33,7 +33,7 @@ const ArtistDetailPage: React.FC = () => {
 
         setArtist(artistData);
 
-        // Fetch artist's artworks
+        
         const { artworks } = await artworkAPI.getByArtist(artistData.id);
         setArtworks(artworks);
 
@@ -131,7 +131,7 @@ const ArtistDetailPage: React.FC = () => {
               <div className="mb-4">
                 <h2 className="text-lg font-semibold mb-2">Website</h2>
                 <a
-                  href={artist.website.startsWith('http') ? artist.website : `https://${artist.website}`}
+                  href={artist.website.startsWith('http') ? artist.website : `https:
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:underline"
@@ -141,7 +141,7 @@ const ArtistDetailPage: React.FC = () => {
               </div>
             )}
 
-            {/* Share Profile - LinkedIn-style URL */}
+            {}
             {artist.username && (
               <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <h2 className="text-lg font-semibold mb-2">Share Profile</h2>
@@ -171,7 +171,7 @@ const ArtistDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Artist's Artworks Section */}
+      {}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-6">Artworks by {artist.firstName}</h2>
 

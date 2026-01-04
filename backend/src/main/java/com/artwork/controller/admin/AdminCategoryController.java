@@ -22,30 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * REST Controller for Admin Category Management
- * All endpoints require ADMIN role
- * 
- * Endpoints:
- * - GET    /api/admin/categories              - List all categories (including deleted)
- * - GET    /api/admin/categories/active       - List only active categories
- * - GET    /api/admin/categories/deleted      - List only deleted categories
- * - GET    /api/admin/categories/{id}         - Get specific category
- * - POST   /api/admin/categories              - Create new category
- * - PUT    /api/admin/categories/{id}         - Update category
- * - DELETE /api/admin/categories/{id}         - Soft delete category
- * - PUT    /api/admin/categories/{id}/restore - Restore soft-deleted category
- * - DELETE /api/admin/categories/{id}/hard    - Permanently delete category
- * - POST   /api/admin/categories/{id}/image   - Upload category image
- * - DELETE /api/admin/categories/{id}/image   - Remove category image
- * - PUT    /api/admin/categories/{id}/toggle  - Toggle active status
- * - PUT    /api/admin/categories/reorder      - Reorder categories
- * - GET    /api/admin/categories/stats        - Get category statistics
- * - GET    /api/admin/categories/check-name   - Check if name is available
- * 
- * @author System
- * @since 1.0
- */
+
 @RestController
 @RequestMapping({"/api/admin/categories", "/api/v1/admin/categories"})
 @RequiredArgsConstructor
@@ -54,13 +31,11 @@ public class AdminCategoryController {
     
     private final AdminCategoryService adminCategoryService;
     
-    // ============================================
-    // List Operations
-    // ============================================
     
-    /**
-     * Get all categories with pagination (including soft-deleted)
-     */
+    
+    
+    
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllCategories(
@@ -84,9 +59,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Get all categories as a list (no pagination)
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> getAllCategoriesList() {
@@ -105,9 +78,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Get only active (not deleted) categories
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/active")
     public ResponseEntity<Map<String, Object>> getActiveCategories(
@@ -131,9 +102,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Get only soft-deleted categories
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/deleted")
     public ResponseEntity<Map<String, Object>> getDeletedCategories() {
@@ -152,9 +121,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Search categories
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/search")
     public ResponseEntity<Map<String, Object>> searchCategories(
@@ -177,13 +144,11 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    // ============================================
-    // Get Single Category
-    // ============================================
     
-    /**
-     * Get a specific category by ID
-     */
+    
+    
+    
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getCategoryById(@PathVariable String id) {
@@ -199,9 +164,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Get a specific category by name
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/by-name/{name}")
     public ResponseEntity<Map<String, Object>> getCategoryByName(@PathVariable String name) {
@@ -217,13 +180,11 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    // ============================================
-    // Create Operations
-    // ============================================
     
-    /**
-     * Create a new category (without image)
-     */
+    
+    
+    
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Map<String, Object>> createCategory(
@@ -243,9 +204,7 @@ public class AdminCategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
-    /**
-     * Create a new category with image upload
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/with-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> createCategoryWithImage(
@@ -253,11 +212,11 @@ public class AdminCategoryController {
             @RequestPart("image") MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         
-        // Cast to UserPrincipal to get user ID
+        
         String adminId = ((com.artwork.security.UserPrincipal) userDetails).getId();
         log.info("Admin {} request to create category with image: {}", adminId, request.getName());
         
-        // Validate image
+        
         validateImage(image);
         
         AdminCategoryDto category = adminCategoryService.createCategoryWithImage(request, image, adminId);
@@ -270,13 +229,11 @@ public class AdminCategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
-    // ============================================
-    // Update Operations
-    // ============================================
     
-    /**
-     * Update an existing category (without changing image)
-     */
+    
+    
+    
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, Object>> updateCategory(
@@ -297,9 +254,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Update category with new image
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{id}/with-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> updateCategoryWithImage(
@@ -311,7 +266,7 @@ public class AdminCategoryController {
         String adminId = ((com.artwork.security.UserPrincipal) userDetails).getId();
         log.info("Admin {} request to update category with image: {}", adminId, id);
         
-        // Validate image
+        
         validateImage(image);
         
         AdminCategoryDto category = adminCategoryService.updateCategoryWithImage(id, request, image, adminId);
@@ -324,9 +279,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Upload or update category image only
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> uploadCategoryImage(
@@ -337,7 +290,7 @@ public class AdminCategoryController {
         String adminId = ((com.artwork.security.UserPrincipal) userDetails).getId();
         log.info("Admin {} request to upload image for category: {}", adminId, id);
         
-        // Validate image
+        
         validateImage(image);
         
         AdminCategoryDto category = adminCategoryService.uploadCategoryImage(id, image, adminId);
@@ -350,9 +303,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Remove category image
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}/image")
     public ResponseEntity<Map<String, Object>> removeCategoryImage(
@@ -372,9 +323,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Toggle category active status
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/toggle")
     public ResponseEntity<Map<String, Object>> toggleCategoryActive(
@@ -394,9 +343,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Reorder multiple categories
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/reorder")
     public ResponseEntity<Map<String, Object>> reorderCategories(
@@ -419,13 +366,11 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    // ============================================
-    // Delete Operations
-    // ============================================
     
-    /**
-     * Soft delete a category (mark as deleted but retain data)
-     */
+    
+    
+    
+    
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> softDeleteCategory(
@@ -445,9 +390,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Restore a soft-deleted category
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/restore")
     public ResponseEntity<Map<String, Object>> restoreCategory(
@@ -467,10 +410,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Permanently delete a category (hard delete)
-     * WARNING: This action cannot be undone!
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}/hard")
     public ResponseEntity<Map<String, Object>> hardDeleteCategory(
@@ -489,13 +429,11 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    // ============================================
-    // Statistics & Utilities
-    // ============================================
     
-    /**
-     * Get category statistics
-     */
+    
+    
+    
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getCategoryStats() {
@@ -511,9 +449,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Check if a category name is available
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/check-name")
     public ResponseEntity<Map<String, Object>> checkNameAvailability(
@@ -535,31 +471,29 @@ public class AdminCategoryController {
         return ResponseEntity.ok(response);
     }
     
-    // ============================================
-    // Private Helper Methods
-    // ============================================
     
-    /**
-     * Validate uploaded image file
-     */
+    
+    
+    
+    
     private void validateImage(MultipartFile image) {
         if (image == null || image.isEmpty()) {
             throw new IllegalArgumentException("Image file is required");
         }
         
-        // Check file size (max 5MB)
-        long maxSize = 5L * 1024 * 1024; // 5MB
+        
+        long maxSize = 5L * 1024 * 1024; 
         if (image.getSize() > maxSize) {
             throw new IllegalArgumentException("Image file size cannot exceed 5MB");
         }
         
-        // Check content type
+        
         String contentType = image.getContentType();
         if (contentType == null || !contentType.startsWith("image/")) {
             throw new IllegalArgumentException("Only image files are allowed");
         }
         
-        // Allow only specific image types
+        
         List<String> allowedTypes = List.of(
             "image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp", "image/svg+xml"
         );

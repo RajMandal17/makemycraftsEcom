@@ -1,8 +1,4 @@
-/**
- * UI Component Library - Barrel Export
- * 
- * Centralized export for all UI components
- */
+
 
 export { default as Button } from './Button';
 export type { ButtonProps, ButtonVariant, ButtonSize } from './Button';

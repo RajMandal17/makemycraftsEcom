@@ -4,9 +4,7 @@ import com.artwork.validation.StrongPassword;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-/**
- * DTO for setting a new password (for OAuth users who don't have a password yet)
- */
+
 @Data
 public class PasswordSetRequest {
     @NotBlank(message = "New password is required")

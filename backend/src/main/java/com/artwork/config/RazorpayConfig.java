@@ -7,13 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Razorpay configuration for payment gateway integration.
- * 
- * Single Responsibility: Configure Razorpay client only.
- * 
- * @author Artwork Platform
- */
+
 @Configuration
 @Slf4j
 public class RazorpayConfig {

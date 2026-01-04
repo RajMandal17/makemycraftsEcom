@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for aggregated user statistics.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

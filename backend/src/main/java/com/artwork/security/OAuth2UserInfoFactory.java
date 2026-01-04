@@ -5,9 +5,7 @@ import org.springframework.security.oauth2.core.OAuth2Error;
 
 import java.util.Map;
 
-/**
- * Factory to create OAuth2UserInfo based on provider
- */
+
 public class OAuth2UserInfoFactory {
     
     public static OAuth2UserInfo getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) {

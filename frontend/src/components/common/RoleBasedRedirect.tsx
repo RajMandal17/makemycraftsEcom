@@ -23,7 +23,7 @@ const RoleBasedRedirect: React.FC<RoleBasedRedirectProps> = ({ children }) => {
   });
 
   useEffect(() => {
-    // Only redirect if authenticated, not loading, has user, and hasn't already redirected
+    
     if (state.auth.isAuthenticated && !state.auth.loading && state.auth.user && !hasRedirected.current) {
       const role = state.auth.user.role;
       let targetPath = '';
@@ -39,11 +39,11 @@ const RoleBasedRedirect: React.FC<RoleBasedRedirectProps> = ({ children }) => {
           targetPath = '/dashboard/customer';
           break;
         default:
-          // No matching role, stay on current page
+          
           return;
       }
 
-      // Only redirect if we're not already at the target path
+      
       if (location.pathname !== targetPath && !location.pathname.startsWith(targetPath)) {
         console.log(`🔀 RoleBasedRedirect: Redirecting ${role} to ${targetPath}`);
         hasRedirected.current = true;
@@ -53,14 +53,14 @@ const RoleBasedRedirect: React.FC<RoleBasedRedirectProps> = ({ children }) => {
     }
   }, [state.auth.isAuthenticated, state.auth.loading, state.auth.user, navigate, location.pathname]);
 
-  // Reset redirect flag when user logs out
+  
   useEffect(() => {
     if (!state.auth.isAuthenticated) {
       hasRedirected.current = false;
     }
   }, [state.auth.isAuthenticated]);
 
-  // If we're checking authentication, show a loading spinner
+  
   if (state.auth.loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -69,7 +69,7 @@ const RoleBasedRedirect: React.FC<RoleBasedRedirectProps> = ({ children }) => {
     );
   }
 
-  // If user is not authenticated or redirect hasn't happened, render children
+  
   return <>{children}</>;
 };
 

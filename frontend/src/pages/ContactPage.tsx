@@ -3,10 +3,7 @@ import { Mail, MapPin, Clock, Send, MessageCircle, HelpCircle, ShoppingBag } fro
 import { updateMetaTags } from '../components/common/SEO';
 import { toast } from 'react-toastify';
 
-/**
- * Contact Page - SEO Optimized
- * Keywords: contact makemycrafts, handmade art support, custom artwork inquiry
- */
+
 const ContactPage: React.FC = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -17,7 +14,7 @@ const ContactPage: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        // SEO Meta Tags
+        
         updateMetaTags({
             title: 'Contact MakeMyCrafts - Get Help with Handmade Artwork & Custom Crafts Orders',
             description: 'Contact MakeMyCrafts for questions about handmade artwork, custom made crafts orders, artist inquiries, or customer support. We\'re here to help with your homemade art needs.',
@@ -26,7 +23,7 @@ const ContactPage: React.FC = () => {
             type: 'website',
         });
 
-        // Inject Contact Schema
+        
         const contactSchema = {
             '@context': 'https://schema.org',
             '@type': 'ContactPage',
@@ -61,7 +58,7 @@ const ContactPage: React.FC = () => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate form submission
+        
         setTimeout(() => {
             toast.success('Thank you for your message! We\'ll get back to you within 24 hours.');
             setFormData({ name: '', email: '', subject: '', message: '' });
@@ -78,7 +75,7 @@ const ContactPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Hero Section */}
+            {}
             <section className="bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 text-white py-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -90,7 +87,7 @@ const ContactPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Contact Cards */}
+            {}
             <section className="py-12 -mt-8">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -116,11 +113,11 @@ const ContactPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Main Content */}
+            {}
             <section className="py-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                        {/* Contact Form */}
+                        {}
                         <div className="bg-white rounded-2xl shadow-sm p-8">
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">
                                 Send Us a Message
@@ -209,7 +206,7 @@ const ContactPage: React.FC = () => {
                             </form>
                         </div>
 
-                        {/* FAQ Section */}
+                        {}
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">
                                 Frequently Asked Questions
@@ -237,7 +234,7 @@ const ContactPage: React.FC = () => {
                                 />
                             </div>
 
-                            {/* Additional Help */}
+                            {}
                             <div className="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6">
                                 <h3 className="text-lg font-semibold text-gray-900 mb-3">
                                     Need More Help?
@@ -264,7 +261,7 @@ const ContactPage: React.FC = () => {
     );
 };
 
-// Contact Card Component
+
 const ContactCard: React.FC<{
     icon: React.ReactNode;
     title: string;
@@ -281,7 +278,7 @@ const ContactCard: React.FC<{
     </div>
 );
 
-// FAQ Item Component
+
 const FAQItem: React.FC<{
     icon: React.ReactNode;
     question: string;

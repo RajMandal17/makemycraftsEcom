@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Payment verification response.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

@@ -28,20 +28,20 @@ public class CartServiceImpl implements CartService {
     public CartItemDto addToCart(CartItemDto cartItemDto, String token) {
         String userId = jwtUtil.getClaims(token).getSubject();
         
-        // Check if the item is already in cart
+        
         Optional<CartItem> existingItem = cartItemRepository.findAll().stream()
                 .filter(item -> item.getUserId().equals(userId) && item.getArtworkId().equals(cartItemDto.getArtworkId()))
                 .findFirst();
         
         if (existingItem.isPresent()) {
-            // Update quantity instead of creating a new item
+            
             CartItem item = existingItem.get();
             item.setQuantity(item.getQuantity() + cartItemDto.getQuantity());
             cartItemRepository.save(item);
             return modelMapper.map(item, CartItemDto.class);
         }
         
-        // Create new cart item
+        
         CartItem cartItem = CartItem.builder()
                 .userId(userId)
                 .artworkId(cartItemDto.getArtworkId())
@@ -83,7 +83,7 @@ public class CartServiceImpl implements CartService {
         CartItem cartItem = cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
         
-        // Ensure the user owns this cart item
+        
         if (!cartItem.getUserId().equals(userId)) {
             throw new IllegalArgumentException("You don't have permission to update this cart item");
         }
@@ -105,7 +105,7 @@ public class CartServiceImpl implements CartService {
         CartItem cartItem = cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
                 
-        // Ensure the user owns this cart item
+        
         if (!cartItem.getUserId().equals(userId)) {
             throw new IllegalArgumentException("You don't have permission to remove this cart item");
         }

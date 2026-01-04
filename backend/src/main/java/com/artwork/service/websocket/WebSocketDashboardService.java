@@ -20,15 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * WebSocket Dashboard Service
- * 
- * Broadcasts real-time updates to admin dashboard.
- * Optimized for low server cost:
- * - Only sends updates when data changes
- * - Caches last sent data to avoid redundant broadcasts
- * - Uses scheduled polling with reasonable intervals
- */
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -39,18 +31,15 @@ public class WebSocketDashboardService {
     private final ArtworkRepository artworkRepository;
     private final OrderRepository orderRepository;
     
-    // Cache last sent update to avoid redundant broadcasts
+    
     private final AtomicReference<DashboardUpdateDto> lastSentUpdate = new AtomicReference<>();
     
-    // Minimum interval between broadcasts (in milliseconds)
-    private static final long MIN_BROADCAST_INTERVAL = 5000; // 5 seconds
+    
+    private static final long MIN_BROADCAST_INTERVAL = 5000; 
     private volatile long lastBroadcastTime = 0;
     
-    /**
-     * Scheduled dashboard update - runs every 30 seconds
-     * Only broadcasts if data has changed
-     */
-    @Scheduled(fixedRate = 30000) // Every 30 seconds
+    
+    @Scheduled(fixedRate = 30000) 
     public void scheduledDashboardUpdate() {
         try {
             broadcastDashboardUpdate();
@@ -59,11 +48,9 @@ public class WebSocketDashboardService {
         }
     }
     
-    /**
-     * Broadcast dashboard update to all subscribed admins
-     */
+    
     public void broadcastDashboardUpdate() {
-        // Rate limit broadcasts
+        
         long now = System.currentTimeMillis();
         if (now - lastBroadcastTime < MIN_BROADCAST_INTERVAL) {
             return;
@@ -71,7 +58,7 @@ public class WebSocketDashboardService {
         
         DashboardUpdateDto update = buildDashboardUpdate();
         
-        // Only broadcast if data has changed
+        
         DashboardUpdateDto lastUpdate = lastSentUpdate.get();
         if (lastUpdate != null && isSameData(lastUpdate, update)) {
             log.debug("Dashboard data unchanged, skipping broadcast");
@@ -85,39 +72,29 @@ public class WebSocketDashboardService {
         log.debug("Broadcasted dashboard update");
     }
     
-    /**
-     * Send notification to all admins
-     */
+    
     public void sendNotificationToAdmins(NotificationDto notification) {
         messagingTemplate.convertAndSend("/topic/admin/notifications", notification);
         log.info("Sent notification to admins: {}", notification.getTitle());
     }
     
-    /**
-     * Send notification to a specific topic
-     */
+    
     public void sendNotification(String topic, NotificationDto notification) {
         messagingTemplate.convertAndSend("/topic/admin/" + topic, notification);
     }
     
-    /**
-     * Send notification to a specific user
-     */
+    
     public void sendNotificationToUser(String userId, NotificationDto notification) {
         messagingTemplate.convertAndSendToUser(userId, "/queue/notifications", notification);
     }
     
-    /**
-     * Force immediate dashboard update (call after significant events)
-     */
+    
     public void triggerImmediateUpdate() {
-        lastBroadcastTime = 0; // Reset rate limit
+        lastBroadcastTime = 0; 
         broadcastDashboardUpdate();
     }
     
-    /**
-     * Build dashboard update DTO with current stats
-     */
+    
     private DashboardUpdateDto buildDashboardUpdate() {
         return DashboardUpdateDto.builder()
             .userStats(buildUserStats())
@@ -134,7 +111,7 @@ public class WebSocketDashboardService {
         
         return DashboardUpdateDto.UserStats.builder()
             .totalUsers(totalUsers)
-            .activeUsers(totalUsers) // Could track active sessions if needed
+            .activeUsers(totalUsers) 
             .newUsersToday(newUsersToday)
             .pendingApprovals(artistsPending)
             .build();
@@ -173,7 +150,7 @@ public class WebSocketDashboardService {
         MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
         
         double cpuLoad = osBean.getSystemLoadAverage();
-        if (cpuLoad < 0) cpuLoad = 0; // Not available on some systems
+        if (cpuLoad < 0) cpuLoad = 0; 
         
         long usedMemory = memoryBean.getHeapMemoryUsage().getUsed();
         long maxMemory = memoryBean.getHeapMemoryUsage().getMax();
@@ -181,14 +158,14 @@ public class WebSocketDashboardService {
         
         return DashboardUpdateDto.SystemHealth.builder()
             .status("HEALTHY")
-            .activeServices(5) // Backend, DB, Redis, etc.
+            .activeServices(5) 
             .totalServices(5)
-            .cpuUsage(Math.min(cpuLoad * 10, 100)) // Normalize for display
+            .cpuUsage(Math.min(cpuLoad * 10, 100)) 
             .memoryUsage(memoryUsage)
             .build();
     }
     
-    // Helper methods
+    
     private long countNewUsersToday() {
         try {
             LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
@@ -232,7 +209,7 @@ public class WebSocketDashboardService {
     }
     
     private boolean isSameData(DashboardUpdateDto a, DashboardUpdateDto b) {
-        // Quick equality check - can be more sophisticated if needed
+        
         return a.getUserStats().getTotalUsers() == b.getUserStats().getTotalUsers()
             && a.getArtworkStats().getPendingApproval() == b.getArtworkStats().getPendingApproval()
             && a.getOrderStats().getTotalOrders() == b.getOrderStats().getTotalOrders();

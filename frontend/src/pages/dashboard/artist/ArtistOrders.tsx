@@ -243,7 +243,7 @@ const ArtistOrders: React.FC = () => {
         <h1 className="text-2xl font-semibold">Orders & Sales</h1>
       </div>
 
-      {/* Stats */}
+      {}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <div className="flex justify-between">
@@ -294,7 +294,7 @@ const ArtistOrders: React.FC = () => {
         </div>
       </div>
 
-      {/* Filter */}
+      {}
       <div className="flex space-x-2 mb-4 overflow-x-auto pb-2">
         <button
           onClick={() => setFilter('all')}
@@ -333,7 +333,7 @@ const ArtistOrders: React.FC = () => {
         </button>
       </div>
 
-      {/* Orders List */}
+      {}
       <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

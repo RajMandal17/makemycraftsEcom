@@ -34,7 +34,7 @@ const AdminDashboard: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Sidebar */}
+          {}
           <div className="w-full md:w-64 bg-white rounded-lg shadow-md p-4">
             <div className="flex flex-col items-center pb-5 mb-5 border-b">
               <div className="h-20 w-20 rounded-full bg-purple-100 flex items-center justify-center mb-2">
@@ -153,7 +153,7 @@ const AdminDashboard: React.FC = () => {
             </nav>
           </div>
 
-          {/* Main Content */}
+          {}
           <div className="flex-1 bg-white rounded-lg shadow-md p-6">
             <Routes>
               <Route index element={<AdminDashboardHome />} />
@@ -172,7 +172,7 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-// Dashboard Home Component
+
 const AdminDashboardHome: React.FC = () => {
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState<any>(null);
@@ -184,7 +184,7 @@ const AdminDashboardHome: React.FC = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        // Call the Admin Dashboard Service to get full dashboard overview
+        
         const response = await adminAPI.getDashboardOverview();
         setDashboardData(response);
         setError(null);
@@ -192,7 +192,7 @@ const AdminDashboardHome: React.FC = () => {
         console.error('Failed to fetch dashboard data:', err);
         setError('Failed to load dashboard data');
 
-        // Fallback to backend if Admin Dashboard Service is not available
+        
         try {
           const response = await adminApiClient.get('/v1/admin/dashboard/overview');
           setDashboardData(response.data.data);
@@ -207,13 +207,13 @@ const AdminDashboardHome: React.FC = () => {
 
     fetchDashboardData();
 
-    // Connect to WebSocket for real-time updates
+    
     const connectWebSocket = async () => {
       try {
         await adminWebSocketClient.connect();
         setIsWsConnected(true);
 
-        // Subscribe to dashboard updates
+        
         const unsubscribe = adminWebSocketClient.subscribeToDashboard((data: DashboardUpdate) => {
           console.log('Received real-time dashboard update:', data);
           setDashboardData((prev: any) => ({
@@ -225,7 +225,7 @@ const AdminDashboardHome: React.FC = () => {
           }));
         });
 
-        // Cleanup on unmount
+        
         return () => {
           unsubscribe();
           adminWebSocketClient.disconnect();
@@ -244,7 +244,7 @@ const AdminDashboardHome: React.FC = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
 
-        {/* WebSocket Connection Indicator */}
+        {}
         <div className="flex items-center space-x-2">
           {isWsConnected ? (
             <>
@@ -260,7 +260,7 @@ const AdminDashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* Quick stats */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-purple-50 border border-purple-100 p-4 rounded-lg">
           <div className="flex justify-between items-center">
@@ -331,12 +331,12 @@ const AdminDashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* System Health Monitor */}
+      {}
       <div className="mb-8">
         <SystemHealthMonitor />
       </div>
 
-      {/* Quick actions */}
+      {}
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -394,7 +394,7 @@ const AdminDashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* Recent activity */}
+      {}
       <div>
         <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
         <div className="border rounded-lg overflow-hidden">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppContext } from '../../context/AppContext';
 
-// Simplified JWT decoder function
+
 const decodeJWT = (token: string) => {
   try {
     const base64Url = token.split('.')[1];

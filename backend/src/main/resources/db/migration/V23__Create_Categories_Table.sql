@@ -1,8 +1,8 @@
--- V23__Create_Categories_Table.sql
--- Migration to create categories table with soft delete support
--- Part of category management system upgrade
 
--- Create categories table
+
+
+
+
 CREATE TABLE IF NOT EXISTS categories (
     id VARCHAR(36) PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS categories (
     deleted_by VARCHAR(36)
 );
 
--- Create indexes for common queries
+
 CREATE INDEX IF NOT EXISTS idx_categories_name ON categories(name);
 CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
 CREATE INDEX IF NOT EXISTS idx_categories_deleted ON categories(is_deleted);
@@ -30,8 +30,8 @@ CREATE INDEX IF NOT EXISTS idx_categories_active ON categories(is_active);
 CREATE INDEX IF NOT EXISTS idx_categories_display_order ON categories(display_order);
 CREATE INDEX IF NOT EXISTS idx_categories_name_lower ON categories(LOWER(name));
 
--- Insert default categories with fallback emojis
--- These are inserted as INACTIVE - Admin must activate them
+
+
 INSERT INTO categories (id, name, slug, display_name, emoji, display_order, is_active, is_deleted, created_at, updated_at)
 VALUES 
     (gen_random_uuid()::text, 'PAINTING', 'painting', 'Painting', '🎨', 1, FALSE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -51,7 +51,7 @@ VALUES
     (gen_random_uuid()::text, 'OTHER', 'other', 'Other', '✨', 15, FALSE, FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (name) DO NOTHING;
 
--- Add comment for documentation
+
 COMMENT ON TABLE categories IS 'Artwork categories with soft delete support. Admins can add/edit/delete categories with image icons.';
 COMMENT ON COLUMN categories.image_url IS 'URL to category icon image (replaces emoji when available)';
 COMMENT ON COLUMN categories.is_deleted IS 'Soft delete flag - TRUE means category is deleted but data retained';

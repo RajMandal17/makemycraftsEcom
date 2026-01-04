@@ -35,7 +35,7 @@ public class AdminAnalyticsServiceImpl implements AdminAnalyticsService {
     public Map<String, Object> getSystemHealth() {
         Map<String, Object> health = new HashMap<>();
         health.put("status", "UP");
-        health.put("database", "CONNECTED"); // Placeholder check
+        health.put("database", "CONNECTED"); 
         health.put("timestamp", System.currentTimeMillis());
         return health;
     }

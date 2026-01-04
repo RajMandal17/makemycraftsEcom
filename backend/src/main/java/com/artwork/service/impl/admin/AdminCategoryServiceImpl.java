@@ -32,20 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- * Implementation of AdminCategoryService
- * Provides full CRUD operations for category management with soft delete support
- * 
- * Features:
- * - CRUD operations with validation
- * - Soft delete and restore functionality
- * - Image upload via CloudStorageService
- * - Caching for performance
- * - Audit trail (created/updated/deleted by)
- * 
- * @author System
- * @since 1.0
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -59,9 +46,9 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     
     private static final String CATEGORY_IMAGES_FOLDER = "category-icons";
     
-    // ============================================
-    // Create Operations
-    // ============================================
+    
+    
+    
     
     @Override
     @Caching(evict = {
@@ -72,13 +59,13 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     public AdminCategoryDto createCategory(CategoryCreateRequest request, String adminId) {
         log.info("Creating new category: {} by admin: {}", request.getName(), adminId);
         
-        // Validate unique name
+        
         validateUniqueName(request.getName(), null);
         
-        // Build category entity
+        
         Category category = buildCategoryFromRequest(request, adminId);
         
-        // Save and return
+        
         Category savedCategory = categoryRepository.save(category);
         log.info("Category created successfully with ID: {}", savedCategory.getId());
         
@@ -94,26 +81,26 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     public AdminCategoryDto createCategoryWithImage(CategoryCreateRequest request, MultipartFile image, String adminId) throws IOException {
         log.info("Creating new category with image: {} by admin: {}", request.getName(), adminId);
         
-        // Validate unique name
+        
         validateUniqueName(request.getName(), null);
         
-        // Upload image first
+        
         String imageUrl = uploadImage(image);
         
-        // Build category entity
+        
         Category category = buildCategoryFromRequest(request, adminId);
         category.setImageUrl(imageUrl);
         
-        // Save and return
+        
         Category savedCategory = categoryRepository.save(category);
         log.info("Category with image created successfully with ID: {}", savedCategory.getId());
         
         return toAdminDto(savedCategory);
     }
     
-    // ============================================
-    // Read Operations
-    // ============================================
+    
+    
+    
     
     @Override
     @Transactional(readOnly = true)
@@ -208,9 +195,9 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             .collect(Collectors.toList());
     }
     
-    // ============================================
-    // Update Operations
-    // ============================================
+    
+    
+    
     
     @Override
     @Caching(evict = {
@@ -224,21 +211,21 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         
         Category category = findCategoryOrThrow(categoryId);
         
-        // Validate unique name if being changed
+        
         if (request.getName() != null && !request.getName().equalsIgnoreCase(category.getName())) {
             validateUniqueName(request.getName(), categoryId);
         }
         
-        // Apply updates
+        
         applyUpdates(category, request, adminId);
         
-        // Handle image removal if requested
+        
         if (Boolean.TRUE.equals(request.getRemoveImage()) && category.getImageUrl() != null) {
             deleteExistingImage(category.getImageUrl());
             category.setImageUrl(null);
         }
         
-        // Save and return
+        
         Category updatedCategory = categoryRepository.save(category);
         log.info("Category updated successfully: {}", categoryId);
         
@@ -257,24 +244,24 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         
         Category category = findCategoryOrThrow(categoryId);
         
-        // Validate unique name if being changed
+        
         if (request.getName() != null && !request.getName().equalsIgnoreCase(category.getName())) {
             validateUniqueName(request.getName(), categoryId);
         }
         
-        // Delete old image if exists
+        
         if (category.getImageUrl() != null) {
             deleteExistingImage(category.getImageUrl());
         }
         
-        // Upload new image
+        
         String imageUrl = uploadImage(image);
         category.setImageUrl(imageUrl);
         
-        // Apply other updates
+        
         applyUpdates(category, request, adminId);
         
-        // Save and return
+        
         Category updatedCategory = categoryRepository.save(category);
         log.info("Category with image updated successfully: {}", categoryId);
         
@@ -292,18 +279,18 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         
         Category category = findCategoryOrThrow(categoryId);
         
-        // Delete old image if exists
+        
         if (category.getImageUrl() != null) {
             deleteExistingImage(category.getImageUrl());
         }
         
-        // Upload new image
+        
         String imageUrl = uploadImage(image);
         category.setImageUrl(imageUrl);
         category.setUpdatedBy(adminId);
         category.setUpdatedAt(LocalDateTime.now());
         
-        // Save and return
+        
         Category updatedCategory = categoryRepository.save(category);
         log.info("Category image uploaded successfully: {}", categoryId);
         
@@ -321,7 +308,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         
         Category category = findCategoryOrThrow(categoryId);
         
-        // Delete existing image
+        
         if (category.getImageUrl() != null) {
             deleteExistingImage(category.getImageUrl());
             category.setImageUrl(null);
@@ -329,7 +316,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             category.setUpdatedAt(LocalDateTime.now());
         }
         
-        // Save and return
+        
         Category updatedCategory = categoryRepository.save(category);
         log.info("Category image removed successfully: {}", categoryId);
         
@@ -366,11 +353,11 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     public boolean activateCategoryByName(String categoryName, String adminId) {
         log.info("Activating category by name: {} by admin: {}", categoryName, adminId);
         
-        // Normalize the category name for lookup
+        
         String normalizedName = categoryName.toUpperCase().replaceAll("\\s+", "_").replaceAll("-", "_");
         
         try {
-            // Try multiple lookup strategies
+            
             Category category = categoryRepository.findByNameIgnoreCase(normalizedName)
                 .or(() -> categoryRepository.findByNameIgnoreCase(categoryName))
                 .orElse(null);
@@ -380,15 +367,15 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
                 return false;
             }
             
-            // If already active, just return true
+            
             if (category.getIsActive() && !category.getIsDeleted()) {
                 log.info("Category already active: {}", categoryName);
                 return true;
             }
             
-            // Activate the category
+            
             category.setIsActive(true);
-            category.setIsDeleted(false); // Also un-delete if it was soft-deleted
+            category.setIsDeleted(false); 
             category.setUpdatedBy(adminId);
             category.setUpdatedAt(LocalDateTime.now());
             
@@ -451,9 +438,9 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             .collect(Collectors.toList());
     }
     
-    // ============================================
-    // Delete Operations
-    // ============================================
+    
+    
+    
     
     @Override
     @Caching(evict = {
@@ -517,7 +504,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         
         Category category = findCategoryOrThrow(categoryId);
         
-        // Delete associated image if exists
+        
         if (category.getImageUrl() != null) {
             deleteExistingImage(category.getImageUrl());
         }
@@ -526,9 +513,9 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         log.info("Category permanently deleted: {}", categoryId);
     }
     
-    // ============================================
-    // Statistics Operations
-    // ============================================
+    
+    
+    
     
     @Override
     @Transactional(readOnly = true)
@@ -553,9 +540,9 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         return !categoryRepository.existsByNameIgnoreCase(name);
     }
     
-    // ============================================
-    // Private Helper Methods
-    // ============================================
+    
+    
+    
     
     private Category findCategoryOrThrow(String categoryId) {
         return categoryRepository.findById(categoryId)
@@ -576,13 +563,13 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     }
     
     private Category buildCategoryFromRequest(CategoryCreateRequest request, String adminId) {
-        // Determine display order
+        
         Integer displayOrder = request.getDisplayOrder();
         if (displayOrder == null) {
             displayOrder = categoryRepository.findMaxDisplayOrder() + 1;
         }
         
-        // Normalize name to uppercase with underscores
+        
         String normalizedName = request.getName().toUpperCase().replaceAll("\\s+", "_");
         
         return Category.builder()
@@ -606,7 +593,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             String normalizedName = request.getName().toUpperCase().replaceAll("\\s+", "_");
             category.setName(normalizedName);
             category.setSlug(Category.generateSlug(normalizedName));
-            // Update display name if not explicitly set
+            
             if (request.getDisplayName() == null) {
                 category.setDisplayName(Category.formatDisplayName(normalizedName));
             }
@@ -666,7 +653,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     private AdminCategoryDto toAdminDtoWithArtworkCount(Category category) {
         AdminCategoryDto dto = toAdminDto(category);
         
-        // Count artworks in this category using efficient database query
+        
         long artworkCount = artworkRepository.countByCategory(category.getName());
         dto.setArtworkCount(artworkCount);
         

@@ -18,9 +18,7 @@ public class EmailAnalyticsService {
 
     private final EmailLogRepository emailLogRepository;
 
-    /**
-     * Get email statistics for the last N hours
-     */
+    
     public Map<String, Object> getEmailStats(int hours) {
         LocalDateTime since = LocalDateTime.now().minusHours(hours);
         
@@ -50,16 +48,12 @@ public class EmailAnalyticsService {
         return stats;
     }
 
-    /**
-     * Get failed emails for debugging
-     */
+    
     public List<EmailLog> getFailedEmails() {
         return emailLogRepository.findByStatus(EmailLog.EmailStatus.FAILED);
     }
 
-    /**
-     * Get email history for a specific recipient
-     */
+    
     public List<EmailLog> getEmailHistory(String recipient) {
         return emailLogRepository.findByRecipient(recipient);
     }

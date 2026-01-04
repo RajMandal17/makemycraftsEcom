@@ -22,7 +22,7 @@ public class StrongPasswordValidator implements ConstraintValidator<StrongPasswo
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
         if (password == null || password.isEmpty()) {
-            // Null/empty validation should be handled by @NotNull or @NotEmpty
+            
             return true;
         }
         

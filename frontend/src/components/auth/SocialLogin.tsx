@@ -38,12 +38,12 @@ const SocialLogin: React.FC = () => {
 
   const handleSocialLogin = (authorizationUrl: string) => {
     setLoading(true);
-    // Construct full backend URL for OAuth2 authorization
+    
     const fullUrl = authorizationUrl.startsWith('http')
       ? authorizationUrl
       : `${API_CONFIG.BACKEND_URL}${authorizationUrl}`;
 
-    // Redirect to OAuth2 provider via backend
+    
     window.location.href = fullUrl;
   };
 

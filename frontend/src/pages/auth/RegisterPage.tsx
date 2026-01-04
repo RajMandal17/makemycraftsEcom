@@ -64,7 +64,7 @@ const RegisterPage: React.FC = () => {
           role: registerData.role as 'CUSTOMER' | 'ARTIST'
         });
         if (result && result.user && result.tokens && result.tokens.accessToken) {
-          // Store both access and refresh tokens using TokenManager
+          
           TokenManager.setTokens(result.tokens.accessToken, result.tokens.refreshToken);
           dispatch({ 
             type: 'AUTH_SUCCESS', 
@@ -76,11 +76,11 @@ const RegisterPage: React.FC = () => {
           });
           toast.success('Registration successful! Welcome to ArtMarket!');
           
-          // Use redirectUrl from the backend response
+          
           if (result.redirectUrl) {
             navigate(result.redirectUrl, { replace: true });
           } else {
-            // Fallback to front-end role-based redirect
+            
             if (result.user.role === 'ARTIST') {
               navigate('/dashboard/artist', { replace: true });
             } else if (result.user.role === 'ADMIN') {
@@ -91,7 +91,7 @@ const RegisterPage: React.FC = () => {
               navigate('/');
             }
           }
-          return; // Prevent execution of error code
+          return; 
         } else {
           throw new Error('Registration failed - Invalid response format');
         }
@@ -109,7 +109,7 @@ const RegisterPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-lg shadow-xl p-8">
-          {/* Header */}
+          {}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
               <div className="bg-purple-600 p-3 rounded-full">
@@ -120,9 +120,9 @@ const RegisterPage: React.FC = () => {
             <p className="text-gray-600 mt-2">Create your account to get started</p>
           </div>
 
-          {/* Form */}
+          {}
           <form onSubmit={formik.handleSubmit} className="space-y-6">
-            {/* Role Selection */}
+            {}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 I want to join as a:
@@ -160,7 +160,7 @@ const RegisterPage: React.FC = () => {
               )}
             </div>
 
-            {/* Name Fields */}
+            {}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -202,7 +202,7 @@ const RegisterPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Email */}
+            {}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email Address
@@ -223,7 +223,7 @@ const RegisterPage: React.FC = () => {
               )}
             </div>
 
-            {/* Password */}
+            {}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Password
@@ -257,7 +257,7 @@ const RegisterPage: React.FC = () => {
               )}
             </div>
 
-            {/* Confirm Password */}
+            {}
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
                 Confirm Password
@@ -291,7 +291,7 @@ const RegisterPage: React.FC = () => {
               )}
             </div>
 
-            {/* Terms Agreement */}
+            {}
             <div className="flex items-start">
               <input
                 id="agreeToTerms"
@@ -314,7 +314,7 @@ const RegisterPage: React.FC = () => {
               <p className="text-sm text-red-600">{formik.errors.agreeToTerms}</p>
             )}
 
-            {/* Submit Button */}
+            {}
             <button
               type="submit"
               disabled={formik.isSubmitting}
@@ -328,10 +328,10 @@ const RegisterPage: React.FC = () => {
             </button>
           </form>
 
-          {/* Social Registration */}
+          {}
           <SocialLogin />
 
-          {/* Divider */}
+          {}
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -343,7 +343,7 @@ const RegisterPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Sign In Link */}
+          {}
           <div className="mt-6 text-center">
             <Link
               to="/login"

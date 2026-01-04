@@ -71,11 +71,11 @@ const PendingArtworkApprovals: React.FC = () => {
 
         setIsProcessing(true);
         try {
-            // Use approve-with-category to also activate the category if needed
+            
             await adminAPI.approveArtworkWithCategory(selectedArtwork.id, approveNotes || undefined);
             toast.success(`Artwork "${selectedArtwork.title}" approved successfully!`);
 
-            // Remove from pending list
+            
             setPendingArtworks(prev => prev.filter(a => a.id !== selectedArtwork.id));
             setShowApproveModal(false);
         } catch (error: any) {
@@ -97,7 +97,7 @@ const PendingArtworkApprovals: React.FC = () => {
             await adminAPI.rejectArtwork(selectedArtwork.id, rejectReason);
             toast.success(`Artwork "${selectedArtwork.title}" rejected`);
 
-            // Remove from pending list
+            
             setPendingArtworks(prev => prev.filter(a => a.id !== selectedArtwork.id));
             setShowRejectModal(false);
         } catch (error: any) {
@@ -123,7 +123,7 @@ const PendingArtworkApprovals: React.FC = () => {
 
     return (
         <div className="bg-white rounded-lg shadow">
-            {/* Header */}
+            {}
             <div className="p-4 border-b flex items-center justify-between">
                 <div className="flex items-center">
                     <Clock className="h-5 w-5 text-amber-500 mr-2" />
@@ -141,7 +141,7 @@ const PendingArtworkApprovals: React.FC = () => {
                 </button>
             </div>
 
-            {/* Content */}
+            {}
             {pendingArtworks.length === 0 ? (
                 <div className="p-8 text-center">
                     <Check className="h-12 w-12 text-green-500 mx-auto mb-4" />
@@ -152,9 +152,9 @@ const PendingArtworkApprovals: React.FC = () => {
                 <div className="divide-y divide-gray-200">
                     {pendingArtworks.map((artwork) => (
                         <div key={artwork.id} className="p-4">
-                            {/* Artwork Card */}
+                            {}
                             <div className="flex items-start gap-4">
-                                {/* Thumbnail */}
+                                {}
                                 <div className="flex-shrink-0 h-24 w-24 bg-gray-100 rounded-lg overflow-hidden">
                                     {artwork.images && artwork.images.length > 0 ? (
                                         <img
@@ -169,7 +169,7 @@ const PendingArtworkApprovals: React.FC = () => {
                                     )}
                                 </div>
 
-                                {/* Info */}
+                                {}
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-start justify-between">
                                         <div>
@@ -201,7 +201,7 @@ const PendingArtworkApprovals: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Quick Info */}
+                                    {}
                                     <div className="flex items-center gap-4 mt-2 text-sm">
                                         <span className="text-gray-600">
                                             <strong>Category:</strong>{' '}
@@ -220,7 +220,7 @@ const PendingArtworkApprovals: React.FC = () => {
                                         </span>
                                     </div>
 
-                                    {/* Moderation Notes (if any) */}
+                                    {}
                                     {artwork.moderationNotes && (
                                         <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded text-sm">
                                             <AlertTriangle className="h-4 w-4 inline text-amber-500 mr-1" />
@@ -228,7 +228,7 @@ const PendingArtworkApprovals: React.FC = () => {
                                         </div>
                                     )}
 
-                                    {/* Expand/Collapse */}
+                                    {}
                                     <button
                                         onClick={() => toggleExpand(artwork.id)}
                                         className="text-purple-600 text-sm mt-2 flex items-center hover:underline"
@@ -246,7 +246,7 @@ const PendingArtworkApprovals: React.FC = () => {
                                         )}
                                     </button>
 
-                                    {/* Expanded View */}
+                                    {}
                                     {expandedArtwork === artwork.id && (
                                         <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                                             <p className="text-sm text-gray-700 mb-4">
@@ -254,7 +254,7 @@ const PendingArtworkApprovals: React.FC = () => {
                                                 {artwork.description}
                                             </p>
 
-                                            {/* All Images */}
+                                            {}
                                             {artwork.images && artwork.images.length > 1 && (
                                                 <div>
                                                     <strong className="text-sm text-gray-700">All Images:</strong>
@@ -279,7 +279,7 @@ const PendingArtworkApprovals: React.FC = () => {
                 </div>
             )}
 
-            {/* Approve Modal */}
+            {}
             {showApproveModal && selectedArtwork && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg w-full max-w-md">
@@ -340,7 +340,7 @@ const PendingArtworkApprovals: React.FC = () => {
                 </div>
             )}
 
-            {/* Reject Modal */}
+            {}
             {showRejectModal && selectedArtwork && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg w-full max-w-md">

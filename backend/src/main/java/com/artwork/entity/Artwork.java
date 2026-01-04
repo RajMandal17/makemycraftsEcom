@@ -55,7 +55,7 @@ public class Artwork {
     
     private String moderationNotes;
 
-    // We need both artistId for direct queries and artist relationship
+    
     @Column(name = "artist_id", insertable = false, updatable = false)
     private String artistId;
     
@@ -82,7 +82,7 @@ public class Artwork {
     @OneToMany(mappedBy = "artwork")
     private List<OrderItem> orderItems;
 
-    // Helper methods
+    
     public Dimensions getDimensions() {
         return Dimensions.builder()
                 .width(this.width)

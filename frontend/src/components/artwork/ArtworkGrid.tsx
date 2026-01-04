@@ -16,7 +16,7 @@ const ArtworkGrid: React.FC<ArtworkGridProps> = ({
   onAddToCart,
   onAddToWishlist,
 }) => {
-  // Using useCallback to memoize functions passed to child components
+  
   const handleAddToCart = useCallback((artwork: Artwork) => {
     if (onAddToCart) {
       onAddToCart(artwork);
@@ -60,9 +60,9 @@ const ArtworkGrid: React.FC<ArtworkGridProps> = ({
   );
 };
 
-// Using memo to prevent unnecessary re-renders when props don't change
+
 export default memo(ArtworkGrid, (prevProps, nextProps) => {
-  // Only re-render if loading state changes or artworks array changes
+  
   return prevProps.loading === nextProps.loading && 
          prevProps.artworks === nextProps.artworks;
 });

@@ -87,7 +87,7 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
     }
   }, [artwork, isInWishlist, state.auth.isAuthenticated, dispatch, onAddToWishlist, state.wishlist]);
 
-  // Handle potentially incomplete data
+  
   const safeArtwork = {
     ...artwork,
     images: artwork.images?.length > 0 ? artwork.images : ['https://images.pexels.com/photos/1183992/pexels-photo-1183992.jpeg'],
@@ -97,22 +97,22 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
     dimensions: artwork.dimensions || { width: 0, height: 0 }
   };
 
-  // Determine badge variant based on artwork properties
+  
   const getBadge = () => {
     if (!showBadge) return null;
     if (!artwork.isAvailable) return <Badge variant="soldOut" size="sm">Sold Out</Badge>;
-    // You can add more logic here based on artwork properties
-    // For example: if (artwork.isFeatured) return <Badge variant="featured">Featured</Badge>;
+    
+    
     return null;
   };
 
   return (
     <>
       <div className="group relative bg-white rounded-xl shadow-soft overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 animate-fade-in">
-        {/* Image Container - Portrait Aspect Ratio */}
+        {}
         <Link to={`/artworks/${artwork.id}`} className="block">
           <div className="relative aspect-portrait overflow-hidden bg-neutral-100">
-            {/* Skeleton loader while image loads */}
+            {}
             {!imageLoaded && (
               <div className="absolute inset-0 shimmer" />
             )}
@@ -126,7 +126,7 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
               loading="lazy"
             />
 
-            {/* Overlay Actions - Appear on Hover */}
+            {}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div className="absolute inset-0 flex items-center justify-center gap-3">
                 <button
@@ -152,14 +152,14 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
               </div>
             </div>
 
-            {/* Badge - Top Left */}
+            {}
             {getBadge() && (
               <div className="absolute top-3 left-3 z-10">
                 {getBadge()}
               </div>
             )}
 
-            {/* Price Badge - Top Right */}
+            {}
             <div className="absolute top-3 right-3 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-md">
               <span className="text-base font-bold text-primary-600">
                 ₹{artwork.price.toLocaleString()}
@@ -168,16 +168,16 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
           </div>
         </Link>
 
-        {/* Content */}
+        {}
         <div className="p-4">
-          {/* Title */}
+          {}
           <Link to={`/artworks/${artwork.id}`}>
             <h3 className="font-display font-semibold text-lg text-neutral-900 hover:text-primary-600 transition-colors mb-1 line-clamp-1">
               {artwork.title}
             </h3>
           </Link>
 
-          {/* Artist */}
+          {}
           {artwork.artist?.id ? (
             <Link
               to={
@@ -210,7 +210,7 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
             </p>
           )}
 
-          {/* Rating */}
+          {}
           {artwork.averageRating > 0 && (
             <div className="flex items-center mb-3">
               <div className="flex items-center">
@@ -230,12 +230,12 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
             </div>
           )}
 
-          {/* Description - Truncated */}
+          {}
           <p className="text-sm text-neutral-700 mb-4 line-clamp-2">
             {artwork.description}
           </p>
 
-          {/* Tags */}
+          {}
           {artwork.tags && artwork.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-4">
               {artwork.tags.slice(0, 2).map((tag, index) => (
@@ -254,7 +254,7 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
             </div>
           )}
 
-          {/* Add to Cart Button */}
+          {}
           <Button
             variant={isInCart ? 'secondary' : 'primary'}
             size="md"
@@ -269,7 +269,7 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
         </div>
       </div>
 
-      {/* Quick View Modal */}
+      {}
       <QuickViewModal
         isOpen={isQuickViewOpen}
         onClose={() => setIsQuickViewOpen(false)}
@@ -283,7 +283,7 @@ const ArtworkCard: React.FC<ArtworkCardProps> = ({
   );
 };
 
-// Using memo to prevent unnecessary re-renders
+
 export default memo(ArtworkCard, (prevProps, nextProps) => {
   return (
     prevProps.artwork.id === nextProps.artwork.id &&

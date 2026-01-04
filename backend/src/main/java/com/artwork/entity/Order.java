@@ -47,7 +47,7 @@ public class Order {
     
     private Boolean flagged = false;
     
-    private String priority; // LOW, MEDIUM, HIGH
+    private String priority; 
 
     private String paymentMethod;
     private LocalDateTime createdAt = LocalDateTime.now();

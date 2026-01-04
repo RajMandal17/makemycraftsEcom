@@ -9,11 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * SellerBankAccount entity for seller payout destinations.
- * 
- * @author Artwork Platform
- */
+
 @Entity
 @Table(name = "seller_bank_accounts", indexes = {
     @Index(name = "idx_bank_seller_kyc", columnList = "sellerKycId"),
@@ -37,7 +33,7 @@ public class SellerBankAccount {
     private String accountHolderName;
     
     @Column(nullable = false)
-    private String accountNumber; // Should be encrypted in production
+    private String accountNumber; 
     
     @Column(nullable = false, length = 11)
     private String ifscCode;

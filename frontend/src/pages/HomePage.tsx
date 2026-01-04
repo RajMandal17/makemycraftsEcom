@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Fetch statistics, top sellers, and artworks in parallel for better performance
+      
       const fetchStats = async () => {
         try {
           console.log('Fetching home statistics...');
@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
           setStats(statsData);
         } catch (error) {
           console.error('Error fetching home statistics:', error);
-          // Set default stats on error
+          
           setStats({
             totalArtworks: 0,
             totalArtists: 0,
@@ -84,11 +84,11 @@ const HomePage: React.FC = () => {
         }
       };
 
-      // Execute all three fetches in parallel
+      
       await Promise.all([fetchStats(), fetchTopSellers(), fetchArtworks()]);
     };
 
-    // Set SEO meta tags for homepage
+    
     updateMetaTags({
       title: 'MakeMyCrafts - Buy Handmade Artwork, Custom Made Crafts & Homemade Art Online India',
       description: 'MakeMyCrafts - India\'s best marketplace for handmade artwork, custom made crafts & homemade art. Buy unique handcrafted paintings, sculptures & artworks directly from skilled artists. Perfect for custom artwork gifts & home decor.',
@@ -102,7 +102,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Top Sellers Carousel - Hero Section */}
+      {}
       {!topSellersLoading && topSellers.length > 0 && (
         <ProductCarousel
           products={topSellers}
@@ -113,7 +113,7 @@ const HomePage: React.FC = () => {
       )}
 
 
-      {/* Featured Artworks */}
+      {}
       <section className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -171,7 +171,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Categories */}
+      {}
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -238,7 +238,7 @@ const HomePage: React.FC = () => {
       </section>
 
 
-      {/* Stats Section */}
+      {}
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {statsLoading ? (
@@ -288,7 +288,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {}
       <section className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">

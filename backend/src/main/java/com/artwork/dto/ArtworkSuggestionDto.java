@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * DTO for artwork suggestions returned from AI analysis
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,7 +29,7 @@ public class ArtworkSuggestionDto {
     private LocalDateTime createdAt;
     private Boolean isApplied;
     
-    // Additional metadata for frontend
+    
     private AnalysisMetadata metadata;
     
     @Data

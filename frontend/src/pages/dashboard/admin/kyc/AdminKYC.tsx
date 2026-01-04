@@ -102,7 +102,7 @@ const AdminKYC: React.FC = () => {
                 <p>Review and approve seller KYC submissions</p>
             </div>
 
-            {/* Filter Tabs */}
+            {}
             <div className="kyc-filters">
                 <button
                     className={`filter-btn ${filter === 'PENDING' ? 'active' : ''}`}
@@ -136,7 +136,7 @@ const AdminKYC: React.FC = () => {
                 </div>
             )}
 
-            {/* KYC List */}
+            {}
             <div className="kyc-list">
                 {allKyc.length === 0 ? (
                     <div className="empty-state">
@@ -175,7 +175,7 @@ const AdminKYC: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Documents */}
+                                {}
                                 <div className="kyc-documents">
                                     <h4>Documents</h4>
                                     <div className="document-links">
@@ -210,7 +210,7 @@ const AdminKYC: React.FC = () => {
                                 )}
                             </div>
 
-                            {/* Actions */}
+                            {}
                             {kyc.kycStatus === 'PENDING' && (
                                 <div className="kyc-card-actions">
                                     <button
@@ -232,7 +232,7 @@ const AdminKYC: React.FC = () => {
                 )}
             </div>
 
-            {/* Reject Modal */}
+            {}
             {showRejectModal && selectedKyc && (
                 <div className="modal-overlay" onClick={() => setShowRejectModal(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>

@@ -6,10 +6,7 @@ import { userAPI } from '../../services/userAPI';
 import TokenManager from '../../utils/tokenManager';
 import './OAuth2Callback.css';
 
-/**
- * OAuth2 Callback page
- * Handles the redirect from OAuth2 provider with tokens
- */
+
 const OAuth2CallbackPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -22,14 +19,14 @@ const OAuth2CallbackPage: React.FC = () => {
   }, []);
 
   const handleOAuth2Callback = async () => {
-    // Get parameters from URL
+    
     const token = searchParams.get('token');
     const refreshToken = searchParams.get('refreshToken');
     const role = searchParams.get('role');
     const error = searchParams.get('error');
     const message = searchParams.get('message');
 
-    // Handle error case
+    
     if (error) {
       setStatus('error');
       setErrorMessage(message || 'OAuth2 authentication failed. Please try again.');
@@ -39,24 +36,24 @@ const OAuth2CallbackPage: React.FC = () => {
       return;
     }
 
-    // Handle success case
+    
     if (token && refreshToken) {
       try {
-        // Store tokens using TokenManager (with correct keys)
+        
         TokenManager.setTokens(token, refreshToken);
         
         console.log('✅ OAuth2 tokens stored via TokenManager');
         console.log('🔍 Fetching user profile...');
 
-        // Fetch user data and update auth state
+        
         const userData = await userAPI.getProfile();
         
         console.log('✅ User profile fetched:', userData);
         
-        // Store user data
+        
         TokenManager.setUserData(userData);
         
-        // Update app context with user data
+        
         dispatch({
           type: 'AUTH_SUCCESS',
           payload: {
@@ -67,7 +64,7 @@ const OAuth2CallbackPage: React.FC = () => {
 
         setStatus('success');
 
-        // Redirect to appropriate dashboard based on role
+        
         setTimeout(() => {
           switch (role?.toUpperCase()) {
             case 'ADMIN':
@@ -92,7 +89,7 @@ const OAuth2CallbackPage: React.FC = () => {
         }, 3000);
       }
     } else {
-      // No tokens found
+      
       setStatus('error');
       setErrorMessage('Authentication tokens not found. Please try again.');
       setTimeout(() => {

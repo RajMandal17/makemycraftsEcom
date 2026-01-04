@@ -2,9 +2,7 @@ package com.artwork.security;
 
 import java.util.Map;
 
-/**
- * GitHub OAuth2 user info implementation
- */
+
 public class GithubOAuth2UserInfo extends OAuth2UserInfo {
     
     public GithubOAuth2UserInfo(Map<String, Object> attributes) {

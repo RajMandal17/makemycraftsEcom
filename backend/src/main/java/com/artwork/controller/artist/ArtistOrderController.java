@@ -18,9 +18,7 @@ public class ArtistOrderController {
     
     private final ArtistOrderService artistOrderService;
 
-    /**
-     * Get all orders containing the artist's artworks
-     */
+    
     @PreAuthorize("hasRole('ARTIST')")
     @GetMapping
     public ResponseEntity<?> getArtistOrders(
@@ -46,9 +44,7 @@ public class ArtistOrderController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Get a specific order by ID (only if it contains artist's artwork)
-     */
+    
     @PreAuthorize("hasRole('ARTIST')")
     @GetMapping("/{orderId}")
     public ResponseEntity<?> getOrderById(
@@ -66,9 +62,7 @@ public class ArtistOrderController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Update order status (artist can only update certain statuses)
-     */
+    
     @PreAuthorize("hasRole('ARTIST')")
     @PutMapping("/{orderId}/status")
     public ResponseEntity<?> updateOrderStatus(
@@ -91,9 +85,7 @@ public class ArtistOrderController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Get artist order statistics
-     */
+    
     @PreAuthorize("hasRole('ARTIST')")
     @GetMapping("/stats")
     public ResponseEntity<?> getArtistOrderStats(@RequestHeader("Authorization") String authHeader) {

@@ -1,9 +1,7 @@
 import apiClient from './api';
 
 export const debugAPI = {
-  /**
-   * Test the authentication status
-   */
+  
   testAuth: async (): Promise<any> => {
     try {
       const response = await apiClient.get('/users/auth-check');
@@ -15,9 +13,7 @@ export const debugAPI = {
     }
   },
   
-  /**
-   * Test if the artist role permissions are working
-   */
+  
   testArtistAccess: async (): Promise<any> => {
     try {
       const response = await apiClient.get('/artworks/my-artworks');

@@ -12,14 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-/**
- * Implementation of Razorpay X payout service.
- * 
- * Handles direct bank transfers to sellers using Razorpay X API.
- * Requires Razorpay X virtual account to be set up.
- * 
- * @author Artwork Platform
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -50,15 +43,15 @@ public class RazorpayXPayoutServiceImpl implements RazorpayXPayoutService {
             contactRequest.put("type", "vendor");
             contactRequest.put("reference_id", sellerId);
             
-            // Notes for tracking
+            
             JSONObject notes = new JSONObject();
             notes.put("seller_id", sellerId);
             notes.put("platform", "makemycrafts");
             contactRequest.put("notes", notes);
             
-            // TODO: Razorpay SDK may not have direct contact creation
-            // This requires using Razorpay X API directly
-            // For now, return placeholder
+            
+            
+            
             
             log.info("Razorpay X contact request prepared for seller: {}", sellerId);
             return "cont_pending_" + System.currentTimeMillis();
@@ -89,8 +82,8 @@ public class RazorpayXPayoutServiceImpl implements RazorpayXPayoutService {
             bankDetails.put("account_number", bankAccount.getAccountNumber());
             fundAccountRequest.put("bank_account", bankDetails);
             
-            // TODO: Implement actual API call
-            // This requires Razorpay X SDK or direct HTTP calls
+            
+            
             
             log.info("Razorpay X fund account request prepared for contact: {}", contactId);
             return "fa_pending_" + System.currentTimeMillis();
@@ -133,23 +126,23 @@ public class RazorpayXPayoutServiceImpl implements RazorpayXPayoutService {
             JSONObject payoutRequest = new JSONObject();
             payoutRequest.put("account_number", razorpayXAccountNumber);
             payoutRequest.put("fund_account_id", fundAccountId);
-            payoutRequest.put("amount", amount.multiply(new BigDecimal("100")).intValue()); // Paise
+            payoutRequest.put("amount", amount.multiply(new BigDecimal("100")).intValue()); 
             payoutRequest.put("currency", currency);
-            payoutRequest.put("mode", "NEFT"); // NEFT, RTGS, IMPS, or UPI
+            payoutRequest.put("mode", "NEFT"); 
             payoutRequest.put("purpose", "vendor_bill");
             payoutRequest.put("queue_if_low_balance", true);
             payoutRequest.put("reference_id", referenceId);
             payoutRequest.put("narration", narration);
             
-            // Notes for tracking
+            
             JSONObject notes = new JSONObject();
             notes.put("platform", "makemycrafts");
             notes.put("type", "seller_payout");
             payoutRequest.put("notes", notes);
             
-            // TODO: Implement actual API call
-            // This requires Razorpay X SDK or direct HTTP calls
-            // com.razorpay.Payout payout = razorpayClient.payouts.create(payoutRequest);
+            
+            
+            
             
             log.info("Razorpay X payout initiated for reference: {}", referenceId);
             
@@ -189,8 +182,8 @@ public class RazorpayXPayoutServiceImpl implements RazorpayXPayoutService {
         }
         
         try {
-            // TODO: Implement actual API call
-            // com.razorpay.Payout payout = razorpayClient.payouts.fetch(payoutId);
+            
+            
             
             return new PayoutResult(
                 true,

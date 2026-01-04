@@ -38,7 +38,7 @@ const Carousel: React.FC<CarouselProps> = ({
     const totalItems = children.length;
     const maxIndex = Math.max(0, totalItems - itemsPerView);
 
-    // Auto-play functionality
+    
     useEffect(() => {
         if (!autoPlay || !inView || isHovered) return;
 
@@ -61,7 +61,7 @@ const Carousel: React.FC<CarouselProps> = ({
         setCurrentIndex(Math.min(index, maxIndex));
     };
 
-    // Variant-specific styles
+    
     const variantStyles: Record<CarouselVariant, string> = {
         hero: 'h-[400px] md:h-[600px]',
         product: 'h-auto',
@@ -75,7 +75,7 @@ const Carousel: React.FC<CarouselProps> = ({
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {/* Carousel Container */}
+            {}
             <div className="overflow-hidden h-full" ref={containerRef}>
                 <div
                     className="flex h-full transition-transform duration-500 ease-out"
@@ -98,7 +98,7 @@ const Carousel: React.FC<CarouselProps> = ({
                 </div>
             </div>
 
-            {/* Navigation Arrows */}
+            {}
             {showNavigation && totalItems > itemsPerView && (
                 <>
                     <button
@@ -118,7 +118,7 @@ const Carousel: React.FC<CarouselProps> = ({
                 </>
             )}
 
-            {/* Indicators */}
+            {}
             {showIndicators && totalItems > itemsPerView && (
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
                     {Array.from({ length: maxIndex + 1 }).map((_, index) => (
@@ -138,7 +138,7 @@ const Carousel: React.FC<CarouselProps> = ({
     );
 };
 
-// Hero Carousel Slide Component
+
 export const HeroSlide: React.FC<{
     image: string;
     title: string;

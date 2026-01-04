@@ -48,8 +48,8 @@ const AdminOrders: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // This would ideally filter orders by ID or customer name
-    // For now, we're just using status filter
+    
+    
     fetchOrders(1, selectedStatus);
   };
 
@@ -71,7 +71,7 @@ const AdminOrders: React.FC = () => {
       await adminAPI.updateOrderStatus(orderToEdit.id, selectedStatusOption);
       toast.success(`Order #${orderToEdit.id.substring(0, 8)} status updated to ${selectedStatusOption}`);
 
-      // Update local state
+      
       setOrders(orders.map(order =>
         order.id === orderToEdit.id ? { ...order, status: selectedStatusOption } : order
       ));
@@ -119,7 +119,7 @@ const AdminOrders: React.FC = () => {
         </h1>
       </div>
 
-      {/* Search and filters */}
+      {}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <form
           onSubmit={handleSearch}
@@ -168,7 +168,7 @@ const AdminOrders: React.FC = () => {
         </div>
       </div>
 
-      {/* Orders table */}
+      {}
       <div className="bg-white border rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -261,7 +261,7 @@ const AdminOrders: React.FC = () => {
         </div>
       </div>
 
-      {/* Pagination */}
+      {}
       {totalPages > 1 && (
         <div className="flex justify-between items-center mt-4">
           <p className="text-sm text-gray-700">
@@ -278,7 +278,7 @@ const AdminOrders: React.FC = () => {
               <ChevronLeft className="h-5 w-5" />
             </button>
 
-            {/* Simple pagination display */}
+            {}
             <button className="px-4 py-2 border bg-purple-50 text-purple-600 font-medium rounded-md">
               {currentPage}
             </button>
@@ -294,7 +294,7 @@ const AdminOrders: React.FC = () => {
         </div>
       )}
 
-      {/* Status update modal */}
+      {}
       {showStatusModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">
@@ -344,7 +344,7 @@ const AdminOrders: React.FC = () => {
         </div>
       )}
 
-      {/* Order details modal */}
+      {}
       {showOrderDetailsModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">

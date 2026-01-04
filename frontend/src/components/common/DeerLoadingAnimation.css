@@ -1,4 +1,4 @@
-/* Deer Loading Animation Styles */
+
 
 .deer-loading-overlay {
   position: fixed;
@@ -30,7 +30,7 @@
   padding: 2rem;
 }
 
-/* Deer Animation Styles */
+
 .deer-animation {
   position: relative;
   width: 200px;
@@ -54,7 +54,7 @@
   filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3));
 }
 
-/* Deer Body Parts */
+
 .deer-body {
   fill: #f59e0b;
   animation: breathe 2s ease-in-out infinite;
@@ -234,7 +234,7 @@
   }
 }
 
-/* Floating Art Palettes */
+
 .floating-palette {
   position: absolute;
   font-size: 2rem;
@@ -268,7 +268,7 @@
   }
 }
 
-/* Loading Text */
+
 .loading-text {
   color: white;
   margin-top: 1rem;
@@ -329,7 +329,7 @@
   }
 }
 
-/* Circular Progress Indicator */
+
 .circular-progress {
   position: absolute;
   bottom: -50px;
@@ -370,7 +370,7 @@
   }
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .deer-animation {
     width: 150px;
@@ -392,14 +392,14 @@
   }
 }
 
-/* Dark mode support */
+
 @media (prefers-color-scheme: dark) {
   .deer-loading-overlay {
     background: linear-gradient(135deg, rgba(79, 70, 229, 0.95) 0%, rgba(219, 39, 119, 0.95) 100%);
   }
 }
 
-/* Accessibility - Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
   .deer-animation,
   .deer-body,

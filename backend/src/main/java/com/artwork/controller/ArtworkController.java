@@ -44,8 +44,8 @@ public class ArtworkController {
                 "totalPages", result.getTotalPages()
             ));
         } catch (Exception e) {
-            // Handle database errors gracefully by returning empty data
-            // This prevents 500 errors when tables don't exist or database is unavailable
+            
+            
             System.err.println("Database error in getArtworks: " + e.getMessage());
             return ResponseEntity.ok(java.util.Map.of(
                 "artworks", new ArrayList<>(),
@@ -55,7 +55,7 @@ public class ArtworkController {
         }
     }
 
-    // Security handled via SecurityConfig
+    
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<?> createArtwork(
             @RequestParam String title,
@@ -71,13 +71,13 @@ public class ArtworkController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         try {
-            // Log authentication details for debugging
+            
             System.out.println("Create artwork auth - username: " + 
                 (userDetails != null ? userDetails.getUsername() : "No user details"));
             System.out.println("User authorities: " + 
                 (userDetails != null ? userDetails.getAuthorities() : "N/A"));
             
-            // Make sure we have a UserPrincipal
+            
             if (!(userDetails instanceof UserPrincipal)) {
                 throw new RuntimeException("User details not of expected type. Found: " + 
                     (userDetails != null ? userDetails.getClass().getName() : "null"));
@@ -102,9 +102,7 @@ public class ArtworkController {
         return ResponseEntity.ok(updated);
     }
     
-    /**
-     * Get artworks for the current authenticated artist
-     */
+    
     @PreAuthorize("hasAuthority('ROLE_ARTIST')")
     @GetMapping("/my-artworks")
     public ResponseEntity<?> getMyArtworks(
@@ -121,7 +119,7 @@ public class ArtworkController {
             System.out.println("UserDetails type: " + (userDetails != null ? userDetails.getClass().getName() : "NULL"));
             System.out.println("UserDetails username: " + (userDetails != null ? userDetails.getUsername() : "NULL"));
             
-            // Get the artist ID from the authenticated principal
+            
             if (!(userDetails instanceof UserPrincipal)) {
                 System.err.println("ERROR: UserDetails is not an instance of UserPrincipal!");
                 return ResponseEntity.status(401).body(Map.of(
@@ -141,7 +139,7 @@ public class ArtworkController {
             
             Page<ArtworkDto> result = artworkService.getArtworks(page, limit, category, minPrice, maxPrice, search, artistId);
             
-            // Ensure we always return a valid array, even if empty
+            
             List<ArtworkDto> artworks = result != null ? result.getContent() : new ArrayList<>();
             long total = result != null ? result.getTotalElements() : 0;
             int totalPages = result != null ? result.getTotalPages() : 0;
@@ -159,22 +157,20 @@ public class ArtworkController {
             return ResponseEntity.status(500).body(Map.of(
                 "error", e.getMessage(),
                 "status", "Error retrieving artist artworks",
-                "artworks", new ArrayList<>(),  // Always provide empty array on error
+                "artworks", new ArrayList<>(),  
                 "total", 0,
                 "totalPages", 0
             ));
         }
     }
     
-    /**
-     * Get artworks by specific artist ID
-     */
+    
     @GetMapping("/artist/{artistId}")
     public ResponseEntity<?> getArtworksByArtist(@PathVariable String artistId) {
         try {
             System.out.println("=== Getting artworks for artist: " + artistId + " ===");
             
-            // Use the existing getArtworks method with artistId as parameter
+            
             Page<ArtworkDto> result = artworkService.getArtworks(1, 100, null, null, null, null, artistId);
             
             System.out.println("Service returned: " + (result != null ? "Valid Page object" : "NULL"));
@@ -183,12 +179,12 @@ public class ArtworkController {
                 System.out.println("Content size: " + (result.getContent() != null ? result.getContent().size() : "NULL"));
             }
             
-            // Ensure we always return a valid array, even if empty
+            
             List<ArtworkDto> artworks = result != null && result.getContent() != null ? result.getContent() : new ArrayList<>();
             long total = result != null ? result.getTotalElements() : 0;
             int totalPages = result != null ? result.getTotalPages() : 0;
 
-            // Determine if caller is owner or admin. If not, filter out PENDING artworks.
+            
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             boolean isAdmin = false;
             String currentUserId = null;
@@ -213,7 +209,7 @@ public class ArtworkController {
                 }
                 artworks = filtered;
                 total = artworks.size();
-                // we requested up to 100 items, compute pages accordingly
+                
                 int pageSize = 100;
                 totalPages = (int) Math.ceil((double) total / pageSize);
             }
@@ -232,16 +228,14 @@ public class ArtworkController {
             return ResponseEntity.status(500).body(Map.of(
                 "error", e.getMessage(),
                 "status", "Error retrieving artist artworks",
-                "artworks", new ArrayList<>(),  // Always provide empty array on error
+                "artworks", new ArrayList<>(),  
                 "total", 0,
                 "totalPages", 0
             ));
         }
     }
     
-    /**
-     * Debug endpoint for artwork authentication
-     */
+    
     @GetMapping("/debug-auth")
     public ResponseEntity<?> debugAuth(Authentication authentication) {
         Map<String, Object> debug = new HashMap<>();

@@ -11,10 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
-/**
- * Handles OAuth2 authentication failures
- * Redirects to frontend with error message
- */
+
 @Component
 @Slf4j
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {

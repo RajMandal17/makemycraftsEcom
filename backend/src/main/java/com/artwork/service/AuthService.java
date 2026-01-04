@@ -44,12 +44,12 @@ public class AuthService {
             return response;
         }
         
-        // Generate unique username if not provided
+        
         String username = request.getUsername();
         if (username == null || username.trim().isEmpty()) {
             username = usernameGenerator.generateUniqueUsername(request.getEmail(), request.getFirstName());
         } else {
-            // Check if username is already taken
+            
             if (userRepository.findByUsername(username).isPresent()) {
                 AuthResponse response = new AuthResponse();
                 response.setSuccess(false);
@@ -81,7 +81,7 @@ public class AuthService {
         response.setUser(userDto);
         response.setTokens(tokenDto);
 
-        // Set redirect URL based on user role
+        
         if (user.getRole() == Role.ARTIST) {
             response.setRedirectUrl("/dashboard/artist");
         } else if (user.getRole() == Role.ADMIN) {
@@ -92,7 +92,7 @@ public class AuthService {
             response.setRedirectUrl("/");
         }
 
-        // Send welcome email
+        
         Map<String, Object> variables = new HashMap<>();
         variables.put("name", user.getFirstName());
         variables.put("dashboardUrl", frontendBaseUrl + response.getRedirectUrl());
@@ -128,7 +128,7 @@ public class AuthService {
         response.setUser(userDto);
         response.setTokens(tokenDto);
 
-        // Set redirect URL based on user role
+        
         if (user.getRole() == Role.ARTIST) {
             response.setRedirectUrl("/dashboard/artist");
         } else if (user.getRole() == Role.ADMIN) {
@@ -158,7 +158,7 @@ public class AuthService {
         
         User user = userRepository.findByEmail(request.getEmail()).orElse(null);
         
-        // Always return success to prevent email enumeration attacks
+        
         if (user == null) {
             log.warn("Password reset requested for non-existent email: {}", request.getEmail());
             response.put("success", true);
@@ -166,10 +166,10 @@ public class AuthService {
             return response;
         }
         
-        // Delete any existing tokens for this user
+        
         passwordResetTokenRepository.deleteByUserId(user.getId());
         
-        // Generate new reset token
+        
         String token = UUID.randomUUID().toString();
         PasswordResetToken resetToken = PasswordResetToken.builder()
             .token(token)
@@ -179,7 +179,7 @@ public class AuthService {
         
         passwordResetTokenRepository.save(resetToken);
         
-        // Send password reset email
+        
         String resetUrl = frontendBaseUrl + "/reset-password?token=" + token;
         Map<String, Object> variables = new HashMap<>();
         variables.put("name", user.getFirstName());
@@ -219,11 +219,11 @@ public class AuthService {
         User user = userRepository.findById(resetToken.getUserId())
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
         
-        // Update password
+        
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
         
-        // Mark token as used
+        
         resetToken.setUsed(true);
         passwordResetTokenRepository.save(resetToken);
         

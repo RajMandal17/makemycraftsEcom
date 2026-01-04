@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Diagnostic controller to check Gemini AI configuration
- * Helps troubleshoot AI service issues without making actual API calls
- */
+
 @RestController
 @RequestMapping("/api/diagnostic")
 @RequiredArgsConstructor
@@ -35,10 +32,7 @@ public class GeminiDiagnosticController {
     @Value("${gemini.api.url:not-set}")
     private String apiUrl;
     
-    /**
-     * Check Gemini AI configuration status
-     * GET /api/diagnostic/gemini
-     */
+    
     @GetMapping("/gemini")
     @PreAuthorize("hasRole('ARTIST')")
     public ResponseEntity<?> checkGeminiConfig() {
@@ -58,7 +52,7 @@ public class GeminiDiagnosticController {
         diagnostic.put("serviceAvailable", artworkAnalysisService.isAvailable());
         diagnostic.put("providerName", artworkAnalysisService.getProviderName());
         
-        // Add recommendations
+        
         if (!artworkAnalysisService.isAvailable()) {
             if (!geminiEnabled) {
                 diagnostic.put("issue", "Gemini is disabled. Set GEMINI_ENABLED=true in environment variables.");

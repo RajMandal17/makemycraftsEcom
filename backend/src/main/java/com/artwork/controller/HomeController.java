@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * REST Controller for home page endpoints
- * Follows RESTful principles and proper HTTP semantics
- */
+
 @Slf4j
 @RestController
 @RequestMapping("/api/home")
@@ -26,12 +23,7 @@ public class HomeController {
     
     private final HomeService homeService;
 
-    /**
-     * Get home page statistics
-     * Publicly accessible endpoint - no authentication required
-     * 
-     * @return ResponseEntity containing HomeStatsDto
-     */
+    
     @GetMapping("/stats")
     @Operation(
         summary = "Get home page statistics",
@@ -51,7 +43,7 @@ public class HomeController {
             
         } catch (Exception e) {
             log.error("Error retrieving home statistics", e);
-            // Return empty stats instead of error to prevent home page from breaking
+            
             HomeStatsDto emptyStats = HomeStatsDto.builder()
                     .totalArtworks(0L)
                     .totalArtists(0L)
@@ -64,13 +56,7 @@ public class HomeController {
         }
     }
 
-    /**
-     * Get top-selling artworks for homepage carousel
-     * Publicly accessible endpoint - no authentication required
-     * 
-     * @param limit maximum number of artworks to return (default: 10)
-     * @return ResponseEntity containing list of top-selling artworks
-     */
+    
     @GetMapping("/top-sellers")
     @Operation(
         summary = "Get top-selling artworks",
@@ -86,7 +72,7 @@ public class HomeController {
         log.info("GET /api/home/top-sellers - Fetching top {} selling artworks", limit);
         
         try {
-            // Enforce reasonable limits
+            
             if (limit <= 0 || limit > 50) {
                 limit = 10;
             }
@@ -97,7 +83,7 @@ public class HomeController {
             
         } catch (Exception e) {
             log.error("Error retrieving top-selling artworks", e);
-            // Return empty list instead of error
+            
             return ResponseEntity.ok(java.util.Collections.emptyList());
         }
     }

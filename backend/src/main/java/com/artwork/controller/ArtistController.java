@@ -38,16 +38,16 @@ public class ArtistController {
         return ResponseEntity.ok(artist);
     }
 
-    // LinkedIn-style username-based profile lookup
-    // Note: This must come before /{id} to avoid path conflicts
-    // Use /username/{username} to differentiate from ID-based lookup
+    
+    
+    
     @GetMapping("/username/{username}")
     public ResponseEntity<?> getArtistByUsername(@PathVariable String username) {
         UserDto artist = artistService.getArtistByUsername(username);
         return ResponseEntity.ok(artist);
     }
     
-    // Check if username is available for profile creation/update
+    
     @GetMapping("/username-available")
     public ResponseEntity<?> checkUsernameAvailability(@RequestParam String username) {
         boolean available = artistService.isUsernameAvailable(username);

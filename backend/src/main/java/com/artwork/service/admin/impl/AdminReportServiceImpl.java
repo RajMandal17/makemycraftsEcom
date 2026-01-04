@@ -23,10 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
-/**
- * Admin Report Service Implementation
- * Generates reports in PDF, Excel, and CSV formats
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -37,7 +34,7 @@ public class AdminReportServiceImpl implements AdminReportService {
     private final ArtworkRepository artworkRepository;
     private final OrderItemRepository orderItemRepository;
 
-    // In-memory storage for generated reports (in production, use Redis or database)
+    
     private final Map<String, ReportData> reportStorage = new HashMap<>();
 
     @Override
@@ -63,7 +60,7 @@ public class AdminReportServiceImpl implements AdminReportService {
                     throw new IllegalArgumentException("Unsupported format: " + request.getReportFormat());
             }
 
-            // Store report data
+            
             ReportData report = new ReportData(reportData, request.getReportFormat().toString(), request.getReportType().toString());
             reportStorage.put(reportId, report);
 
@@ -118,21 +115,21 @@ public class AdminReportServiceImpl implements AdminReportService {
 
         document.open();
 
-        // Add title
+        
         com.lowagie.text.Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
         Paragraph title = new Paragraph(request.getReportType().toString().replace("_", " ") + " Report", titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
         document.add(new Paragraph(" "));
 
-        // Add date range
+        
         com.lowagie.text.Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
         Paragraph dateRange = new Paragraph(
                 "Period: " + request.getStartDate() + " to " + request.getEndDate(), normalFont);
         document.add(dateRange);
         document.add(new Paragraph(" "));
 
-        // Generate content based on type
+        
         switch (request.getReportType().toString()) {
             case "SALES":
                 generateSalesPdfContent(document, request);
@@ -158,7 +155,7 @@ public class AdminReportServiceImpl implements AdminReportService {
 
             Sheet sheet = workbook.createSheet(request.getReportType().toString().replace("_", " ") + " Report");
 
-            // Create header style
+            
             CellStyle headerStyle = workbook.createCellStyle();
             org.apache.poi.ss.usermodel.Font headerFont = workbook.createFont();
             headerFont.setBold(true);
@@ -168,7 +165,7 @@ public class AdminReportServiceImpl implements AdminReportService {
 
             int rowNum = 0;
 
-            // Generate content based on type
+            
             switch (request.getReportType().toString()) {
                 case "SALES":
                     rowNum = generateSalesExcelContent(sheet, headerStyle, rowNum, request);
@@ -192,7 +189,7 @@ public class AdminReportServiceImpl implements AdminReportService {
     private byte[] generateCsvReport(ReportGenerationRequest request) {
         StringBuilder csv = new StringBuilder();
 
-        // Generate content based on type
+        
         switch (request.getReportType().toString()) {
             case "SALES":
                 csv.append(generateSalesCsvContent(request));
@@ -211,7 +208,7 @@ public class AdminReportServiceImpl implements AdminReportService {
         return csv.toString().getBytes();
     }
 
-    // PDF Content Generators
+    
     private void generateSalesPdfContent(Document document, ReportGenerationRequest request) throws IOException {
         com.lowagie.text.Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
         com.lowagie.text.Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
@@ -236,7 +233,7 @@ public class AdminReportServiceImpl implements AdminReportService {
         document.add(new Paragraph("Total Revenue: ₹" + totalRevenue, boldFont));
         document.add(new Paragraph(" "));
 
-        // Add order details table
+        
         PdfPTable table = new PdfPTable(4);
         table.setWidthPercentage(100);
         table.addCell("Order ID");
@@ -308,7 +305,7 @@ public class AdminReportServiceImpl implements AdminReportService {
         document.add(new Paragraph("Orders in Period: " + recentOrders.size(), boldFont));
     }
 
-    // Excel Content Generators
+    
     private int generateSalesExcelContent(Sheet sheet, CellStyle headerStyle, int rowNum, ReportGenerationRequest request) {
         org.apache.poi.ss.usermodel.Row headerRow = sheet.createRow(rowNum++);
         headerRow.createCell(0).setCellValue("Order ID");
@@ -432,7 +429,7 @@ public class AdminReportServiceImpl implements AdminReportService {
         return rowNum;
     }
 
-    // CSV Content Generators
+    
     private String generateSalesCsvContent(ReportGenerationRequest request) {
         StringBuilder csv = new StringBuilder();
         csv.append("Order ID,Customer,Amount,Status,Date\n");
@@ -520,7 +517,7 @@ public class AdminReportServiceImpl implements AdminReportService {
         return value;
     }
 
-    // Inner class for report data storage
+    
     private static class ReportData {
         private final byte[] data;
         private final String format;

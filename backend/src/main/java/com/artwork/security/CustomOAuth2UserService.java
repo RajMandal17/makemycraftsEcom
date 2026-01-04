@@ -18,9 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * Custom OAuth2 user service that handles loading or creating users from OAuth2 providers
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        // Load the OAuth2 user from the provider (Google, Facebook, etc.)
+        
         OAuth2User oauth2User = super.loadUser(userRequest);
         
         try {
@@ -50,7 +48,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         Map<String, Object> attributes = oauth2User.getAttributes();
         
-        // Extract user info based on provider
+        
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
         
         if (userInfo.getEmail() == null || userInfo.getEmail().isEmpty()) {
@@ -59,23 +57,23 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             );
         }
         
-        // Check if user exists by email
+        
         Optional<User> userOptional = userRepository.findByEmail(userInfo.getEmail());
         User user;
         
         if (userOptional.isPresent()) {
             user = userOptional.get();
-            // Update OAuth2 info if user logged in with OAuth2 for the first time
+            
             if (user.getOauth2Provider() == null) {
                 user = updateExistingUser(user, registrationId, userInfo);
             } else if (!user.getOauth2Provider().equals(registrationId)) {
-                // User already exists with different OAuth2 provider or regular registration
+                
                 log.warn("User {} already exists with different provider: {}", 
                     userInfo.getEmail(), user.getOauth2Provider());
-                // Still allow login but don't update provider info
+                
             }
         } else {
-            // Create new user from OAuth2 info
+            
             user = createNewUser(registrationId, userInfo);
         }
         
@@ -85,7 +83,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private User createNewUser(String provider, OAuth2UserInfo userInfo) {
         log.info("Creating new user from OAuth2 provider: {}", provider);
         
-        // Generate unique username from email
+        
         String username = usernameGenerator.generateUniqueUsername(
             userInfo.getEmail(), 
             userInfo.getFirstName()
@@ -93,15 +91,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         
         User user = User.builder()
             .email(userInfo.getEmail())
-            .password("") // No password for OAuth2 users
+            .password("") 
             .firstName(userInfo.getFirstName())
             .lastName(userInfo.getLastName())
             .username(username)
-            .role(Role.PENDING) // OAuth2 users need to select their role
+            .role(Role.PENDING) 
             .oauth2Provider(provider)
             .oauth2Id(userInfo.getId())
             .profilePictureUrl(userInfo.getImageUrl())
-            .emailVerified(true) // OAuth2 emails are verified by the provider
+            .emailVerified(true) 
             .isActive(true)
             .enabled(true)
             .status(UserStatus.APPROVED)
@@ -121,7 +119,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         existingUser.setEmailVerified(true);
         existingUser.setUpdatedAt(LocalDateTime.now());
         
-        // Update name if not set
+        
         if (existingUser.getFirstName() == null || existingUser.getFirstName().isEmpty()) {
             existingUser.setFirstName(userInfo.getFirstName());
         }

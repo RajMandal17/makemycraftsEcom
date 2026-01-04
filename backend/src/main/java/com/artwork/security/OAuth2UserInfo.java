@@ -2,9 +2,7 @@ package com.artwork.security;
 
 import java.util.Map;
 
-/**
- * Interface to abstract OAuth2 user info from different providers
- */
+
 public abstract class OAuth2UserInfo {
     protected Map<String, Object> attributes;
     

@@ -6,7 +6,7 @@ import { userAPI } from '../../../services/userAPI';
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
-// Define validation schema
+
 const ProfileSchema = Yup.object().shape({
   firstName: Yup.string()
     .min(2, 'First name must be at least 2 characters')
@@ -32,7 +32,7 @@ const ProfileSchema = Yup.object().shape({
     .max(50, 'Country name is too long'),
 });
 
-// Error message component  
+
 const FormErrorMessage = ({ children }: any) => (
   <div className="text-red-500 text-sm mt-1 flex items-center">
     <AlertCircle className="w-3 h-3 mr-1" />
@@ -60,14 +60,14 @@ const CustomerProfile: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5000000) { // 5MB limit
+    if (file.size > 5000000) { 
       toast.error('Image size must be less than 5MB');
       return;
     }
 
     setSelectedImage(file);
 
-    // Create a preview
+    
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreviewImage(reader.result as string);
@@ -75,14 +75,14 @@ const CustomerProfile: React.FC = () => {
     reader.readAsDataURL(file);
   };
 
-  // Add state for password management
+  
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordData, setPasswordData] = useState({
     newPassword: '',
     confirmPassword: ''
   });
 
-  // Define the form values type
+  
   interface ProfileFormValues {
     firstName: string;
     lastName: string;
@@ -94,13 +94,13 @@ const CustomerProfile: React.FC = () => {
     country: string;
   }
 
-  // Load user profile data on component mount
+  
   useEffect(() => {
     const loadUserProfile = async () => {
       try {
         const userProfile = await userAPI.getProfile();
 
-        // Update form values with the latest data
+        
         setInitialValues({
           firstName: userProfile.firstName || '',
           lastName: userProfile.lastName || '',
@@ -112,7 +112,7 @@ const CustomerProfile: React.FC = () => {
           country: userProfile.country || ''
         });
 
-        // Update profile image if available
+        
         if (userProfile.profileImage) {
           setPreviewImage(userProfile.profileImage);
         }
@@ -138,7 +138,7 @@ const CustomerProfile: React.FC = () => {
       await userAPI.updatePassword(passwordData.newPassword, passwordData.confirmPassword);
       toast.success('Password updated successfully!');
 
-      // Reset form and close modal
+      
       setPasswordData({ newPassword: '', confirmPassword: '' });
       setShowPasswordModal(false);
     } catch (error: any) {
@@ -152,16 +152,16 @@ const CustomerProfile: React.FC = () => {
     try {
       toast.info('Saving profile changes...');
 
-      // If there's a new profile image, we need to upload it first
+      
       if (selectedImage) {
         const imageFormData = new FormData();
-        imageFormData.append('image', selectedImage); // Updated to match backend parameter name
+        imageFormData.append('image', selectedImage); 
 
         try {
-          // First upload the image
+          
           const imageUrl = await userAPI.updateProfileWithImage(imageFormData);
 
-          // Then update the profile data
+          
           const updatedUser = await userAPI.updateProfile({
             firstName: values.firstName,
             lastName: values.lastName,
@@ -173,7 +173,7 @@ const CustomerProfile: React.FC = () => {
             profileImage: imageUrl
           });
 
-          // Update local state with the full user data
+          
           dispatch({
             type: 'AUTH_SUCCESS',
             payload: {
@@ -187,7 +187,7 @@ const CustomerProfile: React.FC = () => {
           return;
         }
       } else {
-        // No image upload, just update profile data
+        
         const updatedUser = await userAPI.updateProfile({
           firstName: values.firstName,
           lastName: values.lastName,
@@ -198,7 +198,7 @@ const CustomerProfile: React.FC = () => {
           country: values.country
         });
 
-        // Update local state
+        
         dispatch({
           type: 'AUTH_SUCCESS',
           payload: {
@@ -221,7 +221,7 @@ const CustomerProfile: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Profile Settings</h1>
         <div className="flex gap-3">
-          {/* Update Password Button */}
+          {}
           <button
             onClick={() => setShowPasswordModal(true)}
             className="flex items-center px-4 py-2 text-white rounded-md bg-gray-600 hover:bg-gray-700"
@@ -230,7 +230,7 @@ const CustomerProfile: React.FC = () => {
             Update Password
           </button>
 
-          {/* Edit/Save Profile Button */}
+          {}
           {!isEditing ? (
             <button
               onClick={() => setIsEditing(true)}
@@ -254,7 +254,7 @@ const CustomerProfile: React.FC = () => {
 
       <div className="bg-white rounded-lg border p-6">
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Profile Image */}
+          {}
           <div className="flex flex-col items-center">
             <div className="h-40 w-40 rounded-full bg-blue-100 flex items-center justify-center mb-4 overflow-hidden">
               {previewImage ? (
@@ -282,7 +282,7 @@ const CustomerProfile: React.FC = () => {
             )}
           </div>
 
-          {/* Profile Details */}
+          {}
           <div className="flex-1">
             <Formik
               initialValues={initialValues}
@@ -330,7 +330,7 @@ const CustomerProfile: React.FC = () => {
                     <Field
                       type="email"
                       name="email"
-                      disabled={true} // Email changes typically require verification
+                      disabled={true} 
                       className="w-full px-3 py-2 border rounded-md bg-gray-100"
                     />
                     {isEditing && (
@@ -419,7 +419,7 @@ const CustomerProfile: React.FC = () => {
         </div>
       </div>
 
-      {/* Password Change Modal */}
+      {}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg max-w-md w-full p-6">

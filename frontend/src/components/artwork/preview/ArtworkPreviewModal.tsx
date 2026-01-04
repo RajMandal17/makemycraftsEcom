@@ -21,12 +21,12 @@ const ArtworkPreviewModal: React.FC<ArtworkPreviewModalProps> = ({
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(initialImageIndex);
 
-  // Reset to initial image when modal opens
+  
   useEffect(() => {
     if (isOpen) {
       setCurrentImageIndex(initialImageIndex);
       
-      // Add event listener for keyboard navigation
+      
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'ArrowLeft') {
           handlePreviousImage();
@@ -39,7 +39,7 @@ const ArtworkPreviewModal: React.FC<ArtworkPreviewModalProps> = ({
       
       window.addEventListener('keydown', handleKeyDown);
       
-      // Prevent background scrolling
+      
       document.body.style.overflow = 'hidden';
       
       return () => {
@@ -49,7 +49,7 @@ const ArtworkPreviewModal: React.FC<ArtworkPreviewModalProps> = ({
     }
   }, [isOpen, initialImageIndex, onClose]);
   
-  // Skip rendering if not open
+  
   if (!isOpen) return null;
   
   const handlePreviousImage = () => {
@@ -66,7 +66,7 @@ const ArtworkPreviewModal: React.FC<ArtworkPreviewModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm">
-      {/* Close button */}
+      {}
       <button 
         onClick={onClose}
         className="absolute top-4 right-4 p-2 text-white bg-black bg-opacity-50 rounded-full hover:bg-opacity-70 transition-opacity"
@@ -75,7 +75,7 @@ const ArtworkPreviewModal: React.FC<ArtworkPreviewModalProps> = ({
         <X size={24} />
       </button>
       
-      {/* Navigation - Left */}
+      {}
       {images.length > 1 && (
         <button 
           onClick={handlePreviousImage}
@@ -86,7 +86,7 @@ const ArtworkPreviewModal: React.FC<ArtworkPreviewModalProps> = ({
         </button>
       )}
       
-      {/* Navigation - Right */}
+      {}
       {images.length > 1 && (
         <button 
           onClick={handleNextImage}
@@ -97,9 +97,9 @@ const ArtworkPreviewModal: React.FC<ArtworkPreviewModalProps> = ({
         </button>
       )}
       
-      {/* Main content */}
+      {}
       <div className="w-full max-w-5xl max-h-[90vh] flex flex-col">
-        {/* Image container */}
+        {}
         <div className="flex-1 relative aspect-square sm:aspect-auto">
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-full h-full max-h-[70vh] md:max-h-[75vh]">
@@ -111,7 +111,7 @@ const ArtworkPreviewModal: React.FC<ArtworkPreviewModalProps> = ({
           </div>
         </div>
         
-        {/* Image info */}
+        {}
         <div className="p-4 text-white bg-black bg-opacity-30 mt-2">
           <h3 className="text-xl font-semibold">{title}</h3>
           <p className="text-gray-300">by {artist}</p>
@@ -122,7 +122,7 @@ const ArtworkPreviewModal: React.FC<ArtworkPreviewModalProps> = ({
           )}
         </div>
         
-        {/* Thumbnails */}
+        {}
         {images.length > 1 && (
           <div className="flex justify-center gap-2 mt-3 overflow-x-auto px-4 py-2">
             {images.map((img, idx) => (

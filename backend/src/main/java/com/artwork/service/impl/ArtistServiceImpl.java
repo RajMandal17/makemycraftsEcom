@@ -29,7 +29,7 @@ public class ArtistServiceImpl implements ArtistService {
     public Page<UserDto> getAllArtists(String search, Pageable pageable) {
         Page<User> artists;
         
-        // Only show APPROVED artists in public listings
+        
         if (search != null && !search.trim().isEmpty()) {
             artists = userRepository.findByRoleAndStatusApprovedAndNameContaining(Role.ARTIST, search.toLowerCase(), pageable);
         } else {
@@ -65,7 +65,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public boolean isUsernameAvailable(String username) {
-        // Username must be alphanumeric with optional underscores/hyphens, 3-50 characters
+        
         if (!username.matches("^[a-zA-Z0-9_-]{3,50}$")) {
             return false;
         }
@@ -74,8 +74,8 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public List<UserDto> getFeaturedArtists() {
-        // For demo purposes, get 5 random artists
-        // In a real app, this could be based on various metrics like number of sales, ratings, etc.
+        
+        
         List<User> featuredArtists = userRepository.findByRole(Role.ARTIST)
                 .stream()
                 .limit(5)
@@ -89,7 +89,7 @@ public class ArtistServiceImpl implements ArtistService {
     private UserDto mapToArtistDto(User artist) {
         UserDto dto = modelMapper.map(artist, UserDto.class);
         
-        // Count the number of artworks for this artist
+        
         long artworkCount = artworkRepository.countByArtistId(artist.getId());
         dto.setArtworkCount(artworkCount);
         dto.setAverageRating(getArtistAverageRating(artist.getId()));

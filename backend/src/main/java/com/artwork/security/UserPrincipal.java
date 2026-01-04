@@ -16,16 +16,14 @@ public class UserPrincipal implements UserDetails {
         this.user = user;
     }
     
-    /**
-     * Get user ID
-     */
+    
     public String getId() {
         return user.getId();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Spring Security requires "ROLE_" prefix for roles
+        
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 

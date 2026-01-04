@@ -1,7 +1,4 @@
-/**
- * Comprehensive token management utility for secure session handling
- * Provides centralized token operations with validation and expiration checking
- */
+
 
 import { User } from '../types';
 
@@ -20,11 +17,9 @@ export class TokenManager {
   private static readonly TOKEN_KEY = 'access_token';
   private static readonly REFRESH_TOKEN_KEY = 'refresh_token';
   private static readonly USER_KEY = 'user_data';
-  private static readonly TOKEN_EXPIRY_BUFFER = 5 * 60; // 5 minutes buffer before expiry
+  private static readonly TOKEN_EXPIRY_BUFFER = 5 * 60; 
 
-  /**
-   * Store authentication tokens and user data securely in localStorage
-   */
+  
   static setTokens(accessToken: string, refreshToken?: string): void {
     try {
       localStorage.setItem(this.TOKEN_KEY, accessToken);
@@ -38,9 +33,7 @@ export class TokenManager {
     }
   }
 
-  /**
-   * Store user data in localStorage
-   */
+  
   static setUserData(user: User): void {
     try {
       if (!user || typeof user !== 'object') {
@@ -61,9 +54,7 @@ export class TokenManager {
     }
   }
 
-  /**
-   * Get stored user data from localStorage
-   */
+  
   static getUserData(): User | null {
     try {
       const userData = localStorage.getItem(this.USER_KEY);
@@ -80,17 +71,13 @@ export class TokenManager {
     }
   }
 
-  /**
-   * Store complete authentication state (tokens + user data)
-   */
+  
   static setAuthState(accessToken: string, user: User, refreshToken?: string): void {
     this.setTokens(accessToken, refreshToken);
     this.setUserData(user);
   }
 
-  /**
-   * Get the current access token from localStorage
-   */
+  
   static getToken(): string | null {
     try {
       const token = localStorage.getItem(this.TOKEN_KEY);
@@ -102,9 +89,7 @@ export class TokenManager {
     }
   }
 
-  /**
-   * Get the current refresh token from localStorage
-   */
+  
   static getRefreshToken(): string | null {
     try {
       return localStorage.getItem(this.REFRESH_TOKEN_KEY);
@@ -114,9 +99,7 @@ export class TokenManager {
     }
   }
 
-  /**
-   * Decode and validate token structure
-   */
+  
   static decodeToken(token?: string): TokenPayload | null {
     const tokenToUse = token || this.getToken();
     if (!tokenToUse) {
@@ -138,9 +121,7 @@ export class TokenManager {
     }
   }
 
-  /**
-   * Check if the token is expired or will expire soon
-   */
+  
   static isTokenExpired(token?: string): boolean {
     const payload = this.decodeToken(token);
     if (!payload || !payload.exp) {
@@ -157,9 +138,7 @@ export class TokenManager {
     return isExpired;
   }
 
-  /**
-   * Check if the token is valid (exists, has correct format, and not expired)
-   */
+  
   static isTokenValid(token?: string): boolean {
     const tokenToUse = token || this.getToken();
     if (!tokenToUse) {
@@ -174,9 +153,7 @@ export class TokenManager {
     return !this.isTokenExpired(tokenToUse);
   }
 
-  /**
-   * Get user information from the token
-   */
+  
   static getUserFromToken(token?: string): { 
     id: string; 
     email: string; 
@@ -198,9 +175,7 @@ export class TokenManager {
     };
   }
 
-  /**
-   * Clear all authentication data (tokens + user data)
-   */
+  
   static clearTokens(): void {
     try {
       localStorage.removeItem(this.TOKEN_KEY);
@@ -212,9 +187,7 @@ export class TokenManager {
     }
   }
 
-  /**
-   * Check if complete authentication state exists (tokens + user data)
-   */
+  
   static hasCompleteAuthState(): boolean {
     const hasToken = !!this.getToken();
     const hasUser = !!this.getUserData();
@@ -224,9 +197,7 @@ export class TokenManager {
     return hasToken && hasUser;
   }
 
-  /**
-   * Get token expiry information for debugging
-   */
+  
   static getTokenInfo(token?: string): {
     isValid: boolean;
     isExpired: boolean;
@@ -272,9 +243,7 @@ export class TokenManager {
     };
   }
 
-  /**
-   * Log comprehensive token debugging information
-   */
+  
   static debugToken(token?: string): void {
     const tokenToUse = token || this.getToken();
     const info = this.getTokenInfo(tokenToUse || undefined);
@@ -296,9 +265,7 @@ export class TokenManager {
     console.groupEnd();
   }
 
-  /**
-   * Enhanced token validation with detailed error reporting
-   */
+  
   static validateTokenWithDetails(token?: string): {
     isValid: boolean;
     errors: string[];
@@ -319,20 +286,20 @@ export class TokenManager {
       return { isValid: false, errors, warnings };
     }
 
-    // Check required fields
+    
     if (!payload.sub) errors.push('Missing user ID in token');
     if (!payload.email) errors.push('Missing email in token');
     if (!payload.role) errors.push('Missing role in token');
     if (!payload.exp) errors.push('Missing expiration in token');
 
-    // Check expiration
+    
     if (this.isTokenExpired(tokenToUse)) {
       errors.push('Token is expired');
     } else {
       const currentTime = Math.floor(Date.now() / 1000);
       const timeUntilExpiry = payload.exp - currentTime;
       
-      if (timeUntilExpiry < (15 * 60)) { // Less than 15 minutes
+      if (timeUntilExpiry < (15 * 60)) { 
         warnings.push('Token expires soon (less than 15 minutes)');
       }
     }

@@ -133,10 +133,7 @@ public class AdminArtworkController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Get all pending artworks for admin review
-     * Includes artworks waiting for category approval
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/pending")
     public ResponseEntity<?> getPendingArtworks() {
@@ -151,10 +148,7 @@ public class AdminArtworkController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Approve artwork and its associated category together
-     * If the artwork uses a pending category, this will activate the category first
-     */
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{artworkId}/approve-with-category")
     public ResponseEntity<?> approveArtworkWithCategory(

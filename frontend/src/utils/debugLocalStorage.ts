@@ -1,13 +1,10 @@
-/**
- * Simple localStorage debug utility
- * Add this to any page to check token status
- */
+
 
 console.group('🔍 LocalStorage Debug');
 console.log('token:', localStorage.getItem('access_token'));
 console.log('refreshToken:', localStorage.getItem('refresh_token'));
 
-// Quick token validity check
+
 const token = localStorage.getItem('access_token');
 if (token) {
   try {
@@ -25,4 +22,4 @@ if (token) {
 
 console.groupEnd();
 
-export {}; // Make this a module
+export {}; 

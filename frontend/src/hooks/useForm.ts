@@ -19,17 +19,13 @@ interface UseFormReturn<T> {
   isValid: boolean;
 }
 
-/**
- * A custom hook for handling form state and validation
- * @param options Configuration options for the form
- * @returns Form state and handlers
- */
+
 export function useForm<T extends Record<string, any>>(options: UseFormOptions<T>): UseFormReturn<T> {
   const [values, setValues] = useState<T>(options.initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof T, boolean>>>({});
   
-  // Run validation
+  
   const validateForm = useCallback(() => {
     if (!options.validate) return {};
     
@@ -38,10 +34,10 @@ export function useForm<T extends Record<string, any>>(options: UseFormOptions<T
     return validationErrors;
   }, [values, options]);
   
-  // Check if form is valid
+  
   const isValid = Object.keys(errors).length === 0;
 
-  // Handle input changes
+  
   const handleChange = useCallback((
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
@@ -53,7 +49,7 @@ export function useForm<T extends Record<string, any>>(options: UseFormOptions<T
     }));
   }, []);
 
-  // Set a field value programmatically
+  
   const setFieldValue = useCallback((name: keyof T, value: any) => {
     setValues((prev) => ({
       ...prev,
@@ -61,7 +57,7 @@ export function useForm<T extends Record<string, any>>(options: UseFormOptions<T
     }));
   }, []);
 
-  // Handle input blur (for marking fields as touched)
+  
   const handleBlur = useCallback((
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
@@ -73,7 +69,7 @@ export function useForm<T extends Record<string, any>>(options: UseFormOptions<T
     }));
   }, []);
 
-  // Set a field as touched programmatically
+  
   const setFieldTouched = useCallback((name: keyof T, isTouched: boolean) => {
     setTouched((prev) => ({
       ...prev,
@@ -81,11 +77,11 @@ export function useForm<T extends Record<string, any>>(options: UseFormOptions<T
     }));
   }, []);
 
-  // Handle form submission
+  
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     
-    // Mark all fields as touched
+    
     const touchedFields = Object.keys(values).reduce(
       (acc, key) => ({ ...acc, [key]: true }),
       {} as Record<keyof T, boolean>
@@ -93,16 +89,16 @@ export function useForm<T extends Record<string, any>>(options: UseFormOptions<T
     
     setTouched(touchedFields);
     
-    // Validate form
+    
     const validationErrors = validateForm();
     
-    // If there are no errors and onSubmit is provided, call it
+    
     if (Object.keys(validationErrors).length === 0 && options.onSubmit) {
       options.onSubmit(values);
     }
   }, [values, options, validateForm]);
 
-  // Reset the form to initial values
+  
   const resetForm = useCallback(() => {
     setValues(options.initialValues);
     setErrors({});

@@ -37,26 +37,26 @@ const ArtistDashboard: React.FC = () => {
   const location = useLocation();
   const [authError, setAuthError] = useState<string | null>(null);
 
-  // Debug authentication when component mounts and handle auth errors
+  
   useEffect(() => {
     console.log('Artist Dashboard - Auth State:', state.auth);
     const tokenInfo = debugToken();
     const token = localStorage.getItem('access_token');
 
-    // Check for auth inconsistency - token missing but marked as authenticated
+    
     if (state.auth.isAuthenticated && !token) {
       console.error('Auth inconsistency detected: Token missing but marked as authenticated');
       setAuthError('Auth inconsistency: Token missing but marked as authenticated');
       toast.error('Authentication error. Please log in again.');
-      // Clear the inconsistent state
+      
       dispatch({ type: 'LOGOUT' });
-      // Redirect to login page after a short delay
+      
       setTimeout(() => navigate('/login'), 500);
     }
     else if (!state.auth.isAuthenticated || !state.auth.token) {
       setAuthError('You are not authenticated. Please log in again.');
       toast.error('Authentication error: Please log in again');
-      // Redirect to login page after a short delay
+      
       setTimeout(() => navigate('/login'), 500);
     } else if (state.auth.user?.role !== 'ARTIST') {
       setAuthError(`Invalid role: ${state.auth.user?.role}. Artist role required.`);
@@ -73,7 +73,7 @@ const ArtistDashboard: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Sidebar */}
+          {}
           <div className="w-full md:w-64 bg-white rounded-lg shadow-md p-4">
             <div className="flex flex-col items-center pb-5 mb-5 border-b">
               <div className="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center mb-2">
@@ -192,7 +192,7 @@ const ArtistDashboard: React.FC = () => {
             </nav>
           </div>
 
-          {/* Main Content */}
+          {}
           <div className="flex-1 bg-white rounded-lg shadow-md p-6">
             {authError ? (
               <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
@@ -229,7 +229,7 @@ const ArtistDashboard: React.FC = () => {
   );
 };
 
-// Dashboard Home Component
+
 const ArtistDashboardHome: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -283,7 +283,7 @@ const ArtistDashboardHome: React.FC = () => {
     <div>
       <h1 className="text-2xl font-semibold mb-6">Artist Dashboard</h1>
 
-      {/* Quick stats */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-blue-50 border border-blue-100 p-4 rounded-lg">
           <div className="flex justify-between items-center">
@@ -327,7 +327,7 @@ const ArtistDashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* Additional stats row */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-purple-50 border border-purple-100 p-4 rounded-lg">
           <div className="flex justify-between items-center">
@@ -366,7 +366,7 @@ const ArtistDashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* Quick actions */}
+      {}
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -411,7 +411,7 @@ const ArtistDashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* Recent activity */}
+      {}
       <div>
         <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
         <div className="border rounded-lg overflow-hidden">

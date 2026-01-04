@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OrderService {
     OrderDto placeOrder(OrderRequestDto orderRequestDto, String token);
-    List<OrderDto> getOrders(String token); // Keep for backward compatibility
+    List<OrderDto> getOrders(String token); 
     Page<OrderDto> getOrdersPaged(String token, Pageable pageable);
     OrderDto getOrderById(String id, String token);
 }

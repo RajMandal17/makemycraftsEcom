@@ -11,13 +11,13 @@ const ArtworkList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Pagination
+  
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalArtworks, setTotalArtworks] = useState(0);
   const limit = 8;
 
-  // Filters
+  
   const [filters, setFilters] = useState({
     search: '',
     category: '',
@@ -25,7 +25,7 @@ const ArtworkList: React.FC = () => {
     maxPrice: '',
   });
 
-  // Delete confirmation
+  
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -34,7 +34,7 @@ const ArtworkList: React.FC = () => {
       setLoading(true);
       setError(null);
 
-      // Build query params
+      
       const params: any = {
         page: currentPage,
         limit,
@@ -56,11 +56,11 @@ const ArtworkList: React.FC = () => {
         params.maxPrice = parseFloat(filters.maxPrice);
       }
 
-      // Log the authentication status before making the request
+      
       const token = localStorage.getItem('access_token');
       console.log('Artist Dashboard - Fetching artworks with token:', token ? `${token.substring(0, 15)}...` : 'none');
 
-      // Ensure the token is valid before making the request
+      
       if (!token) {
         setError('Authentication error. Please log in again.');
         setArtworks([]);
@@ -68,7 +68,7 @@ const ArtworkList: React.FC = () => {
         return;
       }
 
-      // Use the artist-specific endpoint which automatically gets artworks for the logged-in artist
+      
       const response = await artistAPI.getMyArtworks(params);
       console.log('Artist artworks response:', response);
 
@@ -95,7 +95,7 @@ const ArtworkList: React.FC = () => {
 
   const handleFilterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentPage(1); // Reset to first page when filtering
+    setCurrentPage(1); 
     fetchArtworks();
   };
 
@@ -109,7 +109,7 @@ const ArtworkList: React.FC = () => {
       setArtworks(prev => prev.filter(artwork => artwork.id !== deletingId));
       setDeletingId(null);
 
-      // Recalculate total after deletion
+      
       setTotalArtworks(prev => prev - 1);
       if (artworks.length === 1 && currentPage > 1) {
         setCurrentPage(prev => prev - 1);
@@ -136,7 +136,7 @@ const ArtworkList: React.FC = () => {
         </Link>
       </div>
 
-      {/* Filters */}
+      {}
       <form onSubmit={handleFilterSubmit} className="mb-6 bg-gray-50 p-4 rounded-lg">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
@@ -220,7 +220,7 @@ const ArtworkList: React.FC = () => {
         </div>
       </form>
 
-      {/* Artwork List */}
+      {}
       {loading ? (
         <div className="flex justify-center items-center py-12">
           <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
@@ -258,7 +258,7 @@ const ArtworkList: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {artworks.map((artwork) => (
               <div key={artwork.id} className="bg-white rounded-lg overflow-hidden shadow-md border border-gray-200 relative">
-                {/* Approval Status Badge */}
+                {}
                 {artwork.approvalStatus && artwork.approvalStatus !== 'APPROVED' && (
                   <div className="absolute top-2 left-2 z-10">
                     {artwork.approvalStatus === 'PENDING' ? (
@@ -340,7 +340,7 @@ const ArtworkList: React.FC = () => {
             ))}
           </div>
 
-          {/* Pagination */}
+          {}
           <div className="mt-8 flex items-center justify-between">
             <p className="text-sm text-gray-600">
               Showing {artworks.length} of {totalArtworks} artworks
@@ -371,7 +371,7 @@ const ArtworkList: React.FC = () => {
         </>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {}
       {deletingId && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg max-w-md w-full">

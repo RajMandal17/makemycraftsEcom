@@ -8,9 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository for seller linked accounts.
- */
+
 @Repository
 public interface SellerLinkedAccountRepository extends JpaRepository<SellerLinkedAccount, String> {
     

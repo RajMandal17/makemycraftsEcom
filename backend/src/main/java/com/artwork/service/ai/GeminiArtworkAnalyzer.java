@@ -15,10 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Google Gemini Pro Vision implementation of artwork analysis
- * Following Single Responsibility Principle - only handles Gemini AI integration
- */
+
 @Service
 @Slf4j
 public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
@@ -66,7 +63,7 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
                     apiKey.substring(0, 4), 
                     apiKey.substring(apiKey.length() - 4));
                 
-                // Validate API key format (should start with "AIza")
+                
                 if (!apiKey.startsWith("AIza")) {
                     log.warn("⚠️ API Key does not start with 'AIza' - may be invalid!");
                 }
@@ -92,18 +89,18 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
         log.info("Analyzing artwork with Gemini AI for user: {}", userId);
         
         try {
-            // Build the prompt for artwork analysis
+            
             String prompt = buildAnalysisPrompt();
             
-            // Call Gemini API
+            
             String response = callGeminiAPI(imageUrl, prompt);
             
-            // Parse response and build suggestion DTO
+            
             return parseGeminiResponse(response, imageUrl, userId);
             
         } catch (Exception e) {
             log.error("Error analyzing artwork with Gemini AI", e);
-            throw e; // Re-throw to be handled by controller
+            throw e; 
         }
     }
     
@@ -133,9 +130,7 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
         return "Google Gemini Pro Vision";
     }
     
-    /**
-     * Build the analysis prompt for Gemini
-     */
+    
     private String buildAnalysisPrompt() {
         return "You are an expert art curator and critic. Analyze this artwork image and provide detailed metadata in JSON format.\n\n" +
                "Provide the following information:\n" +
@@ -156,30 +151,28 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
                "Respond ONLY with valid JSON, no markdown formatting, no code blocks. Start directly with '{'";
     }
     
-    /**
-     * Call Gemini API with image URL and prompt
-     */
+    
     private String callGeminiAPI(String imageUrl, String prompt) throws IOException {
         try {
-            // Fetch and encode image
+            
             String base64Image = fetchImageAsBase64(imageUrl);
             
-            // Build request body using ObjectMapper to avoid JSON escaping issues
+            
             com.fasterxml.jackson.databind.node.ObjectNode requestJson = objectMapper.createObjectNode();
             
-            // Create contents array
+            
             com.fasterxml.jackson.databind.node.ArrayNode contentsArray = objectMapper.createArrayNode();
             com.fasterxml.jackson.databind.node.ObjectNode contentObj = objectMapper.createObjectNode();
             
-            // Create parts array
+            
             com.fasterxml.jackson.databind.node.ArrayNode partsArray = objectMapper.createArrayNode();
             
-            // Add text part
+            
             com.fasterxml.jackson.databind.node.ObjectNode textPart = objectMapper.createObjectNode();
             textPart.put("text", prompt);
             partsArray.add(textPart);
             
-            // Add image part
+            
             com.fasterxml.jackson.databind.node.ObjectNode imagePart = objectMapper.createObjectNode();
             com.fasterxml.jackson.databind.node.ObjectNode inlineData = objectMapper.createObjectNode();
             inlineData.put("mime_type", "image/jpeg");
@@ -191,7 +184,7 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
             contentsArray.add(contentObj);
             requestJson.set("contents", contentsArray);
             
-            // Add generation config
+            
             com.fasterxml.jackson.databind.node.ObjectNode generationConfig = objectMapper.createObjectNode();
             generationConfig.put("temperature", temperature);
             generationConfig.put("maxOutputTokens", maxTokens);
@@ -199,7 +192,7 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
             generationConfig.put("topK", 32);
             requestJson.set("generationConfig", generationConfig);
             
-            // Convert to JSON string
+            
             String requestBody = objectMapper.writeValueAsString(requestJson);
             
             log.debug("Request body size: {} bytes", requestBody.length());
@@ -245,21 +238,19 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
         }
     }
     
-    /**
-     * Fetch image from URL and convert to base64, or extract base64 from data URL
-     */
+    
     private String fetchImageAsBase64(String imageUrl) throws IOException {
-        // Handle base64 data URLs directly (from frontend FileReader)
+        
         if (imageUrl.startsWith("data:")) {
             log.info("Processing data URL (base64 already encoded)");
             String[] parts = imageUrl.split(",", 2);
             if (parts.length != 2) {
                 throw new IOException("Invalid data URL format - expected 'data:mime;base64,content'");
             }
-            return parts[1]; // Return base64 content after comma
+            return parts[1]; 
         }
         
-        // Handle HTTP/HTTPS URLs (fetch from Cloudinary/web)
+        
         log.info("Fetching image from URL: {}", imageUrl);
         Request request = new Request.Builder()
             .url(imageUrl)
@@ -275,14 +266,12 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
         }
     }
     
-    /**
-     * Parse Gemini API response and extract artwork suggestions
-     */
+    
     private ArtworkSuggestionDto parseGeminiResponse(String response, String imageUrl, String userId) throws Exception {
         try {
             JsonNode root = objectMapper.readTree(response);
             
-            // Extract generated text from Gemini response
+            
             String generatedText = root.path("candidates")
                 .get(0)
                 .path("content")
@@ -291,7 +280,7 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
                 .path("text")
                 .asText();
             
-            // Clean up the generated text (remove markdown code blocks if present)
+            
             generatedText = generatedText.trim();
             if (generatedText.startsWith("```json")) {
                 generatedText = generatedText.substring(7);
@@ -304,10 +293,10 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
             }
             generatedText = generatedText.trim();
             
-            // Parse the artwork analysis JSON
+            
             JsonNode analysis = objectMapper.readTree(generatedText);
             
-            // Build metadata
+            
             ArtworkSuggestionDto.AnalysisMetadata metadata = ArtworkSuggestionDto.AnalysisMetadata.builder()
                 .artStyle(analysis.path("metadata").path("artStyle").asText("Contemporary"))
                 .dominantColors(analysis.path("metadata").path("dominantColors").asText(""))
@@ -316,7 +305,7 @@ public class GeminiArtworkAnalyzer implements IArtworkAnalysisService {
                 .technicalQualities(parseTechnicalQualities(analysis.path("metadata").path("technicalQualities")))
                 .build();
             
-            // Build and return suggestion DTO
+            
             return ArtworkSuggestionDto.builder()
                 .userId(userId)
                 .imageUrl(imageUrl)

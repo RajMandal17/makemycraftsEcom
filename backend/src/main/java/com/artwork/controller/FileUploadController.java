@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Controller for handling file uploads
- */
+
 @RestController
 @RequestMapping("/api/files")
 @RequiredArgsConstructor
@@ -23,12 +21,7 @@ public class FileUploadController {
 
     private final CloudStorageService cloudStorageService;
 
-    /**
-     * Upload a file to cloud storage
-     * @param file The file to upload
-     * @param folder The folder to upload to (e.g., "kyc-documents", "artworks")
-     * @return The URL of the uploaded file
-     */
+    
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> uploadFile(
             @RequestParam("file") MultipartFile file,
@@ -37,20 +30,20 @@ public class FileUploadController {
         try {
             log.info("Uploading file: {} to folder: {}", file.getOriginalFilename(), folder);
             
-            // Validate file
+            
             if (file.isEmpty()) {
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "File is empty"));
             }
             
-            // Validate file size (max 10MB)
-            long maxSize = 10L * 1024 * 1024; // 10MB
+            
+            long maxSize = 10L * 1024 * 1024; 
             if (file.getSize() > maxSize) {
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "File size exceeds 10MB limit"));
             }
             
-            // Validate file type (images and PDFs only)
+            
             String contentType = file.getContentType();
             if (contentType == null || 
                 (!contentType.startsWith("image/") && !contentType.equals("application/pdf"))) {
@@ -58,7 +51,7 @@ public class FileUploadController {
                         .body(Map.of("error", "Only images and PDF files are allowed"));
             }
             
-            // Upload to cloud storage
+            
             String fileUrl = cloudStorageService.uploadFile(file, folder);
             
             if (fileUrl == null) {
@@ -83,11 +76,7 @@ public class FileUploadController {
         }
     }
     
-    /**
-     * Delete a file from cloud storage
-     * @param url The URL of the file to delete
-     * @return Success message
-     */
+    
     @DeleteMapping("/delete")
     public ResponseEntity<Map<String, String>> deleteFile(@RequestParam("url") String url) {
         try {

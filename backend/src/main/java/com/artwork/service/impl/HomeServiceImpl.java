@@ -18,12 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- * Implementation of HomeService following SOLID principles
- * - Single Responsibility: Only handles home page statistics
- * - Dependency Inversion: Depends on repository abstractions
- * - Open/Closed: Extensible through additional methods without modification
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,12 +31,7 @@ public class HomeServiceImpl implements HomeService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
 
-    /**
-     * Retrieves home page statistics
-     * Cached for 5 minutes to reduce database load
-     * 
-     * @return HomeStatsDto containing aggregated statistics
-     */
+    
     @Override
     @Cacheable(value = "homeStats", unless = "#result == null")
     public HomeStatsDto getHomeStatistics() {
@@ -69,8 +59,8 @@ public class HomeServiceImpl implements HomeService {
             
         } catch (Exception e) {
             log.error("Error fetching home statistics", e);
-            // Return default values instead of throwing exception
-            // This ensures the home page loads even if stats fail
+            
+            
             return getDefaultStats();
         }
     }
@@ -147,33 +137,29 @@ public class HomeServiceImpl implements HomeService {
                 artworkRepository.findTopSellingArtworks(pageable);
             log.info("Found {} top-selling artworks", topSellers.size());
             
-            // Initialize lazy collections within the transaction to avoid LazyInitializationException
-            // This forces Hibernate to load the collections before the session closes
+            
+            
             topSellers.forEach(artwork -> {
                 if (artwork.getTags() != null) {
-                    artwork.getTags().size(); // Force initialization
+                    artwork.getTags().size(); 
                 }
                 if (artwork.getImages() != null) {
-                    artwork.getImages().size(); // Force initialization
+                    artwork.getImages().size(); 
                 }
             });
             
-            // Convert to DTOs to avoid circular reference issues
+            
             return topSellers.stream()
                 .map(this::convertToSummaryDto)
                 .collect(java.util.stream.Collectors.toList());
         } catch (Exception e) {
             log.error("Error fetching top-selling artworks", e);
-            // Return empty list on error
+            
             return java.util.Collections.emptyList();
         }
     }
     
-    /**
-     * Converts Artwork entity to ArtworkSummaryDto
-     * Prevents circular reference issues with Artist entity
-     * Note: Lazy collections (tags, images) must be initialized before calling this method
-     */
+    
     private com.artwork.dto.ArtworkSummaryDto convertToSummaryDto(com.artwork.entity.Artwork artwork) {
         String artistName = null;
         String artistProfilePic = null;
@@ -184,7 +170,7 @@ public class HomeServiceImpl implements HomeService {
             artistProfilePic = artwork.getArtist().getProfilePictureUrl();
         }
         
-        // Safely copy lazy-loaded collections to avoid LazyInitializationException
+        
         java.util.List<String> imagesCopy = artwork.getImages() != null ? 
             new java.util.ArrayList<>(artwork.getImages()) : null;
         java.util.List<String> tagsCopy = artwork.getTags() != null ? 
@@ -207,21 +193,16 @@ public class HomeServiceImpl implements HomeService {
                 .artistId(artwork.getArtistId())
                 .artistName(artistName)
                 .artistProfilePicture(artistProfilePic)
-                .averageRating(null)  // Not available in entity
-                .reviewCount(null)    // Not available in entity
-                .stock(null)          // Not available in entity
+                .averageRating(null)  
+                .reviewCount(null)    
+                .stock(null)          
                 .imageUrl(imagesCopy != null && !imagesCopy.isEmpty() ? 
                     imagesCopy.get(0) : null)
                 .createdAt(artwork.getCreatedAt())
                 .build();
     }
 
-    /**
-     * Rounds a double value to one decimal place
-     * 
-     * @param value the value to round
-     * @return rounded value
-     */
+    
     private Double roundToOneDecimal(Double value) {
         if (value == null) {
             return 0.0;
@@ -231,12 +212,7 @@ public class HomeServiceImpl implements HomeService {
                 .doubleValue();
     }
 
-    /**
-     * Returns default statistics when database queries fail
-     * Ensures graceful degradation
-     * 
-     * @return HomeStatsDto with default values
-     */
+    
     private HomeStatsDto getDefaultStats() {
         return HomeStatsDto.builder()
                 .totalArtworks(0L)

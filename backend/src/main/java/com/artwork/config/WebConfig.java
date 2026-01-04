@@ -18,13 +18,13 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(@org.springframework.lang.NonNull CorsRegistry registry) {
-                // Split comma-separated origins
+                
                 String[] allowedOrigins = allowedOriginsString.split(",");
                 
                 log.info("Configuring CORS with allowed origins: {}", String.join(", ", allowedOrigins));
                 
                 registry.addMapping("/api/**")
-                        // Use allowedOriginPatterns instead of allowedOrigins when allowCredentials is true
+                        
                         .allowedOriginPatterns(allowedOrigins)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                         .allowedHeaders("Authorization", "Cache-Control", "Content-Type", "Accept", "Origin", "X-Requested-With")
@@ -32,7 +32,7 @@ public class WebConfig {
                         .exposedHeaders("Authorization")
                         .maxAge(3600);
                 
-                // CORS for WebSocket endpoints
+                
                 registry.addMapping("/ws/**")
                         .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST", "OPTIONS")

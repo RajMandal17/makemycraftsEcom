@@ -17,11 +17,11 @@ import TokenManager from '../utils/tokenManager';
 import tokenRefreshService from './tokenRefresh';
 import { API_CONFIG } from '../config/api';
 
-// Loading callbacks
+
 let showLoadingCallback: ((message?: string) => void) | null = null;
 let hideLoadingCallback: (() => void) | null = null;
 
-// Function to register loading callbacks from LoadingContext
+
 export const registerLoadingCallbacks = (
   showLoading: (message?: string) => void,
   hideLoading: () => void
@@ -33,16 +33,16 @@ export const registerLoadingCallbacks = (
 const API_BASE_URL = API_CONFIG.API_BASE_URL;
 const DIRECT_API_URL = API_CONFIG.BACKEND_URL;
 
-// Utility function to construct full image URLs
+
 export const getFullImageUrl = (imageUrl: string): string => {
   if (!imageUrl) return '';
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-    return imageUrl; // Already a full URL
+    return imageUrl; 
   }
-  return `${DIRECT_API_URL}${imageUrl}`; // Construct full URL for relative paths
+  return `${DIRECT_API_URL}${imageUrl}`; 
 };
 
-// Create axios instance
+
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 60000,
@@ -51,9 +51,9 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
-// Create admin axios instance
+
 const adminApiClient: AxiosInstance = axios.create({
-  baseURL: API_CONFIG.ADMIN_API_FALLBACK_URL, // Always use backend for admin APIs
+  baseURL: API_CONFIG.ADMIN_API_FALLBACK_URL, 
   timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
@@ -62,12 +62,12 @@ const adminApiClient: AxiosInstance = axios.create({
 
 const ADMIN_API_DEFAULT_BASE_URL = API_CONFIG.ADMIN_API_FALLBACK_URL;
 const ADMIN_API_FALLBACK_BASE_URL = API_CONFIG.ADMIN_API_FALLBACK_URL;
-const ADMIN_SERVICE_ENABLED = false; // Disabled since we're using backend directly
+const ADMIN_SERVICE_ENABLED = false; 
 
-// Request interceptor for adminApiClient
+
 adminApiClient.interceptors.request.use(
   async (config) => {
-    // Show loading animation
+    
     if (showLoadingCallback) {
       let loadingMessage = 'Loading admin data...';
       if (config.url?.includes('/users')) {
@@ -87,14 +87,14 @@ adminApiClient.interceptors.request.use(
     console.log('🔐 Admin API Request:', config.method?.toUpperCase(), config.url);
     console.log('🎫 Token available:', !!token);
 
-    // Admin endpoints always require authentication
+    
     if (!token) {
       console.error('❌ No token available for admin endpoint:', config.url);
       if (hideLoadingCallback) hideLoadingCallback();
       return Promise.reject(new Error('No authentication token found'));
     }
 
-    // Check if token is expired and try to refresh
+    
     if (!TokenManager.isTokenValid(token)) {
       console.log('🔄 Token expired, attempting refresh before admin request...');
       try {
@@ -128,10 +128,10 @@ adminApiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor for adminApiClient
+
 adminApiClient.interceptors.response.use(
   (response: AxiosResponse) => {
-    // Hide loading animation on successful response
+    
     if (hideLoadingCallback) {
       hideLoadingCallback();
     }
@@ -139,7 +139,7 @@ adminApiClient.interceptors.response.use(
     return response;
   },
   async (error) => {
-    // Hide loading animation on error
+    
     if (hideLoadingCallback) {
       hideLoadingCallback();
     }
@@ -175,7 +175,7 @@ adminApiClient.interceptors.response.use(
       } catch (refreshError) {
         console.error('❌ Admin token refresh failed after 401:', refreshError);
         toast.error('Session expired. Please login again.');
-        // Delay redirect to allow toast to show
+        
         setTimeout(() => {
           TokenManager.clearTokens();
           window.location.href = '/login';
@@ -209,12 +209,12 @@ adminApiClient.interceptors.response.use(
   }
 );
 
-// Request interceptor to add auth token with automatic refresh
+
 apiClient.interceptors.request.use(
   async (config) => {
-    // Show loading animation
+    
     if (showLoadingCallback) {
-      // Customize loading message based on endpoint
+      
       let loadingMessage = 'Loading...';
       if (config.url?.includes('/artworks')) {
         loadingMessage = 'Loading beautiful artworks...';
@@ -236,7 +236,7 @@ apiClient.interceptors.request.use(
       showLoadingCallback(loadingMessage);
     }
 
-    // List of public endpoints that don't require authentication
+    
     const publicEndpoints = [
       '/home/stats',
       '/artworks',
@@ -246,14 +246,14 @@ apiClient.interceptors.request.use(
       '/auth/oauth2',
     ];
 
-    // Check if this is a public endpoint
+    
     const isPublicEndpoint = publicEndpoints.some(endpoint =>
       config.url?.includes(endpoint)
     );
 
     let token = TokenManager.getToken();
 
-    // Only check for auth inconsistency on protected endpoints
+    
     if (!isPublicEndpoint) {
       const appState = window.localStorage.getItem('app_state');
       if (appState) {
@@ -261,7 +261,7 @@ apiClient.interceptors.request.use(
           const parsedState = JSON.parse(appState);
           if (parsedState.auth?.isAuthenticated === true && !token) {
             console.error('❌ Auth inconsistency detected: Token missing but marked as authenticated');
-            // Clear inconsistent state
+            
             TokenManager.clearTokens();
             localStorage.removeItem('app_state');
           }
@@ -272,7 +272,7 @@ apiClient.interceptors.request.use(
     }
 
     if (token) {
-      // Check if token is expired and try to refresh
+      
       if (!TokenManager.isTokenValid(token)) {
         console.log('🔄 Token expired, attempting refresh...');
         try {
@@ -296,7 +296,7 @@ apiClient.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     } else if (!isPublicEndpoint) {
-      // Only log warning for protected endpoints
+      
       console.warn('⚠️ No token available for protected endpoint:', config.url);
     }
 
@@ -308,17 +308,17 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor for error handling and token refresh
+
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
-    // Hide loading animation on successful response
+    
     if (hideLoadingCallback) {
       hideLoadingCallback();
     }
     return response;
   },
   async (error) => {
-    // Hide loading animation on error
+    
     if (hideLoadingCallback) {
       hideLoadingCallback();
     }
@@ -333,7 +333,7 @@ apiClient.interceptors.response.use(
         const refreshedToken = await tokenRefreshService.refreshAccessToken();
         if (refreshedToken) {
           console.log('✅ Token refreshed, retrying original request');
-          // Update the authorization header and retry
+          
           originalRequest.headers.Authorization = `Bearer ${refreshedToken}`;
           return apiClient(originalRequest);
         } else {
@@ -355,7 +355,7 @@ apiClient.interceptors.response.use(
       console.error('403 Forbidden error. User lacks required permissions.');
       toast.error('Access denied. Insufficient permissions.');
 
-      // Show detailed error if available
+      
       if (error.response?.data?.message) {
         toast.error(`Access denied: ${error.response.data.message}`);
       }
@@ -370,7 +370,7 @@ apiClient.interceptors.response.use(
   }
 );
 
-// Auth API
+
 export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
     const response = await apiClient.post<LoginResponse>(
@@ -401,7 +401,7 @@ export const authAPI = {
   },
 };
 
-// Artwork API
+
 export const artworkAPI = {
   getAll: async (params?: {
     page?: number;
@@ -413,23 +413,23 @@ export const artworkAPI = {
     artistId?: string;
   }): Promise<{ artworks: Artwork[]; total: number; totalPages: number }> => {
     try {
-      // Don't adjust page index - backend expects 1-based pagination
+      
       console.log('Fetching artworks with params:', params);
       const response = await apiClient.get('/artworks', { params });
       console.log('API Response:', response.data);
 
-      // Direct response structure from our controller (no wrapping)
+      
       if (response.data && typeof response.data === 'object') {
         if (Array.isArray(response.data.artworks)) {
           console.log('Standard response structure detected');
           return response.data;
         }
-        // Wrapped response in data property (API standard pattern)
+        
         else if (response.data.data && Array.isArray(response.data.data.artworks)) {
           console.log('Wrapped response structure detected');
           return response.data.data;
         }
-        // The response itself might be the artworks array
+        
         else if (Array.isArray(response.data)) {
           console.log('Array response structure detected');
           return {
@@ -440,10 +440,10 @@ export const artworkAPI = {
         }
       }
 
-      // Log unexpected structure for debugging
+      
       console.warn('Could not parse artworks from response:', response.data);
 
-      // Default return for any other cases
+      
       return {
         artworks: [],
         total: 0,
@@ -461,7 +461,7 @@ export const artworkAPI = {
 
   getById: async (id: string): Promise<Artwork> => {
     try {
-      // Try to get artwork from our backend first
+      
       const response = await apiClient.get(`/v1/artwork-query/${id}`);
       if (response.data) {
         return response.data.data || response.data;
@@ -470,7 +470,7 @@ export const artworkAPI = {
       console.error("Error fetching artwork:", error);
     }
 
-    // Fallback to placeholder data if backend fails or doesn't return expected data
+    
     return {
       id: id,
       title: "Artwork Title",
@@ -515,7 +515,7 @@ export const artworkAPI = {
   },
 };
 
-// Cart API
+
 export const cartAPI = {
   add: async (artworkId: string, quantity: number = 1): Promise<CartItem> => {
     const response = await apiClient.post<ApiResponse<CartItem>>('/cart/add', {
@@ -544,7 +544,7 @@ export const cartAPI = {
   },
 };
 
-// Wishlist API
+
 export const wishlistAPI = {
   add: async (artworkId: string): Promise<WishlistItem> => {
     const response = await apiClient.post<ApiResponse<WishlistItem>>('/wishlist/add', {
@@ -563,7 +563,7 @@ export const wishlistAPI = {
   },
 };
 
-// Order API
+
 export const orderAPI = {
   create: async (orderData: {
     items: { artworkId: string; quantity: number }[];
@@ -593,7 +593,7 @@ export const orderAPI = {
   },
 };
 
-// Artist Order API
+
 export const artistOrderAPI = {
   getAll: async (params?: { page?: number; size?: number; status?: string }): Promise<{ orders: Order[]; total: number; totalPages: number; currentPage: number }> => {
     const response = await apiClient.get<ApiResponse<{ orders: Order[]; total: number; totalPages: number; currentPage: number }>>('/artist/orders', { params });
@@ -623,10 +623,10 @@ export const artistOrderAPI = {
   },
 };
 
-// Review API
+
 export const reviewAPI = {
   create: async (reviewData: {
-    orderItemId: string;  // The order item ID to verify purchase
+    orderItemId: string;  
     rating: number;
     comment: string;
   }): Promise<Review> => {
@@ -639,11 +639,11 @@ export const reviewAPI = {
       const response = await apiClient.get<any>(`/reviews/artwork/${artworkId}`);
       console.log('Review response for artwork:', artworkId, response.data);
 
-      // API returns { success: true, reviews: [...], total: N }
+      
       if (response.data.reviews && Array.isArray(response.data.reviews)) {
         return response.data.reviews;
       }
-      // Fallback: check other possible formats
+      
       if (Array.isArray(response.data)) {
         return response.data;
       }
@@ -667,7 +667,7 @@ export const reviewAPI = {
   },
 };
 
-// Payment API
+
 export const paymentAPI = {
   createPayment: async (paymentData: {
     orderId: string;
@@ -715,7 +715,7 @@ export const paymentAPI = {
   },
 };
 
-// Admin API
+
 export const adminAPI = {
   getUsers: async (params?: { page?: number; limit?: number; role?: string }): Promise<{
     users: User[];

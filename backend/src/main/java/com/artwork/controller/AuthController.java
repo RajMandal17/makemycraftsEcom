@@ -42,10 +42,10 @@ public class AuthController {
                 return ResponseEntity.status(404).body(new ErrorResponse("User not found"));
             }
 
-            // Add additional debug info
+            
             userDto.setAuthorities(userDetails.getAuthorities().toString());
 
-            // Return wrapped response to match ApiResponse structure
+            
             Map<String, Object> response = new HashMap<>();
             response.put("data", userDto);
             response.put("message", "Token verified successfully");

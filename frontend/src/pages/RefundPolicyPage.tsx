@@ -129,7 +129,7 @@ const RefundPolicyPage: React.FC = () => {
                             <div className="space-y-2 text-gray-700">
                                 <p><strong>Refunds:</strong> <a href="mailto:refunds@makemycrafts.com" className="text-blue-600 hover:text-blue-700">refunds@makemycrafts.com</a></p>
                                 <p><strong>Support:</strong> <a href="mailto:support@makemycrafts.com" className="text-blue-600 hover:text-blue-700">support@makemycrafts.com</a></p>
-                                <p><strong>Website:</strong> <a href="https://makemycrafts.com" className="text-blue-600 hover:text-blue-700">https://makemycrafts.com</a></p>
+                                <p><strong>Website:</strong> <a href="https://makemycrafts.com" className="text-blue-600 hover:text-blue-700">https:
                             </div>
                         </section>
                     </div>

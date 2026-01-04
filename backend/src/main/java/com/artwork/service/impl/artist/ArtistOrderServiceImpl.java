@@ -48,16 +48,16 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
     public Page<OrderDto> getArtistOrders(String token, int page, int size, String status) {
         String artistId = jwtUtil.extractUserId(token);
         
-        // Create pageable with sorting by creation date descending
+        
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         
-        // Get all orders
+        
         Page<Order> allOrders = orderRepository.findAll(pageable);
         
-        // Filter orders that contain artist's artworks
+        
         List<OrderDto> artistOrders = allOrders.getContent().stream()
             .map(order -> filterOrderForArtist(order, artistId))
-            .filter(Objects::nonNull) // Remove orders that don't have artist's items
+            .filter(Objects::nonNull) 
             .filter(order -> status == null || order.getStatus().equalsIgnoreCase(status))
             .collect(Collectors.toList());
         
@@ -90,7 +90,7 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
         Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
         
-        // Verify that this order contains artist's artwork
+        
         List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
         boolean hasArtistItems = orderItems.stream()
             .anyMatch(item -> {
@@ -103,7 +103,7 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
             throw new IllegalArgumentException("You don't have permission to update this order");
         }
         
-        // Validate status - artists can only update to certain statuses
+        
         OrderStatus newStatus = null;
         if (status != null && !status.isEmpty()) {
             newStatus = validateAndGetArtistStatus(status);
@@ -115,7 +115,7 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
         }
         
         if (notes != null && !notes.isEmpty()) {
-            // Append artist notes to admin notes
+            
             String existingNotes = order.getAdminNotes() != null ? order.getAdminNotes() : "";
             String artistNotes = "\n[Artist Note - " + LocalDateTime.now() + "]: " + notes;
             order.setAdminNotes(existingNotes + artistNotes);
@@ -124,7 +124,7 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
         order.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(order);
         
-        // Send notification to customer
+        
         if (newStatus != null) {
             sendOrderStatusNotification(order, newStatus);
         }
@@ -137,16 +137,16 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
     public Map<String, Object> getArtistOrderStats(String token) {
         String artistId = jwtUtil.extractUserId(token);
         
-        // Get all orders
+        
         List<Order> allOrders = orderRepository.findAll();
         
-        // Filter for artist's orders
+        
         List<OrderDto> artistOrders = allOrders.stream()
             .map(order -> filterOrderForArtist(order, artistId))
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
         
-        // Calculate statistics
+        
         double totalSales = artistOrders.stream()
             .mapToDouble(OrderDto::getTotalAmount)
             .sum();
@@ -178,14 +178,11 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
         return stats;
     }
 
-    /**
-     * Filter an order to only include items belonging to the artist
-     * Returns null if no items belong to the artist
-     */
+    
     private OrderDto filterOrderForArtist(Order order, String artistId) {
         List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
         
-        // Filter items that belong to this artist
+        
         List<OrderItem> artistItems = orderItems.stream()
             .filter(item -> {
                 return artworkRepository.findById(item.getArtworkId())
@@ -198,14 +195,14 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
             return null;
         }
         
-        // Create OrderDto with only artist's items
+        
         OrderDto orderDto = modelMapper.map(order, OrderDto.class);
         
-        // Map items to DTOs
+        
         List<OrderItemDto> itemDtos = artistItems.stream()
             .map(item -> {
                 OrderItemDto dto = modelMapper.map(item, OrderItemDto.class);
-                // Add artwork details
+                
                 artworkRepository.findById(item.getArtworkId()).ifPresent(artwork -> {
                     dto.setArtwork(modelMapper.map(artwork, com.artwork.dto.ArtworkDto.class));
                     dto.setTitle(artwork.getTitle());
@@ -216,7 +213,7 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
         
         orderDto.setItems(itemDtos);
         
-        // Recalculate total amount for just this artist's items
+        
         double artistTotal = artistItems.stream()
             .mapToDouble(item -> item.getPrice() * item.getQuantity())
             .sum();
@@ -225,15 +222,12 @@ public class ArtistOrderServiceImpl implements ArtistOrderService {
         return orderDto;
     }
 
-    /**
-     * Validate that the status is one that artists are allowed to set
-     * Artists can set: CONFIRMED, SHIPPED, DELIVERED
-     */
+    
     private OrderStatus validateAndGetArtistStatus(String status) {
         try {
             OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
             
-            // Check if artist is allowed to set this status
+            
             if (orderStatus == OrderStatus.CONFIRMED || 
                 orderStatus == OrderStatus.SHIPPED || 
                 orderStatus == OrderStatus.DELIVERED) {

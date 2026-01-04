@@ -9,13 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Payment entity representing a payment transaction.
- * 
- * Single Responsibility: Stores payment transaction data only.
- * 
- * @author Artwork Platform
- */
+
 @Entity
 @Table(name = "payments", indexes = {
     @Index(name = "idx_payments_order_id", columnList = "orderId"),
@@ -57,7 +51,7 @@ public class Payment {
     private String gatewayPaymentId;
     
     @Column(length = 50)
-    private String paymentMethod; // UPI, CARD, NETBANKING, WALLET
+    private String paymentMethod; 
     
     @Enumerated(EnumType.STRING)
     @Builder.Default

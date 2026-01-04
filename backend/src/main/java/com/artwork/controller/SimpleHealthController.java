@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Simple health controller that doesn't depend on external services
- */
+
 @RestController
 public class SimpleHealthController {
 
@@ -32,4 +30,3 @@ public class SimpleHealthController {
 }
 
 
-// ok

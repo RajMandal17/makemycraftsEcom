@@ -18,8 +18,8 @@ public class ReportGenerationRequest {
     @JsonProperty("format")
     private ReportFormat reportFormat;
 
-    private String startDate; // Optional date range
-    private String endDate;   // Optional date range
+    private String startDate; 
+    private String endDate;   
 
     public enum ReportType {
         SALES,

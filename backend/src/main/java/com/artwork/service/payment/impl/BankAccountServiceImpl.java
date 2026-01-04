@@ -16,13 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Bank account service implementation.
- * 
- * Single Responsibility: Manage seller bank accounts only.
- * 
- * @author Artwork Platform
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -36,22 +30,22 @@ public class BankAccountServiceImpl implements BankAccountService {
     public BankAccountResponse addBankAccount(String userId, AddBankAccountRequest request) {
         log.info("Adding bank account for user: {}", userId);
         
-        // Verify KYC exists
+        
         SellerKyc kyc = sellerKycRepository.findByUserId(userId)
             .orElseThrow(() -> new RuntimeException("KYC not found. Please complete KYC first."));
         
-        // Validate IFSC code format
+        
         if (!isValidIfscCode(request.getIfscCode())) {
             throw new RuntimeException("Invalid IFSC code format");
         }
         
-        // Check for duplicate account
+        
         if (bankAccountRepository.findByAccountNumberAndIfscCode(
                 request.getAccountNumber(), request.getIfscCode()).isPresent()) {
             throw new RuntimeException("Bank account already exists");
         }
         
-        // If this is set as primary, unset other primary accounts
+        
         if (Boolean.TRUE.equals(request.getIsPrimary())) {
             bankAccountRepository.findBySellerKycIdAndIsPrimaryTrue(kyc.getId())
                 .ifPresent(existing -> {
@@ -63,7 +57,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         SellerBankAccount bankAccount = SellerBankAccount.builder()
             .sellerKycId(kyc.getId())
             .accountHolderName(request.getAccountHolderName())
-            .accountNumber(request.getAccountNumber()) // TODO: Encrypt in production
+            .accountNumber(request.getAccountNumber()) 
             .ifscCode(request.getIfscCode().toUpperCase())
             .bankName(request.getBankName())
             .branchName(request.getBranchName())
@@ -117,14 +111,14 @@ public class BankAccountServiceImpl implements BankAccountService {
             throw new RuntimeException("Bank account does not belong to user");
         }
         
-        // Unset current primary
+        
         bankAccountRepository.findBySellerKycIdAndIsPrimaryTrue(kyc.getId())
             .ifPresent(existing -> {
                 existing.setIsPrimary(false);
                 bankAccountRepository.save(existing);
             });
         
-        // Set new primary
+        
         bankAccount.setIsPrimary(true);
         bankAccount = bankAccountRepository.save(bankAccount);
         
@@ -141,8 +135,8 @@ public class BankAccountServiceImpl implements BankAccountService {
         SellerBankAccount bankAccount = bankAccountRepository.findById(bankAccountId)
             .orElseThrow(() -> new RuntimeException("Bank account not found: " + bankAccountId));
         
-        // TODO: Implement penny drop verification with payment gateway
-        // For now, mark as verified
+        
+        
         bankAccount.setVerificationStatus(VerificationStatus.VERIFIED);
         bankAccount.setVerifiedAt(java.time.LocalDateTime.now());
         
@@ -182,7 +176,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         if (ifsc == null || ifsc.length() != 11) {
             return false;
         }
-        // IFSC format: AAAA0BBBBBB
+        
         return ifsc.matches("[A-Z]{4}0[A-Z0-9]{6}");
     }
     

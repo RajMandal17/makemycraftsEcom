@@ -14,11 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Payout controller for seller payout operations.
- * 
- * @author Artwork Platform
- */
+
 @RestController
 @RequestMapping("/api/payment/payouts")
 @RequiredArgsConstructor

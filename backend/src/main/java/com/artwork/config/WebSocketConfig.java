@@ -13,14 +13,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
-/**
- * WebSocket Configuration for Real-Time Updates
- * 
- * Optimized for low server cost:
- * - Uses simple in-memory broker (no external message queue needed)
- * - Long heartbeat intervals to reduce network chatter
- * - Message size limits to prevent memory issues
- */
+
 @Configuration
 @EnableWebSocketMessageBroker
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -30,13 +23,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Value("${cors.allowed-origins}")
     private String corsAllowedOrigins;
     
-    // Heartbeat intervals (in milliseconds)
-    private static final long SERVER_HEARTBEAT = 25000; // 25 seconds
-    private static final long CLIENT_HEARTBEAT = 25000; // 25 seconds
+    
+    private static final long SERVER_HEARTBEAT = 25000; 
+    private static final long CLIENT_HEARTBEAT = 25000; 
 
-    /**
-     * Task scheduler for heartbeats - create as @Bean for proper initialization
-     */
+    
     @Bean(name = "websocketHeartbeatScheduler")
     public ThreadPoolTaskScheduler websocketHeartbeatScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
@@ -50,15 +41,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
         log.info("Configuring WebSocket message broker");
         
-        // Use simple in-memory broker
+        
         config.enableSimpleBroker("/topic", "/queue")
               .setHeartbeatValue(new long[]{SERVER_HEARTBEAT, CLIENT_HEARTBEAT})
               .setTaskScheduler(websocketHeartbeatScheduler());
         
-        // Prefix for messages FROM clients TO server
+        
         config.setApplicationDestinationPrefixes("/app");
         
-        // Prefix for user-specific messages
+        
         config.setUserDestinationPrefix("/user");
     }
 
@@ -66,16 +57,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         log.info("Registering WebSocket STOMP endpoints with allowed origins: {}", corsAllowedOrigins);
         
-        // Parse and clean allowed origins
+        
         String[] origins = corsAllowedOrigins.split(",");
         for (int i = 0; i < origins.length; i++) {
             origins[i] = origins[i].trim();
         }
         
-        // Register STOMP endpoint with SockJS fallback
-        // Using setAllowedOriginPatterns for Spring Boot 2.4+ compatibility
+        
+        
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*")  // Allow all origins for SockJS
+                .setAllowedOriginPatterns("*")  
                 .withSockJS()
                 .setHeartbeatTime(SERVER_HEARTBEAT)
                 .setDisconnectDelay(5000)
@@ -84,7 +75,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setSessionCookieNeeded(false)
                 .setClientLibraryUrl("https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js");
         
-        // Also register native WebSocket endpoint (without SockJS)
+        
         registry.addEndpoint("/ws-native")
                 .setAllowedOriginPatterns("*");
         

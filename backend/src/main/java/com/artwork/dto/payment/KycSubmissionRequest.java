@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * KYC submission request DTO.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

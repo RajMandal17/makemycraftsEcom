@@ -1,21 +1,16 @@
-/**
- * Utility to debug authentication issues by checking various endpoints
- * and JWT information.
- */
+
 import axios from 'axios';
 import { API_CONFIG } from '../config/api';
 
-// The base API URL
+
 const API_BASE_URL = API_CONFIG.API_BASE_URL;
 
-/**
- * Tests all authentication related endpoints to diagnose issues
- */
+
 export const runAuthDiagnostics = async (): Promise<void> => {
   console.group('🔍 Authentication Diagnostics');
   console.log('Starting authentication diagnostics...');
 
-  // Get token from localStorage - using the correct key for TokenManager
+  
   const token = localStorage.getItem('access_token');
   if (!token) {
     console.error('❌ No token found in localStorage!');
@@ -25,7 +20,7 @@ export const runAuthDiagnostics = async (): Promise<void> => {
 
   console.log(`✓ Token found: ${token.substring(0, 20)}...`);
 
-  // Decode JWT (without validation)
+  
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     console.log('✓ Token payload:', payload);
@@ -41,7 +36,7 @@ export const runAuthDiagnostics = async (): Promise<void> => {
     console.error('❌ Error decoding JWT:', err);
   }
 
-  // Test /api/auth/verify endpoint
+  
   try {
     console.log('Testing /api/auth/verify endpoint...');
     const verifyResponse = await axios.get(`${API_BASE_URL}/auth/verify`, {
@@ -54,7 +49,7 @@ export const runAuthDiagnostics = async (): Promise<void> => {
     console.error('❌ Verify endpoint error:', err.response?.status, err.response?.data || err.message);
   }
 
-  // Test debug endpoint
+  
   try {
     console.log('Testing /api/debug/auth endpoint...');
     const debugResponse = await axios.get(`${API_BASE_URL}/debug/auth`, {
@@ -64,7 +59,7 @@ export const runAuthDiagnostics = async (): Promise<void> => {
     });
     console.log('✓ Debug endpoint response:', debugResponse.data);
 
-    // Extract and display key information
+    
     const authInfo = debugResponse.data;
     if (authInfo.isAuthenticated) {
       console.log('✓ User is authenticated');
@@ -78,7 +73,7 @@ export const runAuthDiagnostics = async (): Promise<void> => {
     console.error('❌ Debug endpoint error:', err.response?.status, err.response?.data || err.message);
   }
 
-  // Test /api/artworks/my-artworks endpoint
+  
   try {
     console.log('Testing /api/artworks/my-artworks endpoint...');
     const artworksResponse = await axios.get(`${API_BASE_URL}/artworks/my-artworks`, {

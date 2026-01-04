@@ -129,7 +129,7 @@ public class AdminOrderController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/stats")
     public ResponseEntity<?> getOrderStats() {
-        // Fetch real stats from service
+        
         com.artwork.dto.OrderStatsDto stats = adminOrderService.getOrderStats();
         
         Map<String, Object> response = new HashMap<>();

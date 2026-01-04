@@ -30,11 +30,11 @@ const ArtworksPage: React.FC = () => {
     search: ''
   });
 
-  // Dynamic categories from API
+  
   const [categories, setCategories] = useState<PublicCategory[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
 
-  // Fetch categories on mount
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -98,7 +98,7 @@ const ArtworksPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
+      {}
       <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -111,12 +111,12 @@ const ArtworksPage: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters */}
+        {}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">Filter Artworks</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {/* Search */}
+            {}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Search
@@ -130,7 +130,7 @@ const ArtworksPage: React.FC = () => {
               />
             </div>
 
-            {/* Category */}
+            {}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Category
@@ -152,7 +152,7 @@ const ArtworksPage: React.FC = () => {
               </select>
             </div>
 
-            {/* Min Price */}
+            {}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Min Price (₹)
@@ -166,7 +166,7 @@ const ArtworksPage: React.FC = () => {
               />
             </div>
 
-            {/* Max Price */}
+            {}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Max Price (₹)
@@ -182,21 +182,21 @@ const ArtworksPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Error Message */}
+        {}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}
 
-        {/* Results Count */}
+        {}
         <div className="mb-6">
           <p className="text-gray-600">
             {loading ? 'Loading...' : `${artworks.length} artwork${artworks.length !== 1 ? 's' : ''} found`}
           </p>
         </div>
 
-        {/* Artworks Grid */}
+        {}
         {artworks.length === 0 && !loading ? (
           <div className="text-center py-12">
             <svg
@@ -225,7 +225,7 @@ const ArtworksPage: React.FC = () => {
                 to={`/artworks/${artwork.id}`}
                 className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
-                {/* Image */}
+                {}
                 <div className="aspect-square overflow-hidden bg-gray-100">
                   {artwork.images && artwork.images.length > 0 ? (
                     <img
@@ -255,7 +255,7 @@ const ArtworksPage: React.FC = () => {
                   )}
                 </div>
 
-                {/* Details */}
+                {}
                 <div className="p-4">
                   <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1 group-hover:text-purple-600 transition-colors">
                     {artwork.title}

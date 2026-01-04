@@ -9,11 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * SellerKyc entity for seller verification and compliance.
- * 
- * @author Artwork Platform
- */
+
 @Entity
 @Table(name = "seller_kyc", indexes = {
     @Index(name = "idx_kyc_user_id", columnList = "userId"),
@@ -67,7 +63,7 @@ public class SellerKyc {
     
     private String verifiedBy;
     
-    // TDS Tracking
+    
     @Builder.Default
     private Boolean tdsExempt = false;
     

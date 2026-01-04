@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * DTO for aggregated order statistics.
- *
- * @author Admin Dashboard Team
- */
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,7 +22,7 @@ public class OrderStatsDto {
     private Long cancelledOrders;
     private Long refundedOrders;
 
-    // Revenue metrics
+    
     private Double totalRevenue;
     private Double averageOrderValue;
     private Double revenueToday;
@@ -34,13 +30,13 @@ public class OrderStatsDto {
     private Double revenueThisMonth;
     private Double revenueGrowthRate;
 
-    // Growth metrics
+    
     private Long newOrdersToday;
     private Long newOrdersThisWeek;
     private Long newOrdersThisMonth;
     private Double orderGrowthRate;
 
-    // Time range
+    
     private LocalDateTime fromDate;
     private LocalDateTime toDate;
 }

@@ -1,8 +1,4 @@
-/**
- * WebSocket Client for Admin Dashboard Real-Time Updates
- * 
- * Uses STOMP over SockJS to match Spring Boot WebSocket configuration
- */
+
 
 import { API_CONFIG } from '../config/api';
 import TokenManager from '../utils/tokenManager';
@@ -55,7 +51,7 @@ class AdminWebSocketClient {
   private isManualDisconnect = false;
   private subscriptions: Map<string, StompSubscription> = new Map();
 
-  // Feature flag: Enable WebSocket for real-time updates
+  
   private isWebSocketEnabled = true;
 
   constructor() {
@@ -68,12 +64,10 @@ class AdminWebSocketClient {
     }
   }
 
-  /**
-   * Connect to WebSocket server using STOMP over SockJS
-   */
+  
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
-      // Skip connection if WebSocket is disabled
+      
       if (!this.isWebSocketEnabled) {
         console.info('ℹ️ Skipping WebSocket connection (disabled)');
         resolve();
@@ -103,11 +97,11 @@ class AdminWebSocketClient {
 
       try {
         console.log('🔌 Connecting to Admin WebSocket:', API_CONFIG.ADMIN_WEBSOCKET_URL);
-        // Create STOMP client with SockJS
+        
         this.stompClient = new Client({
-          // Use SockJS as the WebSocket implementation
+          
           webSocketFactory: () => {
-            // SockJS requires http/https protocol, not ws/wss
+            
             const url = API_CONFIG.ADMIN_WEBSOCKET_URL
               .replace('wss://', 'https://')
               .replace('ws://', 'http://');
@@ -162,9 +156,7 @@ class AdminWebSocketClient {
     });
   }
 
-  /**
-   * Disconnect from WebSocket server
-   */
+  
   disconnect(): void {
     console.log('🔌 Manually disconnecting WebSocket');
     this.isManualDisconnect = true;
@@ -177,9 +169,7 @@ class AdminWebSocketClient {
     this.subscriptions.clear();
   }
 
-  /**
-   * Attempt to reconnect with exponential backoff
-   */
+  
   private attemptReconnect(): void {
     this.reconnectAttempts++;
     const delay = this.reconnectInterval * Math.pow(2, this.reconnectAttempts - 1);
@@ -193,9 +183,7 @@ class AdminWebSocketClient {
     }, delay);
   }
 
-  /**
-   * Subscribe to a STOMP topic
-   */
+  
   private subscribe(destination: string, handler: MessageHandler): () => void {
     if (!this.stompClient || !this.stompClient.connected) {
       console.error('❌ Cannot subscribe: not connected');
@@ -213,64 +201,50 @@ class AdminWebSocketClient {
 
     this.subscriptions.set(destination, subscription);
 
-    // Return unsubscribe function
+    
     return () => {
       subscription.unsubscribe();
       this.subscriptions.delete(destination);
     };
   }
 
-  /**
-   * Subscribe to dashboard updates
-   */
+  
   subscribeToDashboard(handler: (data: DashboardUpdate) => void): () => void {
     return this.subscribe('/topic/dashboard', handler);
   }
 
-  /**
-   * Subscribe to order notifications
-   */
+  
   subscribeToOrderNotifications(handler: (notification: NotificationMessage) => void): () => void {
     return this.subscribe('/topic/admin/orders', handler);
   }
 
-  /**
-   * Subscribe to user notifications
-   */
+  
   subscribeToUserNotifications(handler: (notification: NotificationMessage) => void): () => void {
     return this.subscribe('/topic/admin/users', handler);
   }
 
-  /**
-   * Subscribe to artwork notifications
-   */
+  
   subscribeToArtworkNotifications(handler: (notification: NotificationMessage) => void): () => void {
     return this.subscribe('/topic/admin/artworks', handler);
   }
 
-  /**
-   * Subscribe to system alerts
-   */
+  
   subscribeToSystemAlerts(handler: (alert: NotificationMessage) => void): () => void {
     return this.subscribe('/topic/admin/alerts', handler);
   }
 
-  /**
-   * Check if WebSocket is connected
-   */
+  
   isConnected(): boolean {
     return this.stompClient !== null && this.stompClient.connected;
   }
 
-  /**
-   * Get connection state
-   */
+  
   getState(): string {
     if (!this.stompClient) return 'DISCONNECTED';
     return this.stompClient.connected ? 'CONNECTED' : 'DISCONNECTED';
   }
 }
 
-// Export singleton instance
+
 export const adminWebSocketClient = new AdminWebSocketClient();
 export default AdminWebSocketClient;

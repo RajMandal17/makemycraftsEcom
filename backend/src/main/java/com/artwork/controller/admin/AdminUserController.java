@@ -30,7 +30,7 @@ public class AdminUserController {
             "users", users.getContent(),
             "total", users.getTotalElements(),
             "totalPages", users.getTotalPages(),
-            "currentPage", users.getNumber() + 1  // Convert back to 1-indexed for frontend
+            "currentPage", users.getNumber() + 1  
         ));
         response.put("message", "Users retrieved successfully");
         response.put("success", true);
@@ -123,7 +123,7 @@ public class AdminUserController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/stats")
     public ResponseEntity<?> getUserStats() {
-        // Fetch real stats from service
+        
         com.artwork.dto.UserStatsDto stats = adminUserService.getUserStats();
         
         Map<String, Object> response = new HashMap<>();

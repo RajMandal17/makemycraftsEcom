@@ -15,18 +15,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-/**
- * SEO Controller for generating sitemap.xml and other SEO-related content
- * 
- * Features:
- * - Dynamic sitemap.xml generation from database
- * - Includes all artworks, artists, and static pages
- * - Proper XML formatting for search engines
- */
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@Hidden  // Hide from Swagger documentation
+@Hidden  
 public class SitemapController {
 
     private final ArtworkRepository artworkRepository;
@@ -34,9 +27,7 @@ public class SitemapController {
     private static final String BASE_URL = "https://makemycrafts.com";
     private static final DateTimeFormatter ISO_DATE = DateTimeFormatter.ISO_DATE;
 
-    /**
-     * Generates a dynamic sitemap.xml with all pages
-     */
+    
     @GetMapping(value = "/sitemap.xml", produces = MediaType.APPLICATION_XML_VALUE)
     @Transactional(readOnly = true)
     public ResponseEntity<String> getSitemap() {
@@ -44,17 +35,17 @@ public class SitemapController {
         
         StringBuilder xml = new StringBuilder();
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        xml.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"\n");
-        xml.append("        xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\">\n");
+        xml.append("<urlset xmlns=\"http:
+        xml.append("        xmlns:image=\"http:
         
-        // Static pages with high priority
+        
         addUrl(xml, "/", "1.0", "daily");
         addUrl(xml, "/artworks", "0.9", "daily");
         addUrl(xml, "/artists", "0.8", "weekly");
         addUrl(xml, "/about", "0.5", "monthly");
         addUrl(xml, "/contact", "0.5", "monthly");
         
-        // Dynamic artwork pages
+        
         try {
             List<Artwork> artworks = artworkRepository.findAll();
             log.info("Adding {} artworks to sitemap", artworks.size());
@@ -73,9 +64,7 @@ public class SitemapController {
                 .body(xml.toString());
     }
 
-    /**
-     * Add a simple URL to the sitemap
-     */
+    
     private void addUrl(StringBuilder xml, String path, String priority, String changeFreq) {
         xml.append("  <url>\n");
         xml.append("    <loc>").append(escapeXml(BASE_URL + path)).append("</loc>\n");
@@ -85,23 +74,21 @@ public class SitemapController {
         xml.append("  </url>\n");
     }
 
-    /**
-     * Add an artwork URL with image information
-     */
+    
     private void addArtworkUrl(StringBuilder xml, Artwork artwork) {
         xml.append("  <url>\n");
         xml.append("    <loc>").append(escapeXml(BASE_URL + "/artworks/" + artwork.getId())).append("</loc>\n");
         xml.append("    <changefreq>weekly</changefreq>\n");
         xml.append("    <priority>0.7</priority>\n");
         
-        // Add last modified date
+        
         if (artwork.getUpdatedAt() != null) {
             xml.append("    <lastmod>").append(artwork.getUpdatedAt().format(ISO_DATE)).append("</lastmod>\n");
         } else if (artwork.getCreatedAt() != null) {
             xml.append("    <lastmod>").append(artwork.getCreatedAt().format(ISO_DATE)).append("</lastmod>\n");
         }
         
-        // Add images for image sitemap
+        
         if (artwork.getImages() != null && !artwork.getImages().isEmpty()) {
             for (String image : artwork.getImages()) {
                 if (image != null && !image.isEmpty()) {
@@ -122,9 +109,7 @@ public class SitemapController {
         xml.append("  </url>\n");
     }
 
-    /**
-     * Escape special XML characters
-     */
+    
     private String escapeXml(String input) {
         if (input == null) return "";
         return input
@@ -135,9 +120,7 @@ public class SitemapController {
                 .replace("'", "&apos;");
     }
 
-    /**
-     * Returns robots.txt content (optional, can also be served from frontend)
-     */
+    
     @GetMapping(value = "/robots.txt", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getRobotsTxt() {
         StringBuilder robots = new StringBuilder();

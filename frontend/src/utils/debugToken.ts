@@ -1,4 +1,4 @@
-// Simple utility to print token in console for debugging
+
 interface TokenPayload {
   sub: string;
   email: string;
@@ -16,7 +16,7 @@ export const debugToken = (): TokenPayload | null => {
   
   if (token) {
     try {
-      // Split the token to get the payload
+      
       const parts = token.split('.');
       if (parts.length === 3) {
         const payload = JSON.parse(atob(parts[1])) as TokenPayload;

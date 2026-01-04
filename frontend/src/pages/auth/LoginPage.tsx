@@ -18,7 +18,7 @@ const LoginPage: React.FC = () => {
 
   const from = (location.state as any)?.from?.pathname || '/';
 
-  // Redirect if already authenticated
+  
   React.useEffect(() => {
     if (state.auth.isAuthenticated && state.auth.user) {
       const role = state.auth.user.role;
@@ -52,7 +52,7 @@ const LoginPage: React.FC = () => {
         console.log('🔐 Login API response:', result);
         
         if (result && result.user && result.tokens && result.tokens.accessToken) {
-          // Store both access and refresh tokens using TokenManager
+          
           console.log('💾 Storing tokens:', {
             accessToken: `${result.tokens.accessToken.substring(0, 20)}...`,
             refreshToken: result.tokens.refreshToken ? `${result.tokens.refreshToken.substring(0, 20)}...` : 'None'
@@ -60,10 +60,10 @@ const LoginPage: React.FC = () => {
           
           TokenManager.setTokens(result.tokens.accessToken, result.tokens.refreshToken);
           
-          // Verify the token was stored
+          
           const storedToken = TokenManager.getToken();
           console.log('✅ Token stored successfully:', storedToken ? 'Yes' : 'No');
-          // Pass the correct token to the AUTH_SUCCESS action
+          
           dispatch({ 
             type: 'AUTH_SUCCESS', 
             payload: { 
@@ -84,7 +84,7 @@ const LoginPage: React.FC = () => {
           } else {
             navigate(from, { replace: true });
           }
-          return; // Prevent error toast
+          return; 
         } else {
           throw new Error('Login failed - Invalid response format');
         }
@@ -102,7 +102,7 @@ const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-lg shadow-xl p-8">
-          {/* Header */}
+          {}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
               <div className="bg-blue-600 p-3 rounded-full">
@@ -113,9 +113,9 @@ const LoginPage: React.FC = () => {
             <p className="text-gray-600 mt-2">Sign in to your account</p>
           </div>
 
-          {/* Form */}
+          {}
           <form onSubmit={formik.handleSubmit} className="space-y-6">
-            {/* Email */}
+            {}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email Address
@@ -136,7 +136,7 @@ const LoginPage: React.FC = () => {
               )}
             </div>
 
-            {/* Password */}
+            {}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Password
@@ -170,7 +170,7 @@ const LoginPage: React.FC = () => {
               )}
             </div>
 
-            {/* Remember Me & Forgot Password */}
+            {}
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
@@ -190,7 +190,7 @@ const LoginPage: React.FC = () => {
               </Link>
             </div>
 
-            {/* Submit Button */}
+            {}
             <button
               type="submit"
               disabled={formik.isSubmitting}
@@ -204,10 +204,10 @@ const LoginPage: React.FC = () => {
             </button>
           </form>
 
-          {/* Social Login */}
+          {}
           <SocialLogin />
 
-          {/* Divider */}
+          {}
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -219,7 +219,7 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Sign Up Link */}
+          {}
           <div className="mt-6 text-center">
             <Link
               to="/register"

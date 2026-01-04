@@ -13,7 +13,7 @@ public class UserDto {
     @Email(message = "Invalid email format")
     private String email;
 
-    private String username; // LinkedIn-style unique username for profile sharing
+    private String username; 
 
     @NotBlank(message = "First name is required")
     private String firstName;
@@ -27,9 +27,9 @@ public class UserDto {
     private String profileImage;
     private String profilePictureUrl;
     private String createdAt;
-    private String authorities; // For debugging role/authority issues
+    private String authorities; 
     
-    // Artist specific fields
+    
     private String bio;
     private String website;
     private SocialLinksDto socialLinks;

@@ -5,24 +5,20 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { toast } from 'react-toastify';
 import apiClient from '../../services/api';
 
-/**
- * OAuth2 Role Selection Page
- * Shown when a new user signs up with OAuth2 (Google, Facebook, GitHub)
- * Allows them to choose their role (Customer or Artist) before completing registration
- */
+
 const OAuth2RoleSelectionPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState<'CUSTOMER' | 'ARTIST'>('CUSTOMER');
   const [loading, setLoading] = useState(false);
 
-  // Get OAuth2 user data from URL params (passed from backend)
+  
   const tempToken = searchParams.get('tempToken');
   const email = searchParams.get('email');
   const name = searchParams.get('name');
   const provider = searchParams.get('provider');
 
-  // If no temp token, redirect to login
+  
   React.useEffect(() => {
     if (!tempToken) {
       toast.error('Invalid OAuth2 session. Please try again.');
@@ -35,18 +31,18 @@ const OAuth2RoleSelectionPage: React.FC = () => {
 
     setLoading(true);
     try {
-      // Complete OAuth2 registration with selected role
+      
       const response = await apiClient.post('/oauth2/complete-registration', {
         tempToken,
         role: selectedRole
       });
 
       if (response.data && response.data.success) {
-        // Store tokens - backend returns token and refreshToken directly
+        
         localStorage.setItem('accessToken', response.data.token);
         localStorage.setItem('refreshToken', response.data.refreshToken);
         
-        // Store user data
+        
         if (response.data.user) {
           localStorage.setItem('userData', JSON.stringify(response.data.user));
           localStorage.setItem('userRole', response.data.user.role);
@@ -54,11 +50,11 @@ const OAuth2RoleSelectionPage: React.FC = () => {
         
         toast.success(`Welcome! Your ${selectedRole.toLowerCase()} account has been created.`);
 
-        // Use redirectUrl from backend response or fallback to role-based redirect
+        
         const redirectPath = response.data.redirectUrl || (selectedRole === 'ARTIST' ? '/dashboard/artist' : '/dashboard/customer');
         navigate(redirectPath);
       } else {
-        // Handle case where response is not successful
+        
         toast.error(response.data?.error || 'Failed to complete registration');
         navigate('/login');
       }
@@ -69,7 +65,7 @@ const OAuth2RoleSelectionPage: React.FC = () => {
                           'Failed to complete registration. Please try again.';
       toast.error(errorMessage);
       
-      // If the error is related to invalid token, redirect to login
+      
       if (error.response?.status === 401) {
         navigate('/login');
       }
@@ -82,7 +78,7 @@ const OAuth2RoleSelectionPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-lg shadow-xl p-8">
-          {/* Header */}
+          {}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
               <div className="bg-purple-600 p-3 rounded-full">
@@ -95,7 +91,7 @@ const OAuth2RoleSelectionPage: React.FC = () => {
             </p>
           </div>
 
-          {/* User Info */}
+          {}
           {email && (
             <div className="mb-6 p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-600">Signing up with {provider}</p>
@@ -104,13 +100,13 @@ const OAuth2RoleSelectionPage: React.FC = () => {
             </div>
           )}
 
-          {/* Role Selection */}
+          {}
           <div className="mb-8">
             <label className="block text-sm font-medium text-gray-700 mb-4">
               What do you want to do on ArtMarket?
             </label>
             <div className="grid grid-cols-1 gap-4">
-              {/* Customer Option */}
+              {}
               <button
                 type="button"
                 onClick={() => setSelectedRole('CUSTOMER')}
@@ -151,7 +147,7 @@ const OAuth2RoleSelectionPage: React.FC = () => {
                 </div>
               </button>
 
-              {/* Artist Option */}
+              {}
               <button
                 type="button"
                 onClick={() => setSelectedRole('ARTIST')}
@@ -194,7 +190,7 @@ const OAuth2RoleSelectionPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Continue Button */}
+          {}
           <button
             onClick={handleRoleSelection}
             disabled={loading}
@@ -213,7 +209,7 @@ const OAuth2RoleSelectionPage: React.FC = () => {
             )}
           </button>
 
-          {/* Back to Login */}
+          {}
           <div className="mt-4 text-center">
             <button
               onClick={() => navigate('/login')}

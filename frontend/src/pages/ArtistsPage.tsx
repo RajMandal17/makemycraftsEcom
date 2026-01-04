@@ -17,7 +17,7 @@ const ArtistsPage: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Fetch all artists with pagination
+        
         const sort = getSortParam(sortOption);
         const result = await artistsAPI.getAllArtists({
           page: currentPage,
@@ -50,12 +50,12 @@ const ArtistsPage: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentPage(0); // Reset to first page when searching
+    setCurrentPage(0); 
   };
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
-    window.scrollTo(0, 0); // Scroll to top when changing page
+    window.scrollTo(0, 0); 
   };
 
   if (loading && artists.length === 0) {
@@ -71,7 +71,7 @@ const ArtistsPage: React.FC = () => {
       <h1 className="text-3xl font-bold text-center mb-8">Our Artists</h1>
 
 
-      {/* Search and Filter Bar */}
+      {}
       <div className="bg-white rounded-lg shadow-md p-4 mb-8">
         <div className="flex flex-col md:flex-row gap-4">
           <form onSubmit={handleSearch} className="flex-grow">
@@ -110,7 +110,7 @@ const ArtistsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Artists Grid */}
+      {}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {artists.length > 0 ? (
           artists.map((artist) => (
@@ -129,7 +129,7 @@ const ArtistsPage: React.FC = () => {
         )}
       </div>
 
-      {/* Pagination */}
+      {}
       {totalPages > 1 && (
         <div className="flex justify-center mt-8">
           <nav className="inline-flex rounded-md shadow">
@@ -141,7 +141,7 @@ const ArtistsPage: React.FC = () => {
               Previous
             </button>
 
-            {/* Page Numbers */}
+            {}
             {[...Array(totalPages)].map((_, i) => (
               <button
                 key={i}
@@ -169,9 +169,9 @@ const ArtistsPage: React.FC = () => {
   );
 };
 
-// Artist Card Component
+
 const ArtistCard: React.FC<{ artist: Artist }> = ({ artist }) => {
-  // Use username URL if available (LinkedIn-style), otherwise fall back to ID
+  
   const profileUrl = artist.username
     ? `/artists/username/${artist.username}`
     : `/artists/${artist.id}`;

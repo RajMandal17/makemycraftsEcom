@@ -21,14 +21,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
-/**
- * Razorpay payment gateway implementation.
- * 
- * Implements Strategy Pattern for payment gateway abstraction.
- * Open/Closed Principle: New gateways can be added without modifying this class.
- * 
- * @author Artwork Platform
- */
+
 @Component("razorpay")
 @RequiredArgsConstructor
 @Slf4j
@@ -48,7 +41,7 @@ public class RazorpayGatewayImpl implements PaymentGateway {
     public PaymentOrderResponse createOrder(String orderId, BigDecimal amount, String currency) {
         try {
             JSONObject orderRequest = new JSONObject();
-            orderRequest.put("amount", amount.multiply(new BigDecimal("100")).intValue()); // Convert to paise
+            orderRequest.put("amount", amount.multiply(new BigDecimal("100")).intValue()); 
             orderRequest.put("currency", currency);
             orderRequest.put("receipt", orderId);
             
@@ -80,11 +73,11 @@ public class RazorpayGatewayImpl implements PaymentGateway {
             BigDecimal transferAmount) {
         try {
             JSONObject orderRequest = new JSONObject();
-            orderRequest.put("amount", amount.multiply(new BigDecimal("100")).intValue()); // Convert to paise
+            orderRequest.put("amount", amount.multiply(new BigDecimal("100")).intValue()); 
             orderRequest.put("currency", currency);
             orderRequest.put("receipt", orderId);
             
-            // Add Route transfer for split payments
+            
             if (linkedAccountId != null && !linkedAccountId.startsWith("acc_placeholder_") 
                     && !linkedAccountId.startsWith("acc_dev_") 
                     && !linkedAccountId.startsWith("FAILED_")) {
@@ -93,9 +86,9 @@ public class RazorpayGatewayImpl implements PaymentGateway {
                 transfer.put("account", linkedAccountId);
                 transfer.put("amount", transferAmount.multiply(new BigDecimal("100")).intValue());
                 transfer.put("currency", currency);
-                transfer.put("on_hold", 0); // 0 = immediate transfer after capture
+                transfer.put("on_hold", 0); 
                 
-                // Notes for tracking
+                
                 JSONObject notes = new JSONObject();
                 notes.put("order_id", orderId);
                 notes.put("type", "artist_payout");
@@ -232,9 +225,7 @@ public class RazorpayGatewayImpl implements PaymentGateway {
         }
     }
     
-    /**
-     * Generate HMAC SHA256 signature for payment verification.
-     */
+    
     private String generateSignature(String payload, String secret) 
             throws NoSuchAlgorithmException, InvalidKeyException {
         Mac sha256Hmac = Mac.getInstance("HmacSHA256");
@@ -246,9 +237,7 @@ public class RazorpayGatewayImpl implements PaymentGateway {
         return byteArrayToHex(hash);
     }
     
-    /**
-     * Convert byte array to hex string.
-     */
+    
     private String byteArrayToHex(byte[] bytes) {
         Formatter formatter = new Formatter();
         for (byte b : bytes) {

@@ -5,11 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for aggregated artwork statistics.
- *
- * @author Admin Dashboard Team
- */
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,7 +22,7 @@ public class ArtworkStatsDto {
     private Double averagePrice;
     private Double totalValue;
 
-    // Growth metrics
+    
     private Long newArtworksToday;
     private Long newArtworksThisWeek;
     private Long newArtworksThisMonth;

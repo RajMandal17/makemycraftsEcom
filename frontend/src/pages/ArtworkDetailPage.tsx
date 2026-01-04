@@ -28,7 +28,7 @@ const ArtworkDetailPage: React.FC = () => {
       setArtwork(artworkData);
       setSelectedImage(getFullImageUrl(artworkData.images[0]) || '');
 
-      // Fetch reviews
+      
       const reviewsData = await reviewAPI.getByArtwork(id);
       setReviews(reviewsData);
     } catch (error) {
@@ -43,10 +43,10 @@ const ArtworkDetailPage: React.FC = () => {
     fetchArtwork();
   }, [fetchArtwork]);
 
-  // SEO: Update meta tags when artwork loads
+  
   useEffect(() => {
     if (artwork) {
-      // Inject product schema for rich snippets
+      
       const schema = generateProductSchema({
         id: artwork.id,
         title: artwork.title,
@@ -139,7 +139,7 @@ const ArtworkDetailPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Image Gallery */}
+        {}
         <div className="space-y-4">
           <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
             <img
@@ -167,7 +167,7 @@ const ArtworkDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Artwork Details */}
+        {}
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2">{artwork.title}</h1>
@@ -283,7 +283,7 @@ const ArtworkDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Reviews Section */}
+      {}
       <div className="mt-12">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Reviews</h2>
         {reviews.length === 0 ? (
@@ -320,7 +320,7 @@ const ArtworkDetailPage: React.FC = () => {
         )}
       </div>
 
-      {/* Image Preview Modal */}
+      {}
       <ArtworkPreviewModal
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}

@@ -95,7 +95,7 @@ const AdminSettings: React.FC = () => {
   useEffect(() => {
     fetchCategories();
     fetchStats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -164,7 +164,7 @@ const AdminSettings: React.FC = () => {
 
     try {
       if (showCreateModal) {
-        // Create new category
+        
         const request: CategoryCreateRequest = {
           name: formData.name,
           displayName: formData.displayName,
@@ -182,7 +182,7 @@ const AdminSettings: React.FC = () => {
           toast.success('Category created successfully');
         }
       } else if (editingCategory) {
-        // Update existing category
+        
         const request: CategoryUpdateRequest = {
           name: formData.name,
           displayName: formData.displayName,
@@ -283,17 +283,17 @@ const AdminSettings: React.FC = () => {
         </button>
       </div>
 
-      {/* Pending Artwork Approvals Section */}
+      {}
       <div className="mb-8">
         <PendingArtworkApprovals />
       </div>
 
-      {/* Category Management Section */}
+      {}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Category Management</h2>
       </div>
 
-      {/* Statistics Cards */}
+      {}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white p-4 rounded-lg shadow border">
@@ -335,7 +335,7 @@ const AdminSettings: React.FC = () => {
         </div>
       )}
 
-      {/* Filters and Search */}
+      {}
       <div className="bg-white p-4 rounded-lg shadow mb-6">
         <div className="flex flex-col md:flex-row gap-4">
           <form onSubmit={handleSearch} className="flex-1">
@@ -367,7 +367,7 @@ const AdminSettings: React.FC = () => {
         </div>
       </div>
 
-      {/* Categories Table */}
+      {}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -508,7 +508,7 @@ const AdminSettings: React.FC = () => {
           </table>
         </div>
 
-        {/* Pagination */}
+        {}
         {totalPages > 1 && (
           <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
             <div className="flex-1 flex justify-between sm:hidden">
@@ -573,7 +573,7 @@ const AdminSettings: React.FC = () => {
         )}
       </div>
 
-      {/* Create/Edit Modal */}
+      {}
       {(showCreateModal || showEditModal) && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
           <div className="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">

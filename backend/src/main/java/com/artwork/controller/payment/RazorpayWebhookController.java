@@ -19,13 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Formatter;
 
-/**
- * Controller to handle Razorpay webhook events.
- * 
- * Handles payment, transfer, and payout status updates in real-time.
- * 
- * @author Artwork Platform
- */
+
 @RestController
 @RequestMapping("/api/webhooks")
 @RequiredArgsConstructor
@@ -38,17 +32,7 @@ public class RazorpayWebhookController {
     @Value("${razorpay.webhook.secret:}")
     private String webhookSecret;
     
-    /**
-     * Handle Razorpay webhook events.
-     * 
-     * Events handled:
-     * - payment.captured: Payment was successfully captured
-     * - payment.failed: Payment failed
-     * - transfer.processed: Route transfer to linked account completed
-     * - payout.processed: Razorpay X payout completed
-     * - payout.failed: Razorpay X payout failed
-     * - payout.reversed: Payout was reversed
-     */
+    
     @PostMapping("/razorpay")
     public ResponseEntity<String> handleRazorpayWebhook(
             @RequestBody String payload,
@@ -56,7 +40,7 @@ public class RazorpayWebhookController {
         
         log.info("Received Razorpay webhook");
         
-        // Verify signature in production
+        
         if (webhookSecret != null && !webhookSecret.isEmpty() && signature != null) {
             if (!verifySignature(payload, signature)) {
                 log.warn("Invalid webhook signature received");
@@ -112,7 +96,7 @@ public class RazorpayWebhookController {
         log.info("Payment captured: paymentId={}, orderId={}, method={}", 
             razorpayPaymentId, razorpayOrderId, method);
         
-        // Find and update payment record
+        
         paymentRepository.findAll().stream()
             .filter(p -> razorpayOrderId.equals(p.getGatewayOrderId()))
             .findFirst()
@@ -175,8 +159,8 @@ public class RazorpayWebhookController {
         log.info("Transfer processed: transferId={}, source={}, recipient={}, amount={}", 
             transferId, sourcePaymentId, recipientAccountId, amountPaise / 100.0);
         
-        // Transfer to linked account completed - can update split status here
-        // This indicates the artist's share has been transferred
+        
+        
     }
     
     private void handlePayoutProcessed(JSONObject payloadData) {
@@ -197,7 +181,7 @@ public class RazorpayWebhookController {
         log.info("Payout processed: payoutId={}, referenceId={}, utr={}", 
             razorpayPayoutId, referenceId, utr);
         
-        // Reference ID is our internal payout ID
+        
         if (referenceId != null && !referenceId.isEmpty()) {
             payoutRepository.findById(referenceId)
                 .ifPresent(p -> {
@@ -269,9 +253,7 @@ public class RazorpayWebhookController {
         }
     }
     
-    /**
-     * Verify webhook signature using HMAC SHA256.
-     */
+    
     private boolean verifySignature(String payload, String signature) {
         try {
             Mac sha256Hmac = Mac.getInstance("HmacSHA256");

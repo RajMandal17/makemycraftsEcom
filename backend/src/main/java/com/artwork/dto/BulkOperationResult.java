@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * DTO for bulk operation results.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

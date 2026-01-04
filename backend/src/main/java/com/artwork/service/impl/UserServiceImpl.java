@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
-        // Update user details
+        
         if (updateRequest.getFirstName() != null) {
             user.setFirstName(updateRequest.getFirstName());
         }
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
             user.setLastName(updateRequest.getLastName());
         }
         
-        // Update artist specific fields
+        
         if (updateRequest.getBio() != null) {
             user.setBio(updateRequest.getBio());
         }
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
             user.setWebsite(updateRequest.getWebsite());
         }
         
-        // Update or create social links
+        
         if (updateRequest.getSocialLinks() != null) {
             SocialLinksDto linksDto = updateRequest.getSocialLinks();
             SocialLinks socialLinks = user.getSocialLinks();
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
             
             String imageUrl;
             
-            // Use Cloudinary if enabled and service is available
+            
             if (cloudinaryEnabled && cloudStorageService != null) {
                 log.info("Uploading profile image to Cloudinary cloud storage");
                 imageUrl = cloudStorageService.uploadFile(image, "profiles");
@@ -125,30 +125,30 @@ public class UserServiceImpl implements UserService {
                     throw new RuntimeException("Failed to upload image to cloud storage");
                 }
             } else {
-                // Fallback to local storage
+                
                 log.info("Cloudinary not enabled, using local storage for profile image");
                 
-                // Create upload directory if it doesn't exist
+                
                 Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
                 }
                 
-                // Generate unique filename with sanitization to prevent path traversal
+                
                 String filename = sanitizeFilename(image.getOriginalFilename());
                 Path targetLocation = uploadPath.resolve(filename).normalize();
                 
-                // SECURITY: Validate that the resolved path is within the upload directory
+                
                 if (!targetLocation.startsWith(uploadPath)) {
                     log.error("Path traversal attempt detected: original={}, resolved={}", 
                         image.getOriginalFilename(), targetLocation);
                     throw new SecurityException("Invalid file path detected");
                 }
                 
-                // Copy file to target location
+                
                 Files.copy(image.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
                 
-                // Save image URL to user
+                
                 imageUrl = "/uploads/" + filename;
                 log.info("Successfully saved profile image locally: {}", imageUrl);
             }
@@ -169,12 +169,12 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(String newPassword, String token) {
         log.debug("Processing password update request");
         
-        // Extract user ID from token - JWT verification happens here
+        
         String userId = jwtUtil.extractUserId(token);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
-        // Encode and update with new password
+        
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         user.setUpdatedAt(java.time.LocalDateTime.now());
@@ -182,7 +182,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         log.info("Password successfully updated for user {}", userId);
         
-        // Send security notification email
+        
         sendPasswordChangeNotification(user);
     }
     
@@ -191,8 +191,8 @@ public class UserServiceImpl implements UserService {
             java.util.Map<String, Object> variables = new java.util.HashMap<>();
             variables.put("name", user.getFirstName());
             variables.put("changeDate", LocalDateTime.now().toString());
-            variables.put("ipAddress", "Unknown"); // TODO: Get from request context
-            variables.put("device", "Unknown"); // TODO: Get from user agent
+            variables.put("ipAddress", "Unknown"); 
+            variables.put("device", "Unknown"); 
             
             eventPublisher.publishEvent(new com.artwork.event.EmailEvent(
                 this,
@@ -205,7 +205,7 @@ public class UserServiceImpl implements UserService {
             log.info("Password change notification sent to {}", user.getEmail());
         } catch (Exception e) {
             log.error("Failed to send password change notification", e);
-            // Don't fail password change if email fails
+            
         }
     }
     
@@ -218,44 +218,38 @@ public class UserServiceImpl implements UserService {
         return user.getPassword() != null && !user.getPassword().isEmpty();
     }
     
-    /**
-     * Sanitize filename to prevent path traversal attacks
-     * Removes path separators, parent directory references, and unsafe characters
-     * 
-     * @param originalFilename The original filename from uploaded file
-     * @return Sanitized filename safe for filesystem operations
-     */
+    
     private String sanitizeFilename(String originalFilename) {
         if (originalFilename == null || originalFilename.trim().isEmpty()) {
             return UUID.randomUUID().toString() + ".tmp";
         }
         
-        // Extract file extension
+        
         String extension = "";
         int lastDotIndex = originalFilename.lastIndexOf('.');
         if (lastDotIndex > 0 && lastDotIndex < originalFilename.length() - 1) {
             extension = originalFilename.substring(lastDotIndex);
         }
         
-        // Remove path separators and parent directory references
-        String sanitized = originalFilename
-            .replace("/", "")                    // Remove forward slashes
-            .replace("\\", "")                   // Remove back slashes
-            .replace("..", "")                   // Remove parent directory references
-            .replaceAll("[^a-zA-Z0-9._-]", "_"); // Replace unsafe characters with underscore
         
-        // Ensure filename is not empty after sanitization
+        String sanitized = originalFilename
+            .replace("/", "")                    
+            .replace("\\", "")                   
+            .replace("..", "")                   
+            .replaceAll("[^a-zA-Z0-9._-]", "_"); 
+        
+        
         if (sanitized.isEmpty() || sanitized.equals(extension)) {
             sanitized = "file" + extension;
         }
         
-        // Limit filename length (max 100 chars before UUID)
+        
         if (sanitized.length() > 100) {
             String name = sanitized.substring(0, 100 - extension.length());
             sanitized = name + extension;
         }
         
-        // Prepend UUID to ensure uniqueness
+        
         return UUID.randomUUID().toString() + "_" + sanitized;
     }
     
@@ -271,11 +265,11 @@ public class UserServiceImpl implements UserService {
         dto.setCreatedAt(user.getCreatedAt().toString());
         dto.setIsActive(user.getIsActive());
         
-        // Include artist specific fields
+        
         dto.setBio(user.getBio());
         dto.setWebsite(user.getWebsite());
         
-        // Include social links if available
+        
         if (user.getSocialLinks() != null) {
             SocialLinksDto socialLinksDto = new SocialLinksDto();
             socialLinksDto.setInstagram(user.getSocialLinks().getInstagram());
@@ -283,7 +277,7 @@ public class UserServiceImpl implements UserService {
             socialLinksDto.setFacebook(user.getSocialLinks().getFacebook());
             dto.setSocialLinks(socialLinksDto);
         } else {
-            // Provide empty social links object to prevent frontend null errors
+            
             dto.setSocialLinks(new SocialLinksDto());
         }
         
@@ -295,8 +289,8 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
-            return imageUrl; // Already a full URL
+            return imageUrl; 
         }
-        return baseUrl + imageUrl; // Construct full URL for relative paths
+        return baseUrl + imageUrl; 
     }
 }

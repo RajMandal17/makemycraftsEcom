@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-/**
- * Seller earnings summary DTO.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

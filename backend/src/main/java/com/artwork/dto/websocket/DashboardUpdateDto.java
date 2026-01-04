@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Dashboard Update DTO for real-time admin dashboard
- */
+
 @Data
 @Builder
 @NoArgsConstructor

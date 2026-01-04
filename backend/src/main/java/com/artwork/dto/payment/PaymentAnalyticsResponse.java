@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-/**
- * Payment analytics response for admin dashboard.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

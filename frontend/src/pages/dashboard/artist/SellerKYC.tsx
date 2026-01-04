@@ -21,7 +21,7 @@ const SellerKYC: React.FC = () => {
     });
 
     const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-    const [uploadingFile, setUploadingFile] = useState<string | null>(null); // Track which file is being uploaded
+    const [uploadingFile, setUploadingFile] = useState<string | null>(null); 
 
     useEffect(() => {
         fetchKycStatus();
@@ -33,7 +33,7 @@ const SellerKYC: React.FC = () => {
             const response = await kycAPI.getKycStatus();
             setKycStatus(response.data);
         } catch (err: any) {
-            // If KYC not found, user can submit
+            
             if (err.response?.status === 404) {
                 setKycStatus({
                     userId: '',
@@ -53,13 +53,13 @@ const SellerKYC: React.FC = () => {
     const handleFileUpload = async (file: File, fieldName: string) => {
         if (!file) return;
 
-        // Validate file size (max 10MB)
+        
         if (file.size > 10 * 1024 * 1024) {
             alert('File size must be less than 10MB');
             return;
         }
 
-        // Validate file type
+        
         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
         if (!allowedTypes.includes(file.type)) {
             alert('Only JPG, PNG, and PDF files are allowed');
@@ -88,7 +88,7 @@ const SellerKYC: React.FC = () => {
 
             const data = await response.json();
 
-            // Update form data with the uploaded file URL
+            
             setFormData(prev => ({ ...prev, [fieldName]: data.url }));
             alert(`${file.name} uploaded successfully!`);
 
@@ -103,7 +103,7 @@ const SellerKYC: React.FC = () => {
     const validateForm = (): boolean => {
         const errors: Record<string, string> = {};
 
-        // PAN validation
+        
         const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
         if (!formData.panNumber) {
             errors.panNumber = 'PAN number is required';
@@ -111,7 +111,7 @@ const SellerKYC: React.FC = () => {
             errors.panNumber = 'Invalid PAN format (e.g., ABCDE1234F)';
         }
 
-        // Aadhaar validation (optional but if provided, must be valid)
+        
         if (formData.aadhaarNumber) {
             const aadhaarRegex = /^[0-9]{12}$/;
             if (!aadhaarRegex.test(formData.aadhaarNumber)) {
@@ -119,7 +119,7 @@ const SellerKYC: React.FC = () => {
             }
         }
 
-        // GST validation (optional but if provided, must be valid)
+        
         if (formData.gstNumber) {
             const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
             if (!gstRegex.test(formData.gstNumber)) {
@@ -134,7 +134,7 @@ const SellerKYC: React.FC = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        // Clear validation error for this field
+        
         if (validationErrors[name]) {
             setValidationErrors(prev => {
                 const newErrors = { ...prev };
@@ -172,7 +172,7 @@ const SellerKYC: React.FC = () => {
         );
     }
 
-    // Show status if KYC already submitted
+    
     if (kycStatus && kycStatus.status && kycStatus.status !== 'REJECTED') {
         return (
             <div className="seller-kyc-container">
@@ -206,7 +206,7 @@ const SellerKYC: React.FC = () => {
         );
     }
 
-    // Show form for new submission or resubmission after rejection
+    
     return (
         <div className="seller-kyc-container">
             <div className="kyc-form-header">
@@ -236,7 +236,7 @@ const SellerKYC: React.FC = () => {
             )}
 
             <form onSubmit={handleSubmit} className="kyc-form">
-                {/* Business Information */}
+                {}
                 <div className="form-section">
                     <h3>Business Information</h3>
 
@@ -273,7 +273,7 @@ const SellerKYC: React.FC = () => {
                     )}
                 </div>
 
-                {/* PAN Details */}
+                {}
                 <div className="form-section">
                     <h3>PAN Details *</h3>
 
@@ -326,7 +326,7 @@ const SellerKYC: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Aadhaar Details */}
+                {}
                 <div className="form-section">
                     <h3>Aadhaar Details (Optional)</h3>
 
@@ -377,7 +377,7 @@ const SellerKYC: React.FC = () => {
                     </div>
                 </div>
 
-                {/* GST Details */}
+                {}
                 <div className="form-section">
                     <h3>GST Details (Optional)</h3>
 
@@ -429,7 +429,7 @@ const SellerKYC: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Submit Button */}
+                {}
                 <div className="form-actions">
                     <button
                         type="submit"

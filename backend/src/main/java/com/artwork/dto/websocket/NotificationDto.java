@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
-/**
- * Notification Message DTO for real-time notifications
- */
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -31,7 +29,7 @@ public class NotificationDto {
     private String actionUrl;
     private Object data;
     
-    // Factory methods for common notifications
+    
     public static NotificationDto newOrder(String orderId, String customerName, double amount) {
         return NotificationDto.builder()
             .type(NotificationType.ORDER)

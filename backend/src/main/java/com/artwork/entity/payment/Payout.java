@@ -9,11 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Payout entity for tracking seller payouts.
- * 
- * @author Artwork Platform
- */
+
 @Entity
 @Table(name = "payouts", indexes = {
     @Index(name = "idx_payouts_seller_id", columnList = "sellerId"),

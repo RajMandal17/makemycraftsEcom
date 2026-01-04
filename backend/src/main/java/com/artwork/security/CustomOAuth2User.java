@@ -10,10 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-/**
- * Custom OAuth2User implementation that wraps both OAuth2 attributes and our User entity
- * This allows Spring Security to work with OAuth2 while we maintain our own user model
- */
+
 @Getter
 public class CustomOAuth2User implements OAuth2User {
     
@@ -43,7 +40,7 @@ public class CustomOAuth2User implements OAuth2User {
     
     @Override
     public String getName() {
-        // Return the email as the principal name
+        
         return user.getEmail();
     }
     

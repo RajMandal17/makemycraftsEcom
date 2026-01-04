@@ -10,9 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-/**
- * Review DTO for creating/updating reviews
- */
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -31,7 +29,7 @@ public class ReviewDto {
     @NotBlank(message = "Order Item ID is required")
     private String orderItemId;
     
-    // These are populated by the backend, not required in request
+    
     private String artworkId;
     private String customerId;
     private String orderId;
@@ -39,7 +37,7 @@ public class ReviewDto {
     private String createdAt;
     private String updatedAt;
     
-    // Additional info for display
+    
     private String customerName;
     private String customerProfileImage;
     private String artworkTitle;

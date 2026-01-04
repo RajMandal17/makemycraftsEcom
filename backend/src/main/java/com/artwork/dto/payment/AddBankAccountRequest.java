@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Request to add a new bank account.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

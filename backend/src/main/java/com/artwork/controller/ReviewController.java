@@ -15,14 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Review Controller
- * 
- * Production-level review system with:
- * - Purchase verification (only buyers can review)
- * - 7-day review window after delivery
- * - One review per order item
- */
+
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
@@ -30,15 +23,7 @@ import java.util.Map;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    /**
-     * Create a new review for a purchased item
-     * 
-     * Requirements:
-     * - Customer must have purchased the item
-     * - Order must be DELIVERED
-     * - Within 7-day review window
-     * - One review per order item
-     */
+    
     @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping
     public ResponseEntity<?> addReview(
@@ -73,9 +58,7 @@ public class ReviewController {
         }
     }
     
-    /**
-     * Update an existing review (within edit window)
-     */
+    
     @PreAuthorize("hasRole('CUSTOMER')")
     @PutMapping("/{reviewId}")
     public ResponseEntity<?> updateReview(
@@ -109,9 +92,7 @@ public class ReviewController {
         }
     }
     
-    /**
-     * Delete a review
-     */
+    
     @PreAuthorize("hasRole('CUSTOMER')")
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<?> deleteReview(
@@ -138,9 +119,7 @@ public class ReviewController {
         }
     }
 
-    /**
-     * Get all reviews for an artwork (public)
-     */
+    
     @GetMapping("/artwork/{artworkId}")
     public ResponseEntity<?> getReviewsByArtwork(@PathVariable String artworkId) {
         try {
@@ -161,9 +140,7 @@ public class ReviewController {
         }
     }
     
-    /**
-     * Get rating summary for an artwork (public)
-     */
+    
     @GetMapping("/artwork/{artworkId}/summary")
     public ResponseEntity<?> getArtworkRatingSummary(@PathVariable String artworkId) {
         try {
@@ -181,9 +158,7 @@ public class ReviewController {
         }
     }
     
-    /**
-     * Get all reviews for an artist (artist only)
-     */
+    
     @PreAuthorize("hasAuthority('ROLE_ARTIST')")
     @GetMapping("/artist/{artistId}")
     public ResponseEntity<?> getReviewsByArtist(@PathVariable String artistId) {
@@ -207,9 +182,7 @@ public class ReviewController {
         }
     }
     
-    /**
-     * Check if customer can review a specific order item
-     */
+    
     @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping("/eligibility/{orderItemId}")
     public ResponseEntity<?> checkReviewEligibility(
@@ -231,9 +204,7 @@ public class ReviewController {
         }
     }
     
-    /**
-     * Get all items the customer can review
-     */
+    
     @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping("/reviewable-items")
     public ResponseEntity<?> getReviewableItems(@RequestHeader("Authorization") String authHeader) {
@@ -254,9 +225,7 @@ public class ReviewController {
         }
     }
     
-    /**
-     * Get customer's own reviews
-     */
+    
     @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping("/my-reviews")
     public ResponseEntity<?> getMyReviews(@RequestHeader("Authorization") String authHeader) {

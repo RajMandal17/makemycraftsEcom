@@ -14,7 +14,7 @@ const TermsPage: React.FC = () => {
             </Helmet>
 
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
-                {/* Hero Section */}
+                {}
                 <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex items-center justify-center mb-6">
@@ -29,10 +29,10 @@ const TermsPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Content Section */}
+                {}
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-                        {/* Introduction */}
+                        {}
                         <section className="mb-12">
                             <p className="text-lg text-gray-700 leading-relaxed">
                                 Welcome to MakeMyCrafts! These Terms and Conditions ("Terms") govern your use of our website{' '}
@@ -43,7 +43,7 @@ const TermsPage: React.FC = () => {
                             </p>
                         </section>
 
-                        {/* Section 1 */}
+                        {}
                         <section className="mb-10">
                             <div className="flex items-center mb-4">
                                 <FileText className="w-6 h-6 text-purple-600 mr-3" />
@@ -65,7 +65,7 @@ const TermsPage: React.FC = () => {
                             </div>
                         </section>
 
-                        {/* Section 2 */}
+                        {}
                         <section className="mb-10">
                             <div className="flex items-center mb-4">
                                 <Users className="w-6 h-6 text-purple-600 mr-3" />
@@ -98,7 +98,7 @@ const TermsPage: React.FC = () => {
                             </div>
                         </section>
 
-                        {/* Section 3 */}
+                        {}
                         <section className="mb-10">
                             <div className="flex items-center mb-4">
                                 <ShieldCheck className="w-6 h-6 text-purple-600 mr-3" />
@@ -142,7 +142,7 @@ const TermsPage: React.FC = () => {
                             </div>
                         </section>
 
-                        {/* Section 4 */}
+                        {}
                         <section className="mb-10">
                             <div className="flex items-center mb-4">
                                 <CreditCard className="w-6 h-6 text-purple-600 mr-3" />
@@ -176,7 +176,7 @@ const TermsPage: React.FC = () => {
                             </div>
                         </section>
 
-                        {/* Section 5 */}
+                        {}
                         <section className="mb-10">
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">5. Intellectual Property Rights</h2>
                             <div className="space-y-4">
@@ -205,7 +205,7 @@ const TermsPage: React.FC = () => {
                             </div>
                         </section>
 
-                        {/* Section 6 */}
+                        {}
                         <section className="mb-10">
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">6. Prohibited Activities</h2>
                             <div className="space-y-3 text-gray-700">
@@ -222,7 +222,7 @@ const TermsPage: React.FC = () => {
                             </div>
                         </section>
 
-                        {/* Section 7 */}
+                        {}
                         <section className="mb-10">
                             <div className="flex items-center mb-4">
                                 <AlertCircle className="w-6 h-6 text-purple-600 mr-3" />
@@ -250,7 +250,7 @@ const TermsPage: React.FC = () => {
                             </div>
                         </section>
 
-                        {/* Section 8 */}
+                        {}
                         <section className="mb-10">
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Dispute Resolution</h2>
                             <div className="space-y-3 text-gray-700">
@@ -265,7 +265,7 @@ const TermsPage: React.FC = () => {
                             </div>
                         </section>
 
-                        {/* Section 9 */}
+                        {}
                         <section className="mb-10">
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">9. Indemnification</h2>
                             <p className="text-gray-700">
@@ -279,7 +279,7 @@ const TermsPage: React.FC = () => {
                             </ul>
                         </section>
 
-                        {/* Section 10 */}
+                        {}
                         <section className="mb-10">
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">10. Changes to Terms</h2>
                             <p className="text-gray-700">
@@ -287,7 +287,7 @@ const TermsPage: React.FC = () => {
                             </p>
                         </section>
 
-                        {/* Section 11 */}
+                        {}
                         <section className="mb-10">
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">11. Severability</h2>
                             <p className="text-gray-700">
@@ -295,7 +295,7 @@ const TermsPage: React.FC = () => {
                             </p>
                         </section>
 
-                        {/* Section 12 */}
+                        {}
                         <section className="mb-10">
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">12. Entire Agreement</h2>
                             <p className="text-gray-700">
@@ -303,7 +303,7 @@ const TermsPage: React.FC = () => {
                             </p>
                         </section>
 
-                        {/* Contact Section */}
+                        {}
                         <section className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 mt-12">
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Us</h2>
                             <p className="text-gray-700 mb-4">
@@ -312,7 +312,7 @@ const TermsPage: React.FC = () => {
                             <div className="space-y-2 text-gray-700">
                                 <p><strong>Email:</strong> <a href="mailto:legal@makemycrafts.com" className="text-blue-600 hover:text-blue-700">legal@makemycrafts.com</a></p>
                                 <p><strong>Support:</strong> <a href="mailto:support@makemycrafts.com" className="text-blue-600 hover:text-blue-700">support@makemycrafts.com</a></p>
-                                <p><strong>Website:</strong> <a href="https://makemycrafts.com" className="text-blue-600 hover:text-blue-700">https://makemycrafts.com</a></p>
+                                <p><strong>Website:</strong> <a href="https://makemycrafts.com" className="text-blue-600 hover:text-blue-700">https:
                             </div>
                         </section>
                     </div>

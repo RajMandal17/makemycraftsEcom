@@ -31,11 +31,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String internalServiceHeader = request.getHeader("X-Internal-Service");
         
-        // Allow internal service calls to admin endpoints without authentication
+        
         if ("admin-dashboard".equals(internalServiceHeader) && requestPath.startsWith("/api/admin")) {
             System.out.println("Allowing internal service call to: " + requestPath);
             
-            // Create a service account user details for internal calls
+            
             ServiceAccountUserDetails serviceUser = new ServiceAccountUserDetails("service-account", "ADMIN");
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(serviceUser, null, serviceUser.getAuthorities());
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         
-        // Log the request for debugging
+        
         System.out.println("Processing request: " + requestPath + " [Auth: " + (authHeader != null ? "YES" : "NO") + "]");
         
         String token = null;
@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && jwtUtil.validateToken(token)) {
             System.out.println("Token validation successful");
             
-            // Check Redis blacklist (with error handling for Redis connection issues)
+            
             Boolean isBlacklisted = false;
             if (redisTemplate != null) {
                 try {
@@ -71,9 +71,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         return;
                     }
                 } catch (Exception e) {
-                    // Redis connection issue - log it but continue processing
+                    
                     System.out.println("Redis connection error (ignoring for token validation): " + e.getMessage());
-                    // We'll assume token is not blacklisted if we can't check
+                    
                 }
             }
             
@@ -87,15 +87,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             
             UserDetails userDetails;
             if ("service-account".equals(userId)) {
-                // Handle service account authentication
+                
                 userDetails = new ServiceAccountUserDetails(userId, userRole);
                 System.out.println("Service account authentication: " + userId + " with role: " + userRole);
             } else {
-                // Handle regular user authentication
+                
                 userDetails = userDetailsService.loadUserById(userId);
             }
             
-            // Print detailed authority information for debugging
+            
             System.out.println("Username from UserDetails: " + userDetails.getUsername());
             System.out.println("Authorities from UserDetails: " + userDetails.getAuthorities());
             userDetails.getAuthorities().forEach(auth -> 

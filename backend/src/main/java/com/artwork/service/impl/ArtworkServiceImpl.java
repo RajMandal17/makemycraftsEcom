@@ -68,7 +68,7 @@ public class ArtworkServiceImpl implements ArtworkService {
         PageRequest pageable = PageRequest.of(page - 1, limit);
         Page<Artwork> artworks;
 
-        // Determine caller roles: admin (can see pending/all) vs customer/anonymous (see only APPROVED)
+        
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAuthenticatedUser = false;
         boolean isAdmin = false;
@@ -78,21 +78,21 @@ public class ArtworkServiceImpl implements ArtworkService {
                     .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
         }
 
-        // If querying for a specific artist, show ALL their artworks (including pending)
-        // So the artist can see their own submissions
+        
+        
         if (artistId != null && !artistId.isEmpty()) {
             log.info("Querying by artistId: {} - showing all statuses for owner", artistId);
             artworks = artworkRepository.findByArtistId(artistId, pageable);
             log.info("Found {} artworks for artist {}", artworks.getTotalElements(), artistId);
         }
-        // If admin is logged in, allow viewing all artworks (including PENDING). Apply simple in-memory filters when provided.
+        
         else if (isAuthenticatedUser && isAdmin) {
             log.info("Admin view: including all statuses (APPROVED/PENDING)");
             Page<Artwork> allPage = artworkRepository.findAll(pageable);
 
-            // Apply light in-memory filters for admin when query params are provided
+            
             if (category != null && !category.isEmpty()) {
-                // Normalize category for comparison: handle DIGITAL_ART vs "Digital Art"
+                
                 String normalizedFilter = category.toLowerCase().replace("_", " ");
                 List<Artwork> filtered = allPage.getContent().stream()
                         .filter(a -> a.getCategory() != null && 
@@ -116,7 +116,7 @@ public class ArtworkServiceImpl implements ArtworkService {
                 artworks = allPage;
             }
         }
-        // For all PUBLIC (customer/anonymous) queries, only show APPROVED artworks from APPROVED artists
+        
         else if (category != null && !category.isEmpty()) {
             log.info("Querying APPROVED artworks from APPROVED artists by category (normalized): {}", category);
             artworks = artworkRepository.findByApprovalStatusAndArtistStatusApprovedAndCategoryNormalized(
@@ -129,11 +129,11 @@ public class ArtworkServiceImpl implements ArtworkService {
             );
         } else if (minPrice != null && maxPrice != null) {
             log.info("Querying APPROVED artworks from APPROVED artists by price range: {} to {}", minPrice, maxPrice);
-            // For price filter, get approved artworks from approved artists, then filter by price
+            
             artworks = artworkRepository.findByApprovalStatusAndArtistStatusApproved(
                 ApprovalStatus.APPROVED, pageable
             );
-            // TODO: Add a combined query for price + approval status + artist status if needed
+            
         } else {
             log.info("Fetching all APPROVED artworks from APPROVED artists...");
             artworks = artworkRepository.findByApprovalStatusAndArtistStatusApproved(
@@ -154,25 +154,25 @@ public class ArtworkServiceImpl implements ArtworkService {
             throw new RuntimeException("Artist cannot be null when creating artwork");
         }
         
-        // Validate category is provided
+        
         if (category == null || category.trim().isEmpty()) {
             throw new IllegalArgumentException("Category is required");
         }
         
-        // Register the category if it's new (will be created as INACTIVE)
-        // Returns true if category is active, false if inactive/new
+        
+        
         boolean isCategoryActive = categoryService.registerCategoryIfNew(category, artist.getId());
         
-        // Determine approval status based on category status
+        
         ApprovalStatus approvalStatus;
         String moderationNotes = null;
         
         if (isCategoryActive) {
-            // Category is active - artwork can be auto-approved
+            
             approvalStatus = ApprovalStatus.APPROVED;
             log.info("Creating artwork with active category '{}' - auto-approved", category);
         } else {
-            // Category is inactive/new - artwork needs admin approval
+            
             approvalStatus = ApprovalStatus.PENDING;
             moderationNotes = "Pending: Category '" + category + "' requires admin approval. " +
                 "Once the category is activated, this artwork will also need approval.";
@@ -181,7 +181,7 @@ public class ArtworkServiceImpl implements ArtworkService {
 
         log.info("Creating artwork for artist: {} (ID: {})", artist.getEmail(), artist.getId());
         
-        // Handle image upload and save
+        
         List<String> imageUrls = new ArrayList<>();
         if (images != null && !images.isEmpty()) {
             imageUrls = saveArtworkImages(images);
@@ -210,7 +210,7 @@ public class ArtworkServiceImpl implements ArtworkService {
         
         ArtworkDto dto = convertToDto(artwork);
         
-        // Add approval status info to response
+        
         if (approvalStatus == ApprovalStatus.PENDING) {
             log.info("Artwork '{}' created as PENDING - awaiting category and artwork approval", title);
         }
@@ -225,19 +225,19 @@ public class ArtworkServiceImpl implements ArtworkService {
         Artwork artwork = artworkRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Artwork not found with id: " + id));
         
-        // Check if artwork is approved - if not, verify the requester is the owner or admin
+        
         if (artwork.getApprovalStatus() != ApprovalStatus.APPROVED) {
-            // Get current user from security context
+            
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             
             if (authentication == null || !authentication.isAuthenticated() || 
                 authentication.getPrincipal().equals("anonymousUser")) {
-                // Anonymous user trying to view non-approved artwork
+                
                 log.warn("Anonymous user attempted to view non-approved artwork: {}", id);
                 throw new ResourceNotFoundException("Artwork not found with id: " + id);
             }
             
-            // Get user ID from authentication
+            
             String currentUserId = null;
             boolean isAdmin = false;
             
@@ -248,7 +248,7 @@ public class ArtworkServiceImpl implements ArtworkService {
                     .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
             }
             
-            // Check if user is the owner or an admin
+            
             boolean isOwner = currentUserId != null && 
                 artwork.getArtist() != null && 
                 currentUserId.equals(artwork.getArtist().getId());
@@ -273,7 +273,7 @@ public class ArtworkServiceImpl implements ArtworkService {
         
         ArtworkDto dto = modelMapper.map(artwork, ArtworkDto.class);
         
-        // Ensure artist details are properly mapped
+        
         if (artwork.getArtist() != null) {
             ArtistDto artistDto = modelMapper.map(artwork.getArtist(), ArtistDto.class);
             if (artistDto.getId() == null && artwork.getArtist().getId() != null) {
@@ -282,7 +282,7 @@ public class ArtworkServiceImpl implements ArtworkService {
             dto.setArtist(artistDto);
         }
         
-        // Handle null values for optional fields
+        
         if (dto.getTags() == null) {
             dto.setTags(new ArrayList<>());
         }
@@ -304,7 +304,7 @@ public class ArtworkServiceImpl implements ArtworkService {
     @Cacheable(value = "featuredArtworks")
     public List<ArtworkDto> getFeaturedArtworks() {
         log.debug("Fetching featured APPROVED artworks from APPROVED artists");
-        // Get top 8 APPROVED artworks from APPROVED artists
+        
         PageRequest pageable = PageRequest.of(0, 8);
         return artworkRepository.findByApprovalStatusAndArtistStatusApproved(ApprovalStatus.APPROVED, pageable)
                 .map(this::convertToDto)
@@ -325,7 +325,7 @@ public class ArtworkServiceImpl implements ArtworkService {
     private List<String> saveArtworkImages(List<MultipartFile> images) {
         List<String> imageUrls = new ArrayList<>();
         
-        // Use Cloudinary if enabled and service is available
+        
         if (cloudinaryEnabled && cloudStorageService != null) {
             log.info("Uploading images to Cloudinary cloud storage");
             for (MultipartFile image : images) {
@@ -345,8 +345,8 @@ public class ArtworkServiceImpl implements ArtworkService {
             return imageUrls;
         }
         
-        // If Cloudinary is not enabled or service is missing, THROW EXCEPTION
-        // We do NOT want to store files locally in production
+        
+        
         log.error("Cloudinary is not enabled or CloudStorageService is missing. Cannot upload images.");
         throw new RuntimeException("Cloud storage is not configured. Cannot upload artwork images.");
     }

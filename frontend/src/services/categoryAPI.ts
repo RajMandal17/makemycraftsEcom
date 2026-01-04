@@ -1,9 +1,6 @@
 import apiClient from './api';
 
-/**
- * Category API Service
- * Handles all category-related API calls
- */
+
 
 export interface CategoryStats {
     categoryId?: string;
@@ -20,9 +17,7 @@ export interface CategoryStats {
     rank: number;
 }
 
-/**
- * Admin Category DTO - includes all fields for admin panel
- */
+
 export interface AdminCategory {
     id: string;
     name: string;
@@ -43,9 +38,7 @@ export interface AdminCategory {
     artworkCount?: number;
 }
 
-/**
- * Request to create a new category
- */
+
 export interface CategoryCreateRequest {
     name: string;
     displayName?: string;
@@ -55,9 +48,7 @@ export interface CategoryCreateRequest {
     isActive?: boolean;
 }
 
-/**
- * Request to update an existing category
- */
+
 export interface CategoryUpdateRequest {
     name?: string;
     displayName?: string;
@@ -93,9 +84,7 @@ export interface CategoryStatsResponse {
     data: CategoryStats;
 }
 
-/**
- * Public Category DTO - active admin-approved categories for dropdowns
- */
+
 export interface PublicCategory {
     id: string;
     name: string;
@@ -116,16 +105,9 @@ export interface ActiveCategoriesResponse {
     };
 }
 
-/**
- * Category API client
- * Follows Single Responsibility Principle
- */
+
 export const categoryAPI = {
-    /**
-     * Get top selling categories
-     * @param limit Maximum number of categories to return (default: 10)
-     * @returns Promise with top selling categories
-     */
+    
     getTopSelling: async (limit: number = 10): Promise<CategoryStats[]> => {
         try {
             const response = await apiClient.get<TopCategoriesResponse>(
@@ -144,10 +126,7 @@ export const categoryAPI = {
         }
     },
 
-    /**
-     * Get all unique categories
-     * @returns Promise with all category names
-     */
+    
     getAll: async (): Promise<string[]> => {
         try {
             const response = await apiClient.get<AllCategoriesResponse>('/categories/all');
@@ -163,11 +142,7 @@ export const categoryAPI = {
         }
     },
 
-    /**
-     * Get statistics for a specific category
-     * @param categoryName Category name
-     * @returns Promise with category statistics
-     */
+    
     getStats: async (categoryName: string): Promise<CategoryStats | null> => {
         try {
             const response = await apiClient.get<CategoryStatsResponse>(
@@ -185,12 +160,7 @@ export const categoryAPI = {
         }
     },
 
-    /**
-     * Get all active categories with full details
-     * Returns only admin-approved active categories
-     * Used for category dropdowns in artwork creation/editing
-     * @returns Promise with active categories including full details
-     */
+    
     getActive: async (): Promise<PublicCategory[]> => {
         try {
             const response = await apiClient.get<ActiveCategoriesResponse>('/categories/active');
@@ -207,9 +177,9 @@ export const categoryAPI = {
     },
 };
 
-// ============================================
-// Admin Category API
-// ============================================
+
+
+
 
 interface AdminCategoriesResponse {
     success: boolean;
@@ -249,14 +219,9 @@ interface NameCheckResponse {
     };
 }
 
-/**
- * Admin Category API client
- * Requires ADMIN role for all operations
- */
+
 export const adminCategoryAPI = {
-    /**
-     * Get all categories (including deleted) with pagination
-     */
+    
     getAll: async (page: number = 0, limit: number = 50): Promise<AdminCategoriesResponse['data'] | null> => {
         try {
             const response = await apiClient.get<AdminCategoriesResponse>(
@@ -270,9 +235,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Get all categories as a list (no pagination)
-     */
+    
     getAllList: async (): Promise<AdminCategory[]> => {
         try {
             const response = await apiClient.get<AdminCategoriesResponse>('/admin/categories/list');
@@ -283,9 +246,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Get only active (not deleted) categories
-     */
+    
     getActive: async (page: number = 0, limit: number = 50): Promise<AdminCategoriesResponse['data'] | null> => {
         try {
             const response = await apiClient.get<AdminCategoriesResponse>(
@@ -299,9 +260,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Get only deleted categories
-     */
+    
     getDeleted: async (): Promise<AdminCategory[]> => {
         try {
             const response = await apiClient.get<AdminCategoriesResponse>('/admin/categories/deleted');
@@ -312,9 +271,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Search categories
-     */
+    
     search: async (query: string, includeDeleted: boolean = false): Promise<AdminCategory[]> => {
         try {
             const response = await apiClient.get<AdminCategoriesResponse>(
@@ -328,9 +285,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Get a specific category by ID
-     */
+    
     getById: async (id: string): Promise<AdminCategory | null> => {
         try {
             const response = await apiClient.get<AdminCategoryResponse>(`/admin/categories/${id}`);
@@ -341,9 +296,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Create a new category (without image)
-     */
+    
     create: async (request: CategoryCreateRequest): Promise<AdminCategory | null> => {
         try {
             const response = await apiClient.post<AdminCategoryResponse>('/admin/categories', request);
@@ -354,9 +307,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Create a new category with image
-     */
+    
     createWithImage: async (request: CategoryCreateRequest, image: File): Promise<AdminCategory | null> => {
         try {
             const formData = new FormData();
@@ -375,9 +326,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Update an existing category
-     */
+    
     update: async (id: string, request: CategoryUpdateRequest): Promise<AdminCategory | null> => {
         try {
             const response = await apiClient.put<AdminCategoryResponse>(`/admin/categories/${id}`, request);
@@ -388,9 +337,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Update category with new image
-     */
+    
     updateWithImage: async (id: string, request: CategoryUpdateRequest, image: File): Promise<AdminCategory | null> => {
         try {
             const formData = new FormData();
@@ -409,9 +356,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Upload/update category image only
-     */
+    
     uploadImage: async (id: string, image: File): Promise<AdminCategory | null> => {
         try {
             const formData = new FormData();
@@ -429,9 +374,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Remove category image
-     */
+    
     removeImage: async (id: string): Promise<AdminCategory | null> => {
         try {
             const response = await apiClient.delete<AdminCategoryResponse>(`/admin/categories/${id}/image`);
@@ -442,9 +385,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Toggle category active status
-     */
+    
     toggleActive: async (id: string): Promise<AdminCategory | null> => {
         try {
             const response = await apiClient.put<AdminCategoryResponse>(`/admin/categories/${id}/toggle`);
@@ -455,9 +396,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Reorder categories
-     */
+    
     reorder: async (categoryIds: string[]): Promise<AdminCategory[]> => {
         try {
             const response = await apiClient.put<AdminCategoriesResponse>(
@@ -471,9 +410,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Soft delete a category
-     */
+    
     softDelete: async (id: string): Promise<AdminCategory | null> => {
         try {
             const response = await apiClient.delete<AdminCategoryResponse>(`/admin/categories/${id}`);
@@ -484,9 +421,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Restore a soft-deleted category
-     */
+    
     restore: async (id: string): Promise<AdminCategory | null> => {
         try {
             const response = await apiClient.put<AdminCategoryResponse>(`/admin/categories/${id}/restore`);
@@ -497,9 +432,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Permanently delete a category (CANNOT BE UNDONE)
-     */
+    
     hardDelete: async (id: string): Promise<boolean> => {
         try {
             const response = await apiClient.delete<{ success: boolean }>(`/admin/categories/${id}/hard`);
@@ -510,9 +443,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Get category statistics
-     */
+    
     getStats: async (): Promise<CategoryStatsAdminResponse['data'] | null> => {
         try {
             const response = await apiClient.get<CategoryStatsAdminResponse>('/admin/categories/stats');
@@ -523,9 +454,7 @@ export const adminCategoryAPI = {
         }
     },
 
-    /**
-     * Check if a category name is available
-     */
+    
     checkNameAvailable: async (name: string, excludeId?: string): Promise<boolean> => {
         try {
             const params: { name: string; excludeId?: string } = { name };

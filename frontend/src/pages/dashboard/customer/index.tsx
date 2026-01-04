@@ -27,7 +27,7 @@ const CustomerDashboard: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Sidebar */}
+          {}
           <div className="w-full md:w-64 bg-white rounded-lg shadow-md p-4">
             <div className="flex flex-col items-center pb-5 mb-5 border-b">
               <div className="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center mb-2">
@@ -134,7 +134,7 @@ const CustomerDashboard: React.FC = () => {
             </nav>
           </div>
 
-          {/* Main Content */}
+          {}
           <div className="flex-1 bg-white rounded-lg shadow-md p-6">
             <Routes>
               <Route index element={<CustomerDashboardHome />} />
@@ -145,7 +145,7 @@ const CustomerDashboard: React.FC = () => {
               <Route path="profile" element={<CustomerProfile />} />
             </Routes>
 
-            {/* Handle direct access to /profile URL */}
+            {}
             {location.pathname === '/profile' && <CustomerProfile />}
           </div>
         </div>
@@ -154,12 +154,12 @@ const CustomerDashboard: React.FC = () => {
   );
 };
 
-// Dashboard Home Component
+
 const CustomerDashboardHome: React.FC = () => {
   const { state } = useAppContext();
   const navigate = useNavigate();
 
-  // Get most recent order, if any
+  
   const recentOrder = state.auth.isAuthenticated &&
     Array.isArray(state.orders) &&
     state.orders.length > 0 ?
@@ -169,7 +169,7 @@ const CustomerDashboardHome: React.FC = () => {
     <div>
       <h1 className="text-2xl font-semibold mb-6">My Dashboard</h1>
 
-      {/* Quick stats */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-blue-50 border border-blue-100 p-4 rounded-lg">
           <div className="flex justify-between items-center">
@@ -208,7 +208,7 @@ const CustomerDashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* Quick actions */}
+      {}
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -253,7 +253,7 @@ const CustomerDashboardHome: React.FC = () => {
         </div>
       </div>
 
-      {/* Recent order */}
+      {}
       <div>
         <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
         {recentOrder ? (

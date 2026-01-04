@@ -8,9 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-/**
- * Handles persistence of email log entries to keep EmailService focused on delivery concerns.
- */
+
 @Service
 @RequiredArgsConstructor
 public class EmailLogService {

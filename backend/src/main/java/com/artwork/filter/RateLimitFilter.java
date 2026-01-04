@@ -33,7 +33,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
                                    FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
         
-        // Only rate limit authentication endpoints
+        
         boolean shouldRateLimit = false;
         for (String endpoint : rateLimit) {
             if (path.startsWith(endpoint)) {
@@ -47,19 +47,19 @@ public class RateLimitFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Get client IP - consider X-Forwarded-For for proxies
+        
         String clientIP = getClientIP(request);
         Bucket bucket = rateLimitConfig.resolveBucket(clientIP);
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
 
         if (probe.isConsumed()) {
-            // Add rate limit headers
+            
             response.addHeader("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
             response.addHeader("X-Rate-Limit-Reset", String.valueOf(probe.getNanosToWaitForRefill() / 1_000_000_000));
             
             filterChain.doFilter(request, response);
         } else {
-            // Too many requests
+            
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
             response.setContentType("application/json");
             

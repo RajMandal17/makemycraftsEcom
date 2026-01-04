@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Request DTO for artwork analysis
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

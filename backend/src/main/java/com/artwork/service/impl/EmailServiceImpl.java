@@ -21,20 +21,7 @@ import java.util.Map;
 
 import static org.springframework.util.StringUtils.hasText;
 
-/**
- * Production-grade email service implementation using JavaMailSender.
- * 
- * Supports:
- * - GoDaddy SMTP (smtpout.secureserver.net)
- * - Microsoft 365 SMTP (smtp.office365.com)
- * - Any standard SMTP server
- * 
- * Features:
- * - Manual retry logic for transient failures (3 attempts)
- * - Comprehensive logging for debugging
- * - Email logging for audit trail
- * - Detailed error messages
- */
+
 @Service
 @Slf4j
 public class EmailServiceImpl implements EmailService {
@@ -67,9 +54,7 @@ public class EmailServiceImpl implements EmailService {
         this.mailProperties = mailProperties;
     }
 
-    /**
-     * Log email configuration on startup for debugging
-     */
+    
     @PostConstruct
     public void logConfiguration() {
         log.info("📧 ============================================");
@@ -122,10 +107,10 @@ public class EmailServiceImpl implements EmailService {
                 
                 emailLogService.markSent(logEntry);
                 log.info("✅ Simple email sent successfully to {} on attempt {}", to, attempt);
-                return; // Success - exit the method
+                return; 
                 
             } catch (MailAuthenticationException e) {
-                // Don't retry authentication failures
+                
                 emailLogService.markFailed(logEntry, "Authentication failed: " + e.getMessage());
                 log.error("❌ SMTP Authentication FAILED!");
                 log.error("   This is NOT a transient error - check your credentials:");
@@ -164,7 +149,7 @@ public class EmailServiceImpl implements EmailService {
             }
         }
         
-        // All retries failed
+        
         emailLogService.markFailed(logEntry, lastException != null ? lastException.getMessage() : "Unknown error");
         log.error("❌ All {} attempts failed to send email to {}", MAX_RETRY_ATTEMPTS, to);
         log.error("   Last error: {}", lastException != null ? lastException.getMessage() : "Unknown");
@@ -202,10 +187,10 @@ public class EmailServiceImpl implements EmailService {
                 
                 emailLogService.markSent(logEntry);
                 log.info("✅ HTML email sent successfully to {} on attempt {}", to, attempt);
-                return; // Success - exit the method
+                return; 
                 
             } catch (MailAuthenticationException e) {
-                // Don't retry authentication failures
+                
                 emailLogService.markFailed(logEntry, "Authentication failed: " + e.getMessage());
                 log.error("❌ SMTP Authentication FAILED!");
                 log.error("   This is NOT a transient error - check your credentials:");
@@ -244,7 +229,7 @@ public class EmailServiceImpl implements EmailService {
             }
         }
         
-        // All retries failed
+        
         emailLogService.markFailed(logEntry, lastException != null ? lastException.getMessage() : "Unknown error");
         log.error("❌ All {} attempts failed to send HTML email to {}", MAX_RETRY_ATTEMPTS, to);
         log.error("   Template: {}", templateName);
@@ -252,30 +237,25 @@ public class EmailServiceImpl implements EmailService {
         throw new EmailProcessingException("Failed to send templated email after " + MAX_RETRY_ATTEMPTS + " attempts", lastException);
     }
 
-    /**
-     * Resolve the 'from' address with fallback chain:
-     * 1. mail.from property
-     * 2. spring.mail.properties.from
-     * 3. spring.mail.username
-     */
+    
     private String resolveFromAddress() {
-        // First priority: mail.from property
+        
         if (hasText(mailFrom)) {
             return mailFrom;
         }
         
-        // Second priority: spring.mail.properties.from
+        
         String propertiesFrom = mailProperties.getProperties().get("from");
         if (hasText(propertiesFrom)) {
             return propertiesFrom;
         }
         
-        // Third priority: spring.mail.username
+        
         if (hasText(mailProperties.getUsername())) {
             return mailProperties.getUsername();
         }
         
-        // Log error with helpful message
+        
         log.error("❌ No 'from' address configured!");
         log.error("   Set one of these environment variables:");
         log.error("   - MAIL_FROM (recommended)");
@@ -283,9 +263,7 @@ public class EmailServiceImpl implements EmailService {
         throw new EmailProcessingException("Mail 'from' address is not configured. Set MAIL_FROM or MAIL_USERNAME environment variable.");
     }
 
-    /**
-     * Safe version for logging during initialization
-     */
+    
     private String safeResolveFromAddress() {
         try {
             return resolveFromAddress();
@@ -294,9 +272,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    /**
-     * Mask email for logging (privacy)
-     */
+    
     private String maskEmail(String email) {
         if (!hasText(email)) {
             return "NOT SET";

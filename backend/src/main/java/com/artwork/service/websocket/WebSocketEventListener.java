@@ -7,12 +7,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-/**
- * Event Listener for triggering WebSocket updates
- * 
- * Listens for application events and broadcasts relevant updates.
- * Uses @Async to avoid blocking the main thread.
- */
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -20,9 +15,7 @@ public class WebSocketEventListener {
     
     private final WebSocketDashboardService dashboardService;
     
-    /**
-     * Notify when a new order is placed
-     */
+    
     @Async
     @EventListener
     public void handleNewOrder(NewOrderEvent event) {
@@ -38,9 +31,7 @@ public class WebSocketEventListener {
         dashboardService.triggerImmediateUpdate();
     }
     
-    /**
-     * Notify when a new user registers
-     */
+    
     @Async
     @EventListener
     public void handleNewUser(NewUserEvent event) {
@@ -56,9 +47,7 @@ public class WebSocketEventListener {
         dashboardService.triggerImmediateUpdate();
     }
     
-    /**
-     * Notify when artwork is submitted for approval
-     */
+    
     @Async
     @EventListener
     public void handlePendingArtwork(PendingArtworkEvent event) {
@@ -74,7 +63,7 @@ public class WebSocketEventListener {
         dashboardService.triggerImmediateUpdate();
     }
     
-    // Event classes
+    
     @lombok.Data
     @lombok.AllArgsConstructor
     public static class NewOrderEvent {

@@ -50,17 +50,13 @@ export interface AIServiceStatus {
   provider: string;
 }
 
-/**
- * Analyze artwork image and get AI-generated suggestions
- */
+
 export const analyzeArtwork = async (request: AnalysisRequest): Promise<ArtworkSuggestion> => {
   const response = await api.post('/suggestions/analyze', request);
   return response.data;
 };
 
-/**
- * Get paginated suggestion history for current user
- */
+
 export const getSuggestionHistory = async (
   page: number = 0,
   size: number = 10
@@ -71,47 +67,35 @@ export const getSuggestionHistory = async (
   return response.data;
 };
 
-/**
- * Get all suggestions for current user
- */
+
 export const getAllSuggestions = async (): Promise<ArtworkSuggestion[]> => {
   const response = await api.get('/suggestions/all');
   return response.data;
 };
 
-/**
- * Get a specific suggestion by ID
- */
+
 export const getSuggestionById = async (id: number): Promise<ArtworkSuggestion> => {
   const response = await api.get(`/suggestions/${id}`);
   return response.data;
 };
 
-/**
- * Mark a suggestion as applied
- */
+
 export const applySuggestion = async (id: number): Promise<void> => {
   await api.post(`/suggestions/${id}/apply`);
 };
 
-/**
- * Delete a suggestion
- */
+
 export const deleteSuggestion = async (id: number): Promise<void> => {
   await api.delete(`/suggestions/${id}`);
 };
 
-/**
- * Get suggestion statistics for current user
- */
+
 export const getSuggestionStats = async (): Promise<SuggestionStats> => {
   const response = await api.get('/suggestions/stats');
   return response.data;
 };
 
-/**
- * Check if AI service is available
- */
+
 export const getAIServiceStatus = async (): Promise<AIServiceStatus> => {
   const response = await api.get('/suggestions/status');
   return response.data;

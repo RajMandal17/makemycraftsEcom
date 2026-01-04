@@ -11,7 +11,7 @@ const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
-  // Debug logging
+  
   console.log('CartPage render:', {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
@@ -30,8 +30,8 @@ const CartPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const subtotal = state.cart.reduce((sum, item) => sum + (item.artwork.price * item.quantity), 0);
-  const shippingCost = subtotal > 100 ? 0 : 15; // Free shipping over $100
-  const tax = subtotal * 0.1; // 10% tax
+  const shippingCost = subtotal > 100 ? 0 : 15; 
+  const tax = subtotal * 0.1; 
   const total = subtotal + shippingCost + tax;
 
   const handleUpdateQuantity = (id: string, quantity: number) => {
@@ -64,7 +64,7 @@ const CartPage: React.FC = () => {
       return;
     }
 
-    // Validate address
+    
     const addressFields = Object.entries(shippingAddress);
     const emptyFields = addressFields.filter(([_, value]) => !value.trim());
 
@@ -87,10 +87,10 @@ const CartPage: React.FC = () => {
 
       const newOrder = await orderAPI.create(orderData);
 
-      // Update orders in context
+      
       dispatch({ type: 'ADD_ORDER', payload: newOrder });
 
-      // Clear the cart
+      
       dispatch({ type: 'CLEAR_CART' });
 
       toast.success('Order placed successfully!');
@@ -105,7 +105,7 @@ const CartPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      {/* Error boundary and loading state */}
+      {}
       {!state.auth.isAuthenticated ? (
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-xl font-semibold mb-4">Please log in to view your cart</h2>
@@ -138,7 +138,7 @@ const CartPage: React.FC = () => {
             </div>
           ) : (
             <div className="flex flex-col lg:flex-row gap-8">
-              {/* Cart Items */}
+              {}
               <div className="lg:w-2/3">
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <div className="p-6 border-b">
@@ -149,7 +149,7 @@ const CartPage: React.FC = () => {
 
                   <ul className="divide-y">
                     {state.cart.map((item) => {
-                      // Debug each cart item
+                      
                       console.log('Rendering cart item:', item);
 
                       if (!item.artwork || !item.artwork.images || item.artwork.images.length === 0) {
@@ -216,7 +216,7 @@ const CartPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Order Summary */}
+              {}
               <div className="lg:w-1/3">
                 <div className="bg-white rounded-lg shadow p-6">
                   <h2 className="text-xl font-semibold mb-4">Order Summary</h2>

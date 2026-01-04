@@ -20,7 +20,7 @@ public class JwtUtil {
 
 
     public String generateToken(String userId, String email, String role, Map<String, Object> claims) {
-        // Ensure role uses the ROLE_ prefix for Spring Security compatibility
+        
         String roleWithPrefix = role.startsWith("ROLE_") ? role : "ROLE_" + role;
         
         return Jwts.builder()
@@ -35,7 +35,7 @@ public class JwtUtil {
     }
 
     public String generateRefreshToken(String userId, String email, String role) {
-        // Ensure role uses the ROLE_ prefix for Spring Security compatibility
+        
         String roleWithPrefix = role.startsWith("ROLE_") ? role : "ROLE_" + role;
         
         return Jwts.builder()

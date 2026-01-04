@@ -8,12 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * LedgerEntry entity for financial transaction auditing.
- * Double-entry bookkeeping support.
- * 
- * @author Artwork Platform
- */
+
 @Entity
 @Table(name = "ledger_entries", indexes = {
     @Index(name = "idx_ledger_transaction_id", columnList = "transactionId"),
@@ -32,16 +27,16 @@ public class LedgerEntry {
     private String id;
     
     @Column(nullable = false)
-    private String transactionId; // Payment ID, Payout ID, or Refund ID
+    private String transactionId; 
     
     @Column(nullable = false, length = 50)
-    private String transactionType; // PAYMENT, PAYOUT, REFUND, COMMISSION
+    private String transactionType; 
     
     @Column(nullable = false, length = 50)
-    private String accountType; // CUSTOMER, SELLER, PLATFORM, TAX
+    private String accountType; 
     
     @Column(length = 50)
-    private String accountId; // User ID or Platform ID
+    private String accountId; 
     
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal debitAmount;
@@ -60,7 +55,7 @@ public class LedgerEntry {
     private String description;
     
     @Column(columnDefinition = "TEXT")
-    private String metadata; // JSON string for additional data
+    private String metadata; 
     
     @CreatedDate
     @Column(nullable = false, updatable = false)

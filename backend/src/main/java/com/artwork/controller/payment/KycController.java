@@ -12,11 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * KYC controller for seller verification.
- * 
- * @author Artwork Platform
- */
+
 @RestController
 @RequestMapping("/api/payment/kyc")
 @RequiredArgsConstructor

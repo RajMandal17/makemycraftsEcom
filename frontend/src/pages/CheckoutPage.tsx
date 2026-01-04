@@ -6,7 +6,7 @@ import { orderAPI, paymentAPI } from '../services/api';
 import { Address } from '../types';
 import { CreditCard, Lock, CheckCircle } from 'lucide-react';
 
-// Declare Razorpay on window
+
 declare global {
     interface Window {
         Razorpay: any;
@@ -29,7 +29,7 @@ const CheckoutPage: React.FC = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [orderId, setOrderId] = useState<string | null>(null);
 
-    // Redirect if not authenticated or cart is empty
+    
     useEffect(() => {
         if (!state.auth.isAuthenticated) {
             toast.error('Please login to checkout');
@@ -41,7 +41,7 @@ const CheckoutPage: React.FC = () => {
         }
     }, [state.auth.isAuthenticated, state.cart, navigate]);
 
-    // Calculate totals
+    
     const subtotal = state.cart.reduce((sum, item) => sum + (item.artwork.price * item.quantity), 0);
     const shippingCost = subtotal > 100 ? 0 : 15;
     const tax = subtotal * 0.1;
@@ -56,7 +56,7 @@ const CheckoutPage: React.FC = () => {
     };
 
     const handlePayment = async () => {
-        // Validate address
+        
         const addressFields = Object.entries(shippingAddress);
         const emptyFields = addressFields.filter(([_, value]) => !value.trim());
 
@@ -68,7 +68,7 @@ const CheckoutPage: React.FC = () => {
         setIsProcessing(true);
 
         try {
-            // Step 1: Create order in backend
+            
             const orderData = {
                 items: state.cart.map(item => ({
                     artworkId: item.artwork.id,
@@ -83,7 +83,7 @@ const CheckoutPage: React.FC = () => {
 
             console.log('Order created:', newOrder);
 
-            // Step 2: Create Razorpay payment order
+            
             const artistId = state.cart[0]?.artwork?.artistId || state.cart[0]?.artwork?.artist?.id;
 
             const paymentData = {
@@ -97,10 +97,10 @@ const CheckoutPage: React.FC = () => {
             const razorpayOrder = await paymentAPI.createPayment(paymentData);
             console.log('Razorpay order created:', razorpayOrder);
 
-            // Step 3: Open Razorpay Checkout
+            
             const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_K2d6X9pQwE7Fn3', // Replace with your key
-                amount: razorpayOrder.amount * 100, // Razorpay expects amount in paise
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_K2d6X9pQwE7Fn3', 
+                amount: razorpayOrder.amount * 100, 
                 currency: razorpayOrder.currency,
                 name: 'MakeMyCrafts',
                 description: `Order #${newOrder.id.substring(0, 8)}`,
@@ -143,19 +143,19 @@ const CheckoutPage: React.FC = () => {
         try {
             console.log('Payment successful:', response);
 
-            // Verify payment on backend
+            
             await paymentAPI.verifyPayment({
                 orderId: orderId,
                 paymentId: response.razorpay_payment_id,
                 signature: response.razorpay_signature,
             });
 
-            // Clear cart
+            
             dispatch({ type: 'CLEAR_CART' });
 
             toast.success('Payment successful! Order placed.');
 
-            // Redirect to order details
+            
             navigate(`/dashboard/customer/orders/${orderId}`);
         } catch (error: any) {
             console.error('Payment verification failed:', error);
@@ -180,7 +180,7 @@ const CheckoutPage: React.FC = () => {
                 <h1 className="text-3xl font-bold mb-8 text-center">Checkout</h1>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Shipping Information */}
+                    {}
                     <div className="lg:col-span-2">
                         <div className="bg-white rounded-lg shadow p-6">
                             <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
@@ -259,7 +259,7 @@ const CheckoutPage: React.FC = () => {
                                 </div>
                             </form>
 
-                            {/* Payment Security Info */}
+                            {}
                             <div className="mt-6 p-4 bg-blue-50 rounded-lg flex items-start">
                                 <Lock className="w-5 h-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
                                 <div>
@@ -272,12 +272,12 @@ const CheckoutPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Order Summary */}
+                    {}
                     <div className="lg:col-span-1">
                         <div className="bg-white rounded-lg shadow p-6 sticky top-4">
                             <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
-                            {/* Cart Items */}
+                            {}
                             <div className="mb-4 space-y-3 max-h-60 overflow-y-auto">
                                 {state.cart.map((item) => (
                                     <div key={item.id} className="flex items-center text-sm">
@@ -318,7 +318,7 @@ const CheckoutPage: React.FC = () => {
                                 </div>
                             </div>
 
-                            {/* Payment Button */}
+                            {}
                             <button
                                 onClick={handlePayment}
                                 disabled={isProcessing}

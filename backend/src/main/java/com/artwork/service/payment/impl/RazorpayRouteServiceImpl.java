@@ -15,14 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-/**
- * Implementation of Razorpay Route service for linked account management.
- * 
- * Uses Razorpay Route API to create and manage linked accounts for marketplace sellers.
- * This enables automatic split payments where seller receives their share directly.
- * 
- * @author Artwork Platform
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -40,13 +33,13 @@ public class RazorpayRouteServiceImpl implements RazorpayRouteService {
     public SellerLinkedAccount createLinkedAccount(SellerKyc kyc) {
         log.info("Creating Razorpay linked account for seller: {}", kyc.getUserId());
         
-        // Check if already exists
+        
         if (linkedAccountRepository.existsBySellerId(kyc.getUserId())) {
             log.info("Linked account already exists for seller: {}", kyc.getUserId());
             return linkedAccountRepository.findBySellerId(kyc.getUserId()).orElse(null);
         }
         
-        // Get user details
+        
         var user = userRepository.findById(kyc.getUserId())
             .orElseThrow(() -> new RuntimeException("User not found: " + kyc.getUserId()));
         
@@ -60,16 +53,16 @@ public class RazorpayRouteServiceImpl implements RazorpayRouteService {
         fullName = fullName.trim().isEmpty() ? "Artist" : fullName.trim();
         
         try {
-            // Create linked account in Razorpay
+            
             JSONObject accountRequest = new JSONObject();
             accountRequest.put("email", user.getEmail());
-            accountRequest.put("phone", "9999999999"); // User entity doesn't have phone
+            accountRequest.put("phone", "9999999999"); 
             accountRequest.put("type", "route");
             accountRequest.put("legal_business_name", kyc.getBusinessName() != null ? kyc.getBusinessName() : fullName);
             accountRequest.put("business_type", mapBusinessType(kyc.getBusinessType()));
             accountRequest.put("contact_name", fullName);
             
-            // Profile
+            
             JSONObject profile = new JSONObject();
             profile.put("category", "arts_and_collectibles");
             profile.put("subcategory", "art");
@@ -83,7 +76,7 @@ public class RazorpayRouteServiceImpl implements RazorpayRouteService {
                     .put("country", "IN")));
             accountRequest.put("profile", profile);
             
-            // Legal info
+            
             JSONObject legalInfo = new JSONObject();
             legalInfo.put("pan", kyc.getPanNumber());
             if (kyc.getGstNumber() != null && !kyc.getGstNumber().isEmpty()) {
@@ -91,13 +84,13 @@ public class RazorpayRouteServiceImpl implements RazorpayRouteService {
             }
             accountRequest.put("legal_info", legalInfo);
             
-            // TODO: Razorpay SDK doesn't have direct account creation method
-            // This requires using Razorpay Route API v2 directly via HTTP client
-            // For now, we'll create a placeholder and update manually
+            
+            
+            
             
             log.info("Razorpay Route account request prepared for: {}", kyc.getUserId());
             
-            // Create placeholder that will be updated via webhook or manual sync
+            
             String placeholderAccountId = "acc_placeholder_" + System.currentTimeMillis();
             
             SellerLinkedAccount linkedAccount = SellerLinkedAccount.builder()
@@ -105,7 +98,7 @@ public class RazorpayRouteServiceImpl implements RazorpayRouteService {
                 .razorpayAccountId(placeholderAccountId)
                 .accountStatus(LinkedAccountStatus.CREATED)
                 .email(user.getEmail())
-                .phone(null) // User entity doesn't have phone field
+                .phone(null) 
                 .businessName(kyc.getBusinessName())
                 .build();
             
@@ -119,13 +112,13 @@ public class RazorpayRouteServiceImpl implements RazorpayRouteService {
         } catch (Exception e) {
             log.error("Failed to create Razorpay linked account for: {}", kyc.getUserId(), e);
             
-            // Create failed record for retry
+            
             SellerLinkedAccount failedAccount = SellerLinkedAccount.builder()
                 .sellerId(kyc.getUserId())
                 .razorpayAccountId("FAILED_" + System.currentTimeMillis())
                 .accountStatus(LinkedAccountStatus.FAILED)
                 .email(user.getEmail())
-                .phone(null) // User entity doesn't have phone field
+                .phone(null) 
                 .businessName(kyc.getBusinessName())
                 .errorMessage(e.getMessage())
                 .build();
@@ -153,8 +146,8 @@ public class RazorpayRouteServiceImpl implements RazorpayRouteService {
         }
         
         try {
-            // TODO: Fetch account status from Razorpay Route API
-            // This requires direct API call as SDK may not have this method
+            
+            
             
             log.info("Account status refreshed for: {}", accountId);
             return account;
@@ -178,7 +171,7 @@ public class RazorpayRouteServiceImpl implements RazorpayRouteService {
         account.setSuspendedAt(LocalDateTime.now());
         account.setErrorMessage("Suspended: " + reason);
         
-        // TODO: Call Razorpay API to suspend account if Route is enabled
+        
         
         log.info("Linked account suspended for seller: {}", sellerId);
         
@@ -191,7 +184,7 @@ public class RazorpayRouteServiceImpl implements RazorpayRouteService {
         SellerLinkedAccount linkedAccount = SellerLinkedAccount.builder()
             .sellerId(kyc.getUserId())
             .razorpayAccountId(placeholderAccountId)
-            .accountStatus(LinkedAccountStatus.ACTIVE) // Active in dev mode
+            .accountStatus(LinkedAccountStatus.ACTIVE) 
             .email(email)
             .phone(phone)
             .businessName(kyc.getBusinessName())

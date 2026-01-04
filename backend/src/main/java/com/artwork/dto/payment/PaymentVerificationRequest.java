@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Request to verify a payment after gateway callback.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

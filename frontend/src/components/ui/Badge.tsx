@@ -16,10 +16,10 @@ const Badge: React.FC<BadgeProps> = ({
     children,
     className = '',
 }) => {
-    // Base styles
+    
     const baseStyles = 'inline-flex items-center justify-center font-medium rounded-full whitespace-nowrap';
 
-    // Variant styles
+    
     const variantStyles: Record<BadgeVariant, string> = {
         new: 'bg-blue-100 text-blue-800 border border-blue-200',
         sale: 'bg-red-100 text-red-800 border border-red-200',
@@ -33,7 +33,7 @@ const Badge: React.FC<BadgeProps> = ({
         neutral: 'bg-neutral-100 text-neutral-700 border border-neutral-200',
     };
 
-    // Size styles
+    
     const sizeStyles: Record<BadgeSize, string> = {
         sm: 'text-xs px-2 py-0.5',
         md: 'text-sm px-2.5 py-1',

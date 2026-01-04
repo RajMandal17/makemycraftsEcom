@@ -15,10 +15,10 @@ import ProfileRedirect from './components/common/ProfileRedirect';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
-// Temporary debug import
+
 import './utils/debugLocalStorage';
 
-// Pages - Eagerly loaded
+
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
@@ -27,7 +27,7 @@ import OAuth2RoleSelectionPage from './pages/auth/OAuth2RoleSelectionPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 
-// Pages - Lazily loaded
+
 const CartPage = lazy(() => import('./pages/CartPage'));
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const ArtworksPage = lazy(() => import('./pages/ArtworksPage'));
@@ -37,31 +37,31 @@ const ArtworkDetailPage = lazy(() => import('./pages/ArtworkDetailPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 
-// Policy Pages - Lazily loaded
+
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
 const RefundPolicyPage = lazy(() => import('./pages/RefundPolicyPage'));
 const ShippingPolicyPage = lazy(() => import('./pages/ShippingPolicyPage'));
 
-// Dashboard - Lazily loaded
+
 const ArtistDashboard = lazy(() => import('./pages/dashboard/artist'));
 const CustomerDashboard = lazy(() => import('./pages/dashboard/customer'));
 const AdminDashboard = lazy(() => import('./pages/dashboard/admin'));
 const AuthDebugger = lazy(() => import('./components/debug/AuthDebugger'));
 
-// Loading fallback component
+
 const LoadingFallback = () => (
   <div className="flex justify-center items-center h-[50vh]">
     <LoadingSpinner size="lg" />
   </div>
 );
 
-// Inner component to access LoadingContext
+
 const AppContent = () => {
   const { showLoading, hideLoading } = useLoading();
 
   useEffect(() => {
-    // Register loading callbacks with API client
+    
     registerLoadingCallbacks(showLoading, hideLoading);
   }, [showLoading, hideLoading]);
 
@@ -74,10 +74,10 @@ const AppContent = () => {
           <ErrorBoundary>
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
-                {/* Public Routes - Accessible to everyone */}
+                {}
                 <Route path="/" element={<HomePage />} />
 
-                {/* Auth Routes - Redirect authenticated users to their dashboards */}
+                {}
                 <Route path="/login" element={<RoleBasedRedirect><LoginPage /></RoleBasedRedirect>} />
                 <Route path="/register" element={<RoleBasedRedirect><RegisterPage /></RoleBasedRedirect>} />
                 <Route path="/auth/oauth2/callback" element={<OAuth2CallbackPage />} />
@@ -85,7 +85,7 @@ const AppContent = () => {
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-                {/* Protected Routes - Customer - Lazy loaded */}
+                {}
                 <Route
                   path="/dashboard/customer/*"
                   element={
@@ -95,7 +95,7 @@ const AppContent = () => {
                   }
                 />
 
-                {/* Dedicated Profile Route - redirects to the customer profile page */}
+                {}
                 <Route
                   path="/profile"
                   element={
@@ -105,7 +105,7 @@ const AppContent = () => {
                   }
                 />
 
-                {/* Protected Routes - Artist - Lazy loaded */}
+                {}
                 <Route
                   path="/dashboard/artist/*"
                   element={
@@ -115,7 +115,7 @@ const AppContent = () => {
                   }
                 />
 
-                {/* Protected Routes - Admin */}
+                {}
                 <Route
                   path="/dashboard/admin/*"
                   element={
@@ -125,7 +125,7 @@ const AppContent = () => {
                   }
                 />
 
-                {/* Artwork Routes */}
+                {}
                 <Route
                   path="/artworks"
                   element={<ArtworksPage />}
@@ -135,7 +135,7 @@ const AppContent = () => {
                   element={<ArtworkDetailPage />}
                 />
 
-                {/* Component Showcase - Design System Demo */}
+                {}
                 <Route
                   path="/showcase"
                   element={
@@ -152,29 +152,29 @@ const AppContent = () => {
                   element={<ArtistsPage />}
                 />
 
-                {/* Username-based artist profile route - LinkedIn-style URLs */}
+                {}
                 <Route
                   path="/artists/username/:username"
                   element={<ArtistDetailPage />}
                 />
 
-                {/* ID-based artist profile route - legacy support */}
+                {}
                 <Route
                   path="/artists/:id"
                   element={<ArtistDetailPage />}
                 />
 
-                {/* Static Pages - SEO Optimized */}
+                {}
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/contact" element={<ContactPage />} />
 
-                {/* Policy Pages - Required for Razorpay Compliance */}
+                {}
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/refund-policy" element={<RefundPolicyPage />} />
                 <Route path="/shipping-policy" element={<ShippingPolicyPage />} />
 
-                {/* Protected Cart Route - Customers only */}
+                {}
                 <Route
                   path="/cart"
                   element={
@@ -184,7 +184,7 @@ const AppContent = () => {
                   }
                 />
 
-                {/* Protected Checkout Route - Customers only */}
+                {}
                 <Route
                   path="/checkout"
                   element={
@@ -194,13 +194,13 @@ const AppContent = () => {
                   }
                 />
 
-                {/* Shortcuts */}
+                {}
                 <Route
                   path="/wishlist"
                   element={<Navigate to="/dashboard/customer/wishlist" replace />}
                 />
 
-                {/* Fallback route for 404 */}
+                {}
                 <Route
                   path="*"
                   element={
@@ -244,7 +244,7 @@ const AppContent = () => {
         theme="light"
       />
 
-      {/* Auth Debugger Tool - Only for development */}
+      {}
       <AuthDebugger />
     </Router>
   );

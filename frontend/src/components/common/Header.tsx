@@ -60,7 +60,7 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
-          {/* Logo */}
+          {}
           <Link to="/" className="flex items-center group">
             <img
               src="/favicon.svg"
@@ -72,7 +72,7 @@ const Header: React.FC = () => {
             </span>
           </Link>
 
-          {/* Search Bar */}
+          {}
           <div className="hidden md:flex flex-1 max-w-lg mx-8">
             <form onSubmit={handleSearch} className="w-full">
               <div className="relative">
@@ -88,7 +88,7 @@ const Header: React.FC = () => {
             </form>
           </div>
 
-          {/* Navigation */}
+          {}
           <nav className="hidden md:flex items-center space-x-6">
 
 
@@ -101,7 +101,7 @@ const Header: React.FC = () => {
 
             {state.auth.isAuthenticated ? (
               <>
-                {/* Cart & Wishlist */}
+                {}
                 <div className="flex items-center space-x-4">
                   <Link to="/wishlist" className="relative text-neutral-700 hover:text-red-500 transition-colors">
                     <Heart className="h-6 w-6" />
@@ -122,7 +122,7 @@ const Header: React.FC = () => {
                   </Link>
                 </div>
 
-                {/* User Menu */}
+                {}
                 <div className="relative group">
                   <button className="flex items-center space-x-2 text-neutral-700 hover:text-primary-600 transition-colors">
                     <User className="h-6 w-6" />
@@ -131,7 +131,7 @@ const Header: React.FC = () => {
                     </span>
                   </button>
 
-                  {/* Dropdown */}
+                  {}
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-neutral-100">
                     <Link
                       to={getDashboardRoute()}
@@ -173,7 +173,7 @@ const Header: React.FC = () => {
             )}
           </nav>
 
-          {/* Mobile menu button */}
+          {}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden text-gray-700 hover:text-blue-600"
@@ -182,10 +182,10 @@ const Header: React.FC = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {}
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
-            {/* Mobile Search */}
+            {}
             <form onSubmit={handleSearch} className="mb-4">
               <div className="relative">
                 <input
@@ -199,7 +199,7 @@ const Header: React.FC = () => {
               </div>
             </form>
 
-            {/* Mobile Navigation */}
+            {}
             <div className="space-y-2">
               <Link
                 to="/artworks"

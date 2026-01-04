@@ -56,8 +56,8 @@ const AdminArtworks: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // This would ideally filter artworks by title, description, etc.
-    // For now, we're just using category and status filters
+    
+    
     fetchArtworks(1, selectedCategory, selectedStatus);
   };
 
@@ -100,7 +100,7 @@ const AdminArtworks: React.FC = () => {
       await adminAPI.updateArtwork(artworkToEdit.id, editFormData);
       toast.success(`Artwork "${editFormData.title}" updated successfully`);
 
-      // Update local state
+      
       setArtworks(artworks.map(artwork =>
         artwork.id === artworkToEdit.id ? { ...artwork, ...editFormData } : artwork
       ));
@@ -119,7 +119,7 @@ const AdminArtworks: React.FC = () => {
       await adminAPI.deleteArtwork(artworkToEdit.id);
       toast.success(`Artwork "${artworkToEdit.title}" deleted successfully`);
 
-      // Update local state
+      
       setArtworks(artworks.filter(artwork => artwork.id !== artworkToEdit.id));
       setTotalArtworks(prev => prev - 1);
 
@@ -138,7 +138,7 @@ const AdminArtworks: React.FC = () => {
         </h1>
       </div>
 
-      {/* Search and filters */}
+      {}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <form
           onSubmit={handleSearch}
@@ -197,7 +197,7 @@ const AdminArtworks: React.FC = () => {
         </div>
       </div>
 
-      {/* Artworks grid */}
+      {}
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mb-4"></div>
@@ -257,7 +257,7 @@ const AdminArtworks: React.FC = () => {
         </div>
       )}
 
-      {/* Pagination */}
+      {}
       {totalPages > 1 && (
         <div className="flex justify-between items-center mt-4">
           <p className="text-sm text-gray-700">
@@ -274,7 +274,7 @@ const AdminArtworks: React.FC = () => {
               <ChevronLeft className="h-5 w-5" />
             </button>
 
-            {/* Simple pagination display */}
+            {}
             <button className="px-4 py-2 border bg-purple-50 text-purple-600 font-medium rounded-md">
               {currentPage}
             </button>
@@ -290,7 +290,7 @@ const AdminArtworks: React.FC = () => {
         </div>
       )}
 
-      {/* Edit artwork modal */}
+      {}
       {showEditModal && artworkToEdit && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
@@ -418,7 +418,7 @@ const AdminArtworks: React.FC = () => {
         </div>
       )}
 
-      {/* Delete artwork modal */}
+      {}
       {showDeleteModal && artworkToEdit && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">

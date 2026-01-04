@@ -19,16 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Production-level Review Service Implementation
- * 
- * Business Rules:
- * 1. Only customers who purchased the artwork can review it
- * 2. Order must be in DELIVERED status
- * 3. Reviews can only be submitted within REVIEW_WINDOW_DAYS of delivery
- * 4. One review per order item (same customer can review again if they buy again)
- * 5. Reviews can be edited within EDIT_WINDOW_DAYS of creation
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -55,29 +46,29 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewDto addReview(ReviewDto reviewDto, String token) {
         String userId = extractUserId(token);
         
-        // Validate order item exists and belongs to user
+        
         OrderItem orderItem = orderItemRepository.findById(reviewDto.getOrderItemId())
                 .orElseThrow(() -> new IllegalArgumentException("Order item not found"));
         
         Order order = orderRepository.findById(orderItem.getOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
         
-        // Verify ownership
+        
         if (!order.getCustomerId().equals(userId)) {
             throw new IllegalStateException("You can only review items from your own orders");
         }
         
-        // Verify order status
+        
         if (order.getStatus() != OrderStatus.DELIVERED) {
             throw new IllegalStateException("You can only review items from delivered orders");
         }
         
-        // Check if already reviewed
+        
         if (reviewRepository.existsByOrderItemId(reviewDto.getOrderItemId())) {
             throw new IllegalStateException("You have already reviewed this item");
         }
         
-        // Check review window (7 days from delivery)
+        
         LocalDateTime deliveredAt = findDeliveryTime(order);
         LocalDateTime reviewDeadline = deliveredAt.plusDays(reviewWindowDays);
         
@@ -87,12 +78,12 @@ public class ReviewServiceImpl implements ReviewService {
             );
         }
         
-        // Validate rating
+        
         if (reviewDto.getRating() == null || reviewDto.getRating() < 1 || reviewDto.getRating() > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
         
-        // Create review
+        
         Review review = Review.builder()
                 .customerId(userId)
                 .artworkId(orderItem.getArtworkId())
@@ -102,7 +93,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .comment(sanitizeComment(reviewDto.getComment()))
                 .verified(true)
                 .deliveredAt(deliveredAt)
-                .status(ReviewStatus.APPROVED) // Auto-approve for now
+                .status(ReviewStatus.APPROVED) 
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -121,12 +112,12 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("Review not found"));
         
-        // Verify ownership
+        
         if (!review.getCustomerId().equals(userId)) {
             throw new IllegalStateException("You can only edit your own reviews");
         }
         
-        // Check edit window
+        
         LocalDateTime editDeadline = review.getCreatedAt().plusDays(editWindowDays);
         if (LocalDateTime.now().isAfter(editDeadline)) {
             throw new IllegalStateException(
@@ -134,7 +125,7 @@ public class ReviewServiceImpl implements ReviewService {
             );
         }
         
-        // Update fields
+        
         if (reviewDto.getRating() != null) {
             if (reviewDto.getRating() < 1 || reviewDto.getRating() > 5) {
                 throw new IllegalArgumentException("Rating must be between 1 and 5");
@@ -162,7 +153,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("Review not found"));
         
-        // Verify ownership
+        
         if (!review.getCustomerId().equals(userId)) {
             throw new IllegalStateException("You can only delete your own reviews");
         }
@@ -220,7 +211,7 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewEligibilityDto> getReviewableItems(String token) {
         String userId = extractUserId(token);
         
-        // Get all delivered orders for the customer
+        
         List<Order> orders = orderRepository.findByCustomerId(userId);
         
         List<ReviewEligibilityDto> result = new ArrayList<>();
@@ -246,7 +237,7 @@ public class ReviewServiceImpl implements ReviewService {
         Double avgRating = reviewRepository.getAverageRatingByArtworkId(artworkId);
         Long totalReviews = reviewRepository.countByArtworkIdAndApproved(artworkId);
         
-        // Get rating distribution
+        
         List<Object[]> distribution = reviewRepository.getRatingDistributionByArtworkId(artworkId);
         Map<Integer, Long> ratingCounts = new HashMap<>();
         for (Object[] row : distribution) {
@@ -255,7 +246,7 @@ public class ReviewServiceImpl implements ReviewService {
             ratingCounts.put(rating, count);
         }
         
-        // Get recent reviews
+        
         List<Review> recentReviews = reviewRepository.findByArtworkIdAndStatusOrderByCreatedAtDesc(
             artworkId, ReviewStatus.APPROVED);
         List<ReviewDto> recentReviewDtos = recentReviews.stream()
@@ -265,7 +256,7 @@ public class ReviewServiceImpl implements ReviewService {
         
         return ArtworkRatingSummaryDto.builder()
                 .artworkId(artworkId)
-                .averageRating(Math.round(avgRating * 10) / 10.0) // Round to 1 decimal
+                .averageRating(Math.round(avgRating * 10) / 10.0) 
                 .totalReviews(totalReviews.intValue())
                 .oneStarCount(ratingCounts.getOrDefault(1, 0L).intValue())
                 .twoStarCount(ratingCounts.getOrDefault(2, 0L).intValue())
@@ -291,7 +282,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .collect(Collectors.toList());
     }
     
-    // ========== Helper Methods ==========
+    
     
     private String extractUserId(String token) {
         if (token == null || token.isEmpty()) {
@@ -308,14 +299,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
     
     private LocalDateTime findDeliveryTime(Order order) {
-        // Use updatedAt as approximation of delivery time
-        // In production, you'd have a dedicated deliveredAt field
+        
+        
         return order.getUpdatedAt() != null ? order.getUpdatedAt() : order.getCreatedAt();
     }
     
     private String sanitizeComment(String comment) {
         if (comment == null) return null;
-        // Basic sanitization - remove HTML tags and excessive whitespace
+        
         return comment.trim()
                 .replaceAll("<[^>]*>", "")
                 .replaceAll("\\s+", " ");
@@ -332,7 +323,7 @@ public class ReviewServiceImpl implements ReviewService {
                    .artworkImageUrl(getFirstImage(artwork));
         }
         
-        // Check ownership
+        
         if (!order.getCustomerId().equals(userId)) {
             return builder
                     .eligible(false)
@@ -340,7 +331,7 @@ public class ReviewServiceImpl implements ReviewService {
                     .build();
         }
         
-        // Check order status
+        
         if (order.getStatus() != OrderStatus.DELIVERED) {
             return builder
                     .eligible(false)
@@ -348,7 +339,7 @@ public class ReviewServiceImpl implements ReviewService {
                     .build();
         }
         
-        // Check if already reviewed
+        
         Optional<Review> existingReview = reviewRepository.findByOrderItemId(orderItem.getId());
         if (existingReview.isPresent()) {
             Review review = existingReview.orElseThrow(() -> 
@@ -366,7 +357,7 @@ public class ReviewServiceImpl implements ReviewService {
                     .build();
         }
         
-        // Check review window
+        
         LocalDateTime deliveredAt = findDeliveryTime(order);
         LocalDateTime reviewDeadline = deliveredAt.plusDays(reviewWindowDays);
         long daysRemaining = ChronoUnit.DAYS.between(LocalDateTime.now(), reviewDeadline);
@@ -381,7 +372,7 @@ public class ReviewServiceImpl implements ReviewService {
                     .build();
         }
         
-        // Eligible!
+        
         return builder
                 .eligible(true)
                 .reason("You can review this item")
@@ -408,26 +399,26 @@ public class ReviewServiceImpl implements ReviewService {
                 .updatedAt(review.getUpdatedAt() != null ? review.getUpdatedAt().format(ISO_FORMATTER) : null)
                 .build();
         
-        // Enrich with customer info
+        
         if (review.getCustomer() != null) {
             User customer = review.getCustomer();
             dto.setCustomerName(customer.getFirstName() + " " + customer.getLastName());
             dto.setCustomerProfileImage(customer.getProfileImage());
         } else {
-            // Fallback: fetch customer
+            
             userRepository.findById(review.getCustomerId()).ifPresent(customer -> {
                 dto.setCustomerName(customer.getFirstName() + " " + customer.getLastName());
                 dto.setCustomerProfileImage(customer.getProfileImage());
             });
         }
         
-        // Enrich with artwork info
+        
         if (review.getArtwork() != null) {
             Artwork artwork = review.getArtwork();
             dto.setArtworkTitle(artwork.getTitle());
             dto.setArtworkImageUrl(getFirstImage(artwork));
         } else {
-            // Fallback: fetch artwork
+            
             artworkRepository.findById(review.getArtworkId()).ifPresent(artwork -> {
                 dto.setArtworkTitle(artwork.getTitle());
                 dto.setArtworkImageUrl(getFirstImage(artwork));

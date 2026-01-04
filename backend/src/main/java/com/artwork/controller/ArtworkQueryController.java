@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller for read-only artwork operations using CQRS pattern
- */
+
 @RestController
 @RequestMapping("/api/v1/artwork-query")
 @RequiredArgsConstructor
@@ -26,9 +24,7 @@ public class ArtworkQueryController {
 
     private final ArtworkQueryService artworkQueryService;
 
-    /**
-     * Get paginated artworks with optional filtering
-     */
+    
     @GetMapping
     public ResponseEntity<Map<String, Object>> getArtworks(
             @RequestParam(defaultValue = "0") @Min(0) int page,
@@ -54,36 +50,28 @@ public class ArtworkQueryController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Get a single artwork by ID
-     */
+    
     @GetMapping("/{id}")
     public ResponseEntity<ArtworkDto> getArtwork(@PathVariable String id) {
         log.info("Request to get artwork with id: {}", id);
         return ResponseEntity.ok(artworkQueryService.getArtworkById(id));
     }
 
-    /**
-     * Get featured artworks
-     */
+    
     @GetMapping("/featured")
     public ResponseEntity<List<ArtworkDto>> getFeaturedArtworks() {
         log.info("Request to get featured artworks");
         return ResponseEntity.ok(artworkQueryService.getFeaturedArtworks());
     }
 
-    /**
-     * Get artworks by artist ID
-     */
+    
     @GetMapping("/artist/{artistId}")
     public ResponseEntity<List<ArtworkDto>> getArtworksByArtist(@PathVariable String artistId) {
         log.info("Request to get artworks by artist: {}", artistId);
         return ResponseEntity.ok(artworkQueryService.getArtworksByArtistId(artistId));
     }
 
-    /**
-     * Get related artworks for an artwork
-     */
+    
     @GetMapping("/{id}/related")
     public ResponseEntity<List<ArtworkDto>> getRelatedArtworks(
             @PathVariable String id,

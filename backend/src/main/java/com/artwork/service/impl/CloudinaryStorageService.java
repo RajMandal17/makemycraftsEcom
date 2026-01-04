@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Implementation of CloudStorageService using Cloudinary
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -34,14 +32,14 @@ public class CloudinaryStorageService implements CloudStorageService {
         }
         
         try {
-            // Generate unique filename
+            
             String originalFilename = file.getOriginalFilename();
             String fileExtension = originalFilename != null && originalFilename.contains(".") 
                 ? originalFilename.substring(originalFilename.lastIndexOf("."))
                 : "";
             String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
             
-            // Upload to Cloudinary
+            
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
                 ObjectUtils.asMap(
                     "folder", folder,
@@ -92,17 +90,17 @@ public class CloudinaryStorageService implements CloudStorageService {
         }
         
         try {
-            // Extract public_id from Cloudinary URL
-            // Format: https://res.cloudinary.com/{cloud_name}/image/upload/v{version}/{folder}/{public_id}.{extension}
+            
+            
             String[] parts = url.split("/upload/");
             if (parts.length < 2) {
                 return null;
             }
             
             String path = parts[1];
-            // Remove version prefix (v1234567890/)
+            
             path = path.replaceFirst("v\\d+/", "");
-            // Remove file extension
+            
             int lastDot = path.lastIndexOf('.');
             if (lastDot > 0) {
                 path = path.substring(0, lastDot);

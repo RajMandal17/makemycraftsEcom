@@ -2,9 +2,7 @@ package com.artwork.security;
 
 import java.util.Map;
 
-/**
- * Facebook OAuth2 user info implementation
- */
+
 public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
     
     public FacebookOAuth2UserInfo(Map<String, Object> attributes) {

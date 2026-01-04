@@ -12,13 +12,13 @@ const BrowseArtworks: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [showFilters, setShowFilters] = useState<boolean>(false);
 
-  // Filter states
+  
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [minPrice, setMinPrice] = useState<number | ''>('');
   const [maxPrice, setMaxPrice] = useState<number | ''>('');
 
-  // Pagination
+  
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalArtworks, setTotalArtworks] = useState<number>(0);
@@ -53,7 +53,7 @@ const BrowseArtworks: React.FC = () => {
       setTotalPages(response.totalPages || 1);
       setTotalArtworks(response.total || 0);
 
-      // Extract unique categories for filter
+      
       const allCategories = Array.from(
         new Set(response.artworks?.map(artwork => artwork.category) || [])
       );
@@ -69,7 +69,7 @@ const BrowseArtworks: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1); 
     fetchArtworks();
   };
 
@@ -84,7 +84,7 @@ const BrowseArtworks: React.FC = () => {
   const renderPagination = () => {
     const pages = [];
 
-    // Previous page
+    
     pages.push(
       <button
         key="prev"
@@ -99,7 +99,7 @@ const BrowseArtworks: React.FC = () => {
       </button>
     );
 
-    // Page numbers
+    
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(totalPages, startPage + 4);
 
@@ -148,7 +148,7 @@ const BrowseArtworks: React.FC = () => {
       );
     }
 
-    // Next page
+    
     pages.push(
       <button
         key="next"

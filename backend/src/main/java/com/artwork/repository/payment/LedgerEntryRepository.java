@@ -12,11 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Repository for LedgerEntry entity.
- * 
- * @author Artwork Platform
- */
+
 @Repository
 public interface LedgerEntryRepository extends JpaRepository<LedgerEntry, String> {
     

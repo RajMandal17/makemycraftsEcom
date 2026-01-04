@@ -4,10 +4,7 @@ import com.artwork.validation.StrongPassword;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-/**
- * DTO for password change/set requests.
- * User is authenticated via JWT, so no current password needed.
- */
+
 @Data
 public class PasswordChangeRequest {
     @NotBlank(message = "New password is required")

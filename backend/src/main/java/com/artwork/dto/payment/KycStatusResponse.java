@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class KycStatusResponse {
     private String userId;
-    private String status; // PENDING, VERIFIED, REJECTED
+    private String status; 
     private String message;
-    private String rejectionReason; // Reason for rejection if status is REJECTED
+    private String rejectionReason; 
     private Boolean canSubmit;
     private Boolean canAddBankAccount;
 }

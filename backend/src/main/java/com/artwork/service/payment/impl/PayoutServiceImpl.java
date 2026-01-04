@@ -20,13 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Payout service implementation.
- * 
- * Single Responsibility: Handle seller payout operations.
- * 
- * @author Artwork Platform
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -44,14 +38,14 @@ public class PayoutServiceImpl implements PayoutService {
     
     @Override
     public BigDecimal getPendingPayoutBalance(String sellerId) {
-        // Get all settled splits that haven't been paid out yet
+        
         List<PaymentSplit> settledSplits = paymentSplitRepository.findBySellerIdAndSplitStatus(
             sellerId, 
             SplitStatus.SETTLED, 
             PageRequest.of(0, Integer.MAX_VALUE)
         ).getContent();
         
-        // Sum up net seller amounts
+        
         return settledSplits.stream()
             .map(PaymentSplit::getNetSellerAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -61,7 +55,7 @@ public class PayoutServiceImpl implements PayoutService {
     public List<PayoutResponse> getPayoutHistory(String sellerId, int page, int size) {
         Page<Payout> payoutPage = payoutRepository.findBySellerIdAndStatus(
             sellerId,
-            null, // All statuses
+            null, 
             PageRequest.of(page, size)
         );
         
@@ -75,7 +69,7 @@ public class PayoutServiceImpl implements PayoutService {
     public PayoutResponse requestPayout(String sellerId, BigDecimal amount) {
         log.info("Payout requested by seller: {}, amount: {}", sellerId, amount);
         
-        // Verify KYC is verified
+        
         SellerKyc kyc = sellerKycRepository.findByUserId(sellerId)
             .orElseThrow(() -> new RuntimeException("KYC not found"));
         
@@ -83,7 +77,7 @@ public class PayoutServiceImpl implements PayoutService {
             throw new RuntimeException("KYC not verified. Cannot process payout.");
         }
         
-        // Verify bank account exists
+        
         SellerBankAccount bankAccount = bankAccountRepository.findBySellerKycIdAndIsPrimaryTrue(kyc.getId())
             .orElseThrow(() -> new RuntimeException("No primary bank account found"));
         
@@ -91,25 +85,25 @@ public class PayoutServiceImpl implements PayoutService {
             throw new RuntimeException("Bank account not verified");
         }
         
-        // Check minimum payout amount
+        
         if (amount.compareTo(minimumPayoutAmount) < 0) {
             throw new RuntimeException("Minimum payout amount is ₹" + minimumPayoutAmount);
         }
         
-        // Check available balance
+        
         BigDecimal availableBalance = getPendingPayoutBalance(sellerId);
         if (amount.compareTo(availableBalance) > 0) {
             throw new RuntimeException("Insufficient balance. Available: ₹" + availableBalance);
         }
         
-        // Create payout
+        
         Payout payout = Payout.builder()
             .sellerId(sellerId)
             .amount(amount)
             .currency("INR")
             .status(PayoutStatus.PENDING)
             .bankAccountId(bankAccount.getId())
-            .scheduledAt(LocalDateTime.now().plusDays(1)) // Schedule for next day
+            .scheduledAt(LocalDateTime.now().plusDays(1)) 
             .build();
         
         payout = payoutRepository.save(payout);
@@ -120,7 +114,7 @@ public class PayoutServiceImpl implements PayoutService {
     }
     
     @Override
-    @Scheduled(cron = "0 0 2 * * *") // Run at 2 AM daily
+    @Scheduled(cron = "0 0 2 * * *") 
     @Transactional
     public void processPendingPayouts() {
         log.info("Processing pending payouts...");
@@ -158,10 +152,10 @@ public class PayoutServiceImpl implements PayoutService {
         
         BigDecimal pendingSettlement = getPendingPayoutBalance(sellerId);
         
-        // Calculate available for payout (settled but not requested)
+        
         BigDecimal availableForPayout = pendingSettlement;
         
-        // Get completed orders count
+        
         long completedOrders = paymentSplitRepository.findBySellerId(sellerId).size();
         
         return SellerEarningsResponse.builder()
@@ -170,8 +164,8 @@ public class PayoutServiceImpl implements PayoutService {
             .pendingSettlement(pendingSettlement)
             .availableForPayout(availableForPayout)
             .totalPaidOut(totalPaidOut)
-            .totalCommissionPaid(BigDecimal.ZERO) // TODO: Calculate from splits
-            .totalTdsDeducted(BigDecimal.ZERO) // TODO: Calculate from splits
+            .totalCommissionPaid(BigDecimal.ZERO) 
+            .totalTdsDeducted(BigDecimal.ZERO) 
             .completedOrders(completedOrders)
             .build();
     }
@@ -180,7 +174,7 @@ public class PayoutServiceImpl implements PayoutService {
         log.info("Processing payout: {} for seller: {}", payout.getId(), payout.getSellerId());
         
         try {
-            // Get seller's linked account for contact/fund account IDs
+            
             SellerLinkedAccount linkedAccount = linkedAccountRepository
                 .findBySellerId(payout.getSellerId())
                 .orElse(null);
@@ -189,16 +183,16 @@ public class PayoutServiceImpl implements PayoutService {
                 throw new RuntimeException("No linked account found for seller: " + payout.getSellerId());
             }
             
-            // Get or create fund account ID
+            
             String fundAccountId = linkedAccount.getRazorpayFundAccountId();
             
             if (fundAccountId == null || fundAccountId.isEmpty()) {
-                // Create fund account if not exists
+                
                 SellerBankAccount bankAccount = bankAccountRepository
                     .findById(payout.getBankAccountId())
                     .orElseThrow(() -> new RuntimeException("Bank account not found: " + payout.getBankAccountId()));
                 
-                // Ensure contact exists
+                
                 String contactId = linkedAccount.getRazorpayContactId();
                 if (contactId == null || contactId.isEmpty()) {
                     contactId = razorpayXPayoutService.createContact(
@@ -210,13 +204,13 @@ public class PayoutServiceImpl implements PayoutService {
                     linkedAccount.setRazorpayContactId(contactId);
                 }
                 
-                // Create fund account
+                
                 fundAccountId = razorpayXPayoutService.createFundAccount(contactId, bankAccount);
                 linkedAccount.setRazorpayFundAccountId(fundAccountId);
                 linkedAccountRepository.save(linkedAccount);
             }
             
-            // Initiate payout via Razorpay X
+            
             RazorpayXPayoutService.PayoutResult result = razorpayXPayoutService.initiatePayout(
                 fundAccountId,
                 payout.getAmount(),

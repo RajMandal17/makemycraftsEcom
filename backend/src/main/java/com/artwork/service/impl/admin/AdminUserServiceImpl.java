@@ -30,13 +30,13 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public Page<UserDto> getUsers(int page, int limit, String role, String status) {
-        // Convert from 1-indexed (frontend) to 0-indexed (Spring Data)
-        // Frontend sends page=1 for first page, Spring Data expects page=0
+        
+        
         int pageIndex = Math.max(0, page - 1);
         Pageable pageable = PageRequest.of(pageIndex, limit);
         
-        // This filtering logic should ideally be in the repository using Specifications
-        // But keeping existing logic for now to minimize risk
+        
+        
         if ((role != null && !role.isEmpty()) || (status != null && !status.isEmpty())) {
             List<User> allUsers = userRepository.findAll();
             List<User> filteredUsers = allUsers.stream()
@@ -101,12 +101,12 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .totalArtists(totalArtists)
                 .totalAdmins(totalAdmins)
                 .pendingApprovals(pendingApprovals)
-                .activeUsers24h(0L) // Placeholder
-                .activeUsers7d(0L) // Placeholder
-                .activeUsers30d(0L) // Placeholder
-                .newUsersToday(0L) // Placeholder
-                .newUsersThisWeek(0L) // Placeholder
-                .newUsersThisMonth(0L) // Placeholder
+                .activeUsers24h(0L) 
+                .activeUsers7d(0L) 
+                .activeUsers30d(0L) 
+                .newUsersToday(0L) 
+                .newUsersThisWeek(0L) 
+                .newUsersThisMonth(0L) 
                 .build();
     }
     
@@ -119,14 +119,14 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     @Transactional
     public UserDto rejectUser(String userId, String reason) {
-        // In a real implementation, we would log the reason or send an email
+        
         return updateUserStatus(userId, "REJECTED");
     }
     
     @Override
     @Transactional
     public UserDto suspendUser(String userId, String reason) {
-        // In a real implementation, we would log the reason or send an email
+        
         return updateUserStatus(userId, "SUSPENDED");
     }
     
@@ -143,7 +143,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         return modelMapper.map(user, UserDto.class);
     }
     
-    // Private helper method for internal use
+    
     private User getUserEntity(String userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));

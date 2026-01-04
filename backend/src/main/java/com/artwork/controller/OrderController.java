@@ -44,7 +44,7 @@ public class OrderController {
                                       @RequestParam(defaultValue = "desc") String direction) {
         String token = authHeader != null && authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
         
-        // Create pageable object with sorting
+        
         Pageable pageable = PageRequest.of(
             page, 
             size, 

@@ -2,9 +2,7 @@ package com.artwork.security;
 
 import java.util.Map;
 
-/**
- * Google OAuth2 user info implementation
- */
+
 public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
     
     public GoogleOAuth2UserInfo(Map<String, Object> attributes) {

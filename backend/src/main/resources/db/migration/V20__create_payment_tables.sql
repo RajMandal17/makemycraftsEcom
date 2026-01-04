@@ -1,7 +1,7 @@
--- Payment Module Tables Migration
--- Version: V20__create_payment_tables.sql
 
--- Payments table
+
+
+
 CREATE TABLE IF NOT EXISTS payments (
     id VARCHAR(36) PRIMARY KEY,
     order_id VARCHAR(36) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS payments (
     INDEX idx_payments_idempotency_key (idempotency_key)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Payment Splits table
+
 CREATE TABLE IF NOT EXISTS payment_splits (
     id VARCHAR(36) PRIMARY KEY,
     payment_id VARCHAR(36) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS payment_splits (
     FOREIGN KEY (payment_id) REFERENCES payments(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Refunds table
+
 CREATE TABLE IF NOT EXISTS refunds (
     id VARCHAR(36) PRIMARY KEY,
     payment_id VARCHAR(36) NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS refunds (
     INDEX idx_refunds_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Payouts table
+
 CREATE TABLE IF NOT EXISTS payouts (
     id VARCHAR(36) PRIMARY KEY,
     seller_id VARCHAR(36) NOT NULL,
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS payouts (
     INDEX idx_payouts_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Seller KYC table
+
 CREATE TABLE IF NOT EXISTS seller_kyc (
     id VARCHAR(36) PRIMARY KEY,
     user_id VARCHAR(36) NOT NULL UNIQUE,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS seller_kyc (
     INDEX idx_kyc_status (kyc_status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Seller Bank Accounts table
+
 CREATE TABLE IF NOT EXISTS seller_bank_accounts (
     id VARCHAR(36) PRIMARY KEY,
     seller_kyc_id VARCHAR(36) NOT NULL,
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS seller_bank_accounts (
     FOREIGN KEY (seller_kyc_id) REFERENCES seller_kyc(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Ledger Entries table (for financial auditing)
+
 CREATE TABLE IF NOT EXISTS ledger_entries (
     id VARCHAR(36) PRIMARY KEY,
     transaction_id VARCHAR(36) NOT NULL,

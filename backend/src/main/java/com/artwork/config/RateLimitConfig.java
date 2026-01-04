@@ -25,7 +25,7 @@ public class RateLimitConfig {
     }
 
     private Bucket newBucket(String key) {
-        // Allow 5 login attempts in 1 minute
+        
         Bandwidth limit = Bandwidth.classic(5, Refill.greedy(5, Duration.ofMinutes(1)));
         return Bucket.builder().addLimit(limit).build();
     }

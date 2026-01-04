@@ -21,11 +21,11 @@ type AppAction =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null };
 
-// Get initial token and user data from localStorage
-// Get initial authentication state in a more robust way
+
+
 const initialToken = TokenManager.getToken();
 const initialUser = TokenManager.getUserData();
-// Explicitly check token validity to avoid auth inconsistencies
+
 const hasValidToken = !!(initialToken && TokenManager.isTokenValid(initialToken) === true);
 const hasCompleteAuthState = !!(hasValidToken && initialUser);
 
@@ -39,14 +39,14 @@ console.log('🔍 Initial state check:', {
   currentPath: window.location.pathname
 });
 
-// Fix for Auth inconsistency: More strict checking of authentication state
-// Only consider authenticated if both token and user exist AND token is valid
+
+
 const initialState: AppState = {
   auth: {
-    user: initialUser, // Load user from localStorage
-    token: hasValidToken ? initialToken : null, // Only set token if it's valid
-    isAuthenticated: Boolean(hasValidToken && !!initialUser), // Only authenticated if we have both valid token and user
-    loading: Boolean(initialToken && !hasCompleteAuthState), // Show loading only if we have token but need to fetch/validate user
+    user: initialUser, 
+    token: hasValidToken ? initialToken : null, 
+    isAuthenticated: Boolean(hasValidToken && !!initialUser), 
+    loading: Boolean(initialToken && !hasCompleteAuthState), 
     error: null,
   },
   cart: JSON.parse(localStorage.getItem('cart') || '[]'),
@@ -59,7 +59,7 @@ const initialState: AppState = {
 
 console.log('🏁 Initial state created with token:', initialState.auth.token ? 'Present' : 'None');
 
-// Store app state in localStorage for auth consistency checking across page loads
+
 const saveStateToLocalStorage = (state: AppState) => {
   try {
     const serializedState = JSON.stringify({
@@ -84,7 +84,7 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
         auth: { ...state.auth, loading: true, error: null },
       };
     case 'AUTH_SUCCESS':
-      // Defensive: check payload
+      
       if (!action.payload || !action.payload.user || !action.payload.token) {
         return {
           ...state,
@@ -97,7 +97,7 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
           },
         };
       }
-      // Store complete authentication state (tokens + user data)
+      
       TokenManager.setAuthState(action.payload.token, action.payload.user);
       console.log('✅ Auth success - complete state stored via TokenManager');
       
@@ -112,13 +112,13 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
         },
       };
       
-      // Save auth state to localStorage for consistency checking
+      
       saveStateToLocalStorage(newState);
       
       return newState;
     case 'AUTH_FAILURE':
       TokenManager.clearTokens();
-      localStorage.removeItem('app_state'); // Clear auth state tracking
+      localStorage.removeItem('app_state'); 
       
       const failureState = {
         ...state,
@@ -126,7 +126,7 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
           user: null,
           token: null,
           isAuthenticated: false,
-          loading: false, // Important: set loading to false
+          loading: false, 
           error: action.payload,
         },
       };
@@ -137,7 +137,7 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
       tokenRefreshService.stopAutoRefresh();
       localStorage.removeItem('cart');
       localStorage.removeItem('wishlist');
-      localStorage.removeItem('app_state'); // Clear auth state tracking
+      localStorage.removeItem('app_state'); 
       
       const logoutState = {
         ...initialState,
@@ -218,7 +218,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         storedUser: storedUser ? `${storedUser.email} (${storedUser.role})` : 'None'
       });
       
-      // If we already have complete auth state, don't re-initialize
+      
       if (TokenManager.hasCompleteAuthState() && TokenManager.isTokenValid(token || '')) {
         console.log('✅ Complete auth state already exists, skipping initialization');
         if (!state.auth.isAuthenticated) {
@@ -231,37 +231,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return;
       }
       
-      // If no token, user is simply not authenticated - this is normal for public pages
+      
       if (!token) {
         console.log('ℹ️ No token found - user is viewing as guest (public access)');
-        // Don't dispatch AUTH_FAILURE - just ensure state reflects unauthenticated status
-        // The initial state already handles this correctly
+        
+        
         return;
       }
 
-      // Only show loading if we don't already have complete auth state
+      
       if (!state.auth.isAuthenticated) {
         dispatch({ type: 'AUTH_START' });
       }
 
-      // Add a small delay to prevent race conditions with React Router
+      
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      // Check if token is expired and try to refresh if needed
+      
       const validation = TokenManager.validateTokenWithDetails(token);
       console.log('Initial token validation result:', validation);
       
       if (!validation.isValid || validation.errors.includes('Token is expired')) {
         console.log('🔄 Token expired or invalid, attempting refresh...');
         
-        // Attempt token refresh
+        
         const refreshedToken = await tokenRefreshService.refreshAccessToken();
         
         if (refreshedToken) {
           console.log('✅ Token refreshed successfully');
           token = refreshedToken;
           
-          // Re-validate the refreshed token
+          
           const refreshValidation = TokenManager.validateTokenWithDetails(token);
           console.log('Refreshed token validation result:', refreshValidation);
           
@@ -272,7 +272,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
         } else {
           console.error('❌ Token refresh failed');
-          // Clear tokens and stop refresh service
+          
           TokenManager.clearTokens();
           tokenRefreshService.stopAutoRefresh();
           dispatch({ type: 'AUTH_FAILURE', payload: 'Token refresh failed - please login again' });
@@ -280,7 +280,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       }
 
-      // Show warnings if any
+      
       if (validation.warnings.length > 0) {
         console.warn('Token validation warnings:', validation.warnings);
       }
@@ -288,7 +288,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         let user: User;
         
-        // If we have stored user data and the token is for the same user, use cached data
+        
         if (storedUser) {
           const tokenUserId = TokenManager.getUserFromToken(token)?.id;
           if (tokenUserId === storedUser.id) {
@@ -307,7 +307,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             };
           }
         } else {
-          // No cached user data, extract from token
+          
           console.log('📝 No cached user data, extracting from token');
           const userFromToken = TokenManager.getUserFromToken(token);
           if (!userFromToken) {
@@ -323,14 +323,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         console.log('✅ Authentication successful, dispatching AUTH_SUCCESS');
         dispatch({ type: 'AUTH_SUCCESS', payload: { user, token } });
         
-        // Start automatic token refresh service
+        
         tokenRefreshService.startAutoRefresh();
 
-        // Try to verify with backend (don't block on this)
+        
         authAPI.verifyToken(token)
           .then(verifiedUser => {
             console.log('Backend verification successful:', verifiedUser);
-            // Update stored user data with backend-verified data if different
+            
             if (JSON.stringify(user) !== JSON.stringify(verifiedUser)) {
               console.log('🔄 Updating user data from backend verification');
               TokenManager.setUserData(verifiedUser);
@@ -347,10 +347,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     };
 
-    // Always initialize on mount
+    
     console.log('🚀 Starting auth initialization...');
     initializeAuth();
-  }, []); // Empty dependency array to run only once on mount
+  }, []); 
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

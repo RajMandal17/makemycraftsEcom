@@ -10,7 +10,7 @@ const AuthDebugger: React.FC = () => {
   const { state, dispatch } = useAppContext();
   const [showDebugger, setShowDebugger] = useState(false);
 
-  // Only log authentication state when debugger is open (to reduce console noise)
+  
   useEffect(() => {
     if (showDebugger) {
       console.log('🔍 AuthDebugger - Current auth state:', {
@@ -23,14 +23,14 @@ const AuthDebugger: React.FC = () => {
     }
   }, [showDebugger, state.auth]);
 
-  // Log localStorage state on every render
+  
   const [localStorageContent, setLocalStorageContent] = useState({
     token: localStorage.getItem('access_token') ? 'Present' : 'Missing',
     refreshToken: localStorage.getItem('refresh_token') ? 'Present' : 'Missing',
     tokenLength: localStorage.getItem('access_token')?.length,
   });
 
-  // Update localStorage content regularly
+  
   React.useEffect(() => {
     const intervalId = setInterval(() => {
       setLocalStorageContent({
@@ -44,14 +44,14 @@ const AuthDebugger: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Only check for auth-related issues when not in loading state
+    
     if (!state.auth.loading) {
       const token = localStorage.getItem('access_token');
       if (!token && state.auth.isAuthenticated) {
         toast.error('Auth inconsistency: Token missing but marked as authenticated');
-        // Fix inconsistency
+        
         dispatch({ type: 'LOGOUT' });
-        // Redirect to login after a short delay
+        
         setTimeout(() => window.location.href = '/login', 500);
       } else if (token && !state.auth.isAuthenticated) {
         toast.error('Auth inconsistency: Token exists but marked as not authenticated');
@@ -68,7 +68,7 @@ const AuthDebugger: React.FC = () => {
         if (userFromToken) {
           console.log('Token payload for fix:', userFromToken);
 
-          // Recreate user object from token payload with proper typing
+          
           const user = {
             id: userFromToken.id,
             email: userFromToken.email,
@@ -78,7 +78,7 @@ const AuthDebugger: React.FC = () => {
             createdAt: new Date().toISOString()
           };
 
-          // Update auth state
+          
           dispatch({
             type: 'AUTH_SUCCESS',
             payload: {

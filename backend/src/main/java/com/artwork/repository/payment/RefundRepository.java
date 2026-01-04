@@ -10,11 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository for Refund entity.
- * 
- * @author Artwork Platform
- */
+
 @Repository
 public interface RefundRepository extends JpaRepository<Refund, String> {
     

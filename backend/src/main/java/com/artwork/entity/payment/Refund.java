@@ -9,11 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Refund entity for tracking refund transactions.
- * 
- * @author Artwork Platform
- */
+
 @Entity
 @Table(name = "refunds", indexes = {
     @Index(name = "idx_refunds_payment_id", columnList = "paymentId"),

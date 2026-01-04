@@ -62,7 +62,7 @@ const AdminUsers: React.FC = () => {
 
   useEffect(() => {
     fetchUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 
   const handlePageChange = (page: number) => {
@@ -160,7 +160,7 @@ const AdminUsers: React.FC = () => {
         </h1>
       </div>
 
-      {/* Search and filters */}
+      {}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <form onSubmit={handleSearch} className="flex-1 flex">
           <div className="relative flex-1">
@@ -214,7 +214,7 @@ const AdminUsers: React.FC = () => {
         </div>
       </div>
 
-      {/* Users table */}
+      {}
       <div className="bg-white border rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -299,7 +299,7 @@ const AdminUsers: React.FC = () => {
         </div>
       </div>
 
-      {/* Pagination */}
+      {}
       {totalPages > 1 && (
         <div className="flex justify-between items-center mt-4">
           <p className="text-sm text-gray-700">
@@ -338,7 +338,7 @@ const AdminUsers: React.FC = () => {
         </div>
       )}
 
-      {/* Status update modal */}
+      {}
       {showStatusModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">
@@ -382,7 +382,7 @@ const AdminUsers: React.FC = () => {
         </div>
       )}
 
-      {/* Role update modal */}
+      {}
       {showRoleModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">

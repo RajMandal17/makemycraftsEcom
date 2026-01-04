@@ -4,15 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
-/**
- * Review Entity - Production-level implementation
- * 
- * Rules:
- * 1. Only customers who purchased the product can review
- * 2. Reviews are tied to specific order items
- * 3. Reviews can only be submitted within 7 days of delivery
- * 4. One review per order item (not per artwork - same customer can review again if they buy again)
- */
+
 @Entity
 @Table(name = "reviews", 
     indexes = {
@@ -23,7 +15,7 @@ import java.time.LocalDateTime;
     },
     uniqueConstraints = @UniqueConstraint(
         name = "uk_review_order_item", 
-        columnNames = {"orderItemId"} // One review per order item
+        columnNames = {"orderItemId"} 
     )
 )
 @Data
@@ -47,35 +39,24 @@ public class Review {
     @Column(nullable = false)
     private String artworkId;
     
-    /**
-     * The specific order item this review is for.
-     * This ensures reviews are tied to actual purchases.
-     */
+    
     @Column(nullable = false)
     private String orderItemId;
     
-    /**
-     * The order ID for easy querying
-     */
+    
     @Column(nullable = false)
     private String orderId;
     
-    /**
-     * Whether the review is verified (customer actually received the product)
-     */
+    
     @Column(nullable = false)
     @Builder.Default
     private Boolean verified = true;
     
-    /**
-     * Optional: Customer can mark as helpful
-     */
+    
     @Builder.Default
     private Integer helpfulCount = 0;
     
-    /**
-     * Moderation status
-     */
+    
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private ReviewStatus status = ReviewStatus.APPROVED;
@@ -86,9 +67,7 @@ public class Review {
     @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
     
-    /**
-     * Track when the order was delivered (for 7-day window calculation)
-     */
+    
     private LocalDateTime deliveredAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

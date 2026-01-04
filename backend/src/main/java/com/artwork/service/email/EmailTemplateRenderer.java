@@ -7,9 +7,7 @@ import org.thymeleaf.context.Context;
 
 import java.util.Map;
 
-/**
- * Responsible for rendering Thymeleaf templates into HTML strings.
- */
+
 @Component
 @RequiredArgsConstructor
 public class EmailTemplateRenderer {

@@ -20,10 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Implementation of ArtworkQueryService using CQRS pattern
- * This service is responsible for read operations only
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -42,7 +39,7 @@ public class ArtworkQueryServiceImpl implements ArtworkQueryService {
         Pageable pageable = PageRequest.of(page, limit, Sort.by("createdAt").descending());
         Page<Artwork> artworks;
         
-        // Apply different filters based on parameters provided
+        
         if (category != null && !category.isEmpty() && search != null && !search.isEmpty()) {
             artworks = artworkRepository.findByCategoryAndTitleContainingIgnoreCase(category, search, pageable);
         } else if (category != null && !category.isEmpty()) {
@@ -67,7 +64,7 @@ public class ArtworkQueryServiceImpl implements ArtworkQueryService {
         Artwork artwork = artworkRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Artwork not found with id: " + id));
         
-        // Initialize lazy collections within the transaction
+        
         initializeLazyCollections(artwork);
         
         return convertToDto(artwork);
@@ -80,7 +77,7 @@ public class ArtworkQueryServiceImpl implements ArtworkQueryService {
         List<Artwork> featuredArtworks = artworkRepository.findByFeaturedTrue(
                 PageRequest.of(0, 8, Sort.by("createdAt").descending()));
         
-        // Initialize lazy collections
+        
         featuredArtworks.forEach(this::initializeLazyCollections);
         
         return featuredArtworks.stream()
@@ -94,7 +91,7 @@ public class ArtworkQueryServiceImpl implements ArtworkQueryService {
         log.info("Fetching artworks for artist: {}", artistId);
         List<Artwork> artworks = artworkRepository.findByArtistId(artistId);
         
-        // Initialize lazy collections
+        
         artworks.forEach(this::initializeLazyCollections);
         
         return artworks.stream()
@@ -107,15 +104,15 @@ public class ArtworkQueryServiceImpl implements ArtworkQueryService {
     public List<ArtworkDto> getRelatedArtworks(String artworkId, int limit) {
         log.info("Fetching related artworks for artwork: {}", artworkId);
         
-        // First get the artwork to find its category
+        
         Artwork artwork = artworkRepository.findById(artworkId)
                 .orElseThrow(() -> new ResourceNotFoundException("Artwork not found with id: " + artworkId));
         
-        // Then find artworks in the same category, excluding the original artwork
+        
         List<Artwork> relatedArtworks = artworkRepository.findByCategoryAndIdNot(
                 artwork.getCategory(), artworkId, PageRequest.of(0, limit));
         
-        // Initialize lazy collections
+        
         relatedArtworks.forEach(this::initializeLazyCollections);
         
         return relatedArtworks.stream()
@@ -123,23 +120,21 @@ public class ArtworkQueryServiceImpl implements ArtworkQueryService {
                 .collect(Collectors.toList());
     }
     
-    /**
-     * Initialize lazy-loaded collections within the transaction to prevent LazyInitializationException
-     */
-    @SuppressWarnings("java:S2201") // Intentionally calling size() to force lazy initialization
+    
+    @SuppressWarnings("java:S2201") 
     private void initializeLazyCollections(Artwork artwork) {
         if (artwork.getTags() != null) {
-            artwork.getTags().size(); // Force initialization
+            artwork.getTags().size(); 
         }
         if (artwork.getImages() != null) {
-            artwork.getImages().size(); // Force initialization
+            artwork.getImages().size(); 
         }
     }
     
     private ArtworkDto convertToDto(Artwork artwork) {
         ArtworkDto dto = modelMapper.map(artwork, ArtworkDto.class);
         
-        // Safely copy collections to avoid LazyInitializationException after session closes
+        
         if (artwork.getTags() != null) {
             dto.setTags(new ArrayList<>(artwork.getTags()));
         }

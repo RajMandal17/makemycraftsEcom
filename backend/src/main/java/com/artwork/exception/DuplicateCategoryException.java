@@ -3,13 +3,7 @@ package com.artwork.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-/**
- * Exception thrown when attempting to create a category with a duplicate name
- * Returns HTTP 409 Conflict status
- * 
- * @author System
- * @since 1.0
- */
+
 @ResponseStatus(HttpStatus.CONFLICT)
 public class DuplicateCategoryException extends RuntimeException {
     

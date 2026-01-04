@@ -17,10 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * REST Controller for AI-powered artwork suggestions
- * Following Single Responsibility Principle - handles HTTP layer only
- */
+
 @RestController
 @RequestMapping("/api/suggestions")
 @RequiredArgsConstructor
@@ -29,10 +26,7 @@ public class ArtworkSuggestionController {
     
     private final ArtworkSuggestionService suggestionService;
     
-    /**
-     * Analyze artwork image and get AI suggestions
-     * POST /api/suggestions/analyze
-     */
+    
     @PostMapping("/analyze")
     @PreAuthorize("hasRole('ARTIST')")
     public ResponseEntity<?> analyzeArtwork(
@@ -40,12 +34,12 @@ public class ArtworkSuggestionController {
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         
         try {
-            // Set userId from authenticated user
+            
             request.setUserId(userPrincipal.getId());
             
             log.info("Analyzing artwork for user: {}", userPrincipal.getId());
             
-            // Check if AI service is available
+            
             if (!suggestionService.isAIServiceAvailable()) {
                 return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                     .body(Map.of(
@@ -54,7 +48,7 @@ public class ArtworkSuggestionController {
                     ));
             }
             
-            // Analyze and save suggestion
+            
             ArtworkSuggestionDto suggestion = suggestionService.analyzeAndSaveSuggestion(request);
             
             return ResponseEntity.ok(suggestion);
@@ -67,13 +61,13 @@ public class ArtworkSuggestionController {
         } catch (Exception e) {
             log.error("Error analyzing artwork", e);
             
-            // Check for specific error messages to return better status codes
+            
             String message = e.getMessage();
             HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
             
             if (message != null) {
                 if (message.contains("Invalid Gemini API key") || message.contains("unauthorized")) {
-                    status = HttpStatus.UNAUTHORIZED; // Or FORBIDDEN, or SERVICE_UNAVAILABLE depending on perspective
+                    status = HttpStatus.UNAUTHORIZED; 
                 } else if (message.contains("rate limit")) {
                     status = HttpStatus.TOO_MANY_REQUESTS;
                 } else if (message.contains("unavailable")) {
@@ -89,10 +83,7 @@ public class ArtworkSuggestionController {
         }
     }
     
-    /**
-     * Get suggestion history for current user (paginated)
-     * GET /api/suggestions/history?page=0&size=10
-     */
+    
     @GetMapping("/history")
     @PreAuthorize("hasRole('ARTIST')")
     public ResponseEntity<?> getSuggestionHistory(
@@ -124,10 +115,7 @@ public class ArtworkSuggestionController {
         }
     }
     
-    /**
-     * Get all suggestions for current user
-     * GET /api/suggestions/all
-     */
+    
     @GetMapping("/all")
     @PreAuthorize("hasRole('ARTIST')")
     public ResponseEntity<?> getAllSuggestions(@AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -145,10 +133,7 @@ public class ArtworkSuggestionController {
         }
     }
     
-    /**
-     * Get a specific suggestion by ID
-     * GET /api/suggestions/{id}
-     */
+    
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ARTIST')")
     public ResponseEntity<?> getSuggestionById(
@@ -175,10 +160,7 @@ public class ArtworkSuggestionController {
         }
     }
     
-    /**
-     * Mark a suggestion as applied
-     * POST /api/suggestions/{id}/apply
-     */
+    
     @PostMapping("/{id}/apply")
     @PreAuthorize("hasRole('ARTIST')")
     public ResponseEntity<?> applySuggestion(
@@ -205,10 +187,7 @@ public class ArtworkSuggestionController {
         }
     }
     
-    /**
-     * Delete a suggestion
-     * DELETE /api/suggestions/{id}
-     */
+    
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ARTIST')")
     public ResponseEntity<?> deleteSuggestion(
@@ -235,10 +214,7 @@ public class ArtworkSuggestionController {
         }
     }
     
-    /**
-     * Get suggestion statistics for current user
-     * GET /api/suggestions/stats
-     */
+    
     @GetMapping("/stats")
     @PreAuthorize("hasRole('ARTIST')")
     public ResponseEntity<?> getUserStats(@AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -261,10 +237,7 @@ public class ArtworkSuggestionController {
         }
     }
     
-    /**
-     * Check AI service status
-     * GET /api/suggestions/status
-     */
+    
     @GetMapping("/status")
     @PreAuthorize("hasRole('ARTIST')")
     public ResponseEntity<?> getServiceStatus() {

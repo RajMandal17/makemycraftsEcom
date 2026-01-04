@@ -20,10 +20,10 @@ public class JwtUtil {
     @Value("${jwt.secret:defaultSecretKeyThatShouldBeAtLeast256BitsLongForHS256Algorithm}")
     private String secret;
 
-    @Value("${jwt.expiration:86400000}") // 24 hours default
+    @Value("${jwt.expiration:86400000}") 
     private Long expiration;
 
-    @Value("${jwt.refresh-expiration:604800000}") // 7 days default
+    @Value("${jwt.refresh-expiration:604800000}") 
     private Long refreshExpiration;
 
     public String extractUsername(String token) {
@@ -31,7 +31,7 @@ public class JwtUtil {
     }
 
     public String extractUserId(String token) {
-        // In our system, we store the user ID in the subject claim
+        
         return extractUsername(token);
     }
 

@@ -13,11 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository for Payment entity.
- * 
- * @author Artwork Platform
- */
+
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, String> {
     

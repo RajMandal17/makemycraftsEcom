@@ -1,14 +1,4 @@
-/**
- * Admin Reports Page
- * 
- * Features:
- * - Generate reports in multiple formats (PDF, Excel, CSV)
- * - Multiple report types (Sales, User Activity, Artwork Performance, Revenue)
- * - Date range selection
- * - Real-time report generation status
- * - Download generated reports
- * - View recent reports
- */
+
 
 import React, { useState } from 'react';
 import { adminAPI } from '../../../services/adminAPI';
@@ -31,39 +21,37 @@ const AdminReports: React.FC = () => {
   const [reportType, setReportType] = useState<ReportType>('SALES');
   const [reportFormat, setReportFormat] = useState<ReportFormat>('PDF');
   const [startDate, setStartDate] = useState<string>(() => {
-    // Default: 30 days ago
+    
     const date = new Date();
     date.setDate(date.getDate() - 30);
     return date.toISOString().split('T')[0] || '';
   });
   const [endDate, setEndDate] = useState<string>(() => {
-    // Default: today
+    
     return new Date().toISOString().split('T')[0] || '';
   });
   const [isGenerating, setIsGenerating] = useState(false);
-  // Report history - will be implemented in Phase 2
+  
   const reportHistory: ReportHistory[] = [];
 
-  // TODO: Phase 2 - Implement report history
-  // const [reportHistory, setReportHistory] = useState<ReportHistory[]>([]);
-  // useEffect(() => {
-  //   loadReportHistory();
-  // }, []);
-  //
-  // const loadReportHistory = async () => {
-  //   try {
-  //     const history = await adminAPI.getReportHistory();
-  //     setReportHistory(history);
-  //   } catch (error) {
-  //     console.error('Error loading report history:', error);
-  //   }
-  // };
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
-  /**
-   * Generate report
-   */
+  
   const handleGenerateReport = async () => {
-    // Validate dates
+    
     if (new Date(startDate) > new Date(endDate)) {
       toast.error('Start date must be before end date');
       return;
@@ -81,11 +69,11 @@ const AdminReports: React.FC = () => {
 
       toast.success('Report generated successfully!');
 
-      // Download the report
+      
       await handleDownloadReport(reportId);
 
-      // TODO: Phase 2 - Refresh report history
-      // await loadReportHistory();
+      
+      
 
     } catch (error: any) {
       console.error('Error generating report:', error);
@@ -95,28 +83,26 @@ const AdminReports: React.FC = () => {
     }
   };
 
-  /**
-   * Download report
-   */
+  
   const handleDownloadReport = async (reportId: string) => {
     try {
       const blob = await adminAPI.downloadReport(reportId);
       
-      // Create download link
+      
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
       
-      // Generate filename
+      
       const extension = reportFormat.toLowerCase();
       const filename = `${reportType.toLowerCase()}_report_${new Date().toISOString().split('T')[0]}.${extension}`;
       link.download = filename;
       
-      // Trigger download
+      
       document.body.appendChild(link);
       link.click();
       
-      // Cleanup
+      
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
       
@@ -127,9 +113,7 @@ const AdminReports: React.FC = () => {
     }
   };
 
-  /**
-   * Get format icon
-   */
+  
   const getFormatIcon = (format: ReportFormat) => {
     switch (format) {
       case 'PDF':
@@ -143,9 +127,7 @@ const AdminReports: React.FC = () => {
     }
   };
 
-  /**
-   * Get status badge
-   */
+  
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'COMPLETED':
@@ -176,11 +158,11 @@ const AdminReports: React.FC = () => {
       <h1 className="text-3xl font-bold mb-8">Admin Reports</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Report Generator */}
+        {}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-xl font-semibold mb-6">Generate New Report</h2>
 
-          {/* Report Type */}
+          {}
           <div className="mb-6">
             <label className="block text-gray-700 font-medium mb-2">
               Report Type
@@ -197,7 +179,7 @@ const AdminReports: React.FC = () => {
             </select>
           </div>
 
-          {/* Report Format */}
+          {}
           <div className="mb-6">
             <label className="block text-gray-700 font-medium mb-2">
               Report Format
@@ -236,7 +218,7 @@ const AdminReports: React.FC = () => {
             </div>
           </div>
 
-          {/* Date Range */}
+          {}
           <div className="mb-6">
             <label className="block text-gray-700 font-medium mb-2">
               Date Range
@@ -263,7 +245,7 @@ const AdminReports: React.FC = () => {
             </div>
           </div>
 
-          {/* Generate Button */}
+          {}
           <button
             onClick={handleGenerateReport}
             disabled={isGenerating}
@@ -284,7 +266,7 @@ const AdminReports: React.FC = () => {
           </button>
         </div>
 
-        {/* Report History */}
+        {}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-xl font-semibold mb-6">Recent Reports</h2>
 
@@ -333,7 +315,7 @@ const AdminReports: React.FC = () => {
         </div>
       </div>
 
-      {/* Report Type Descriptions */}
+      {}
       <div className="mt-8 bg-blue-50 rounded-lg p-6">
         <h3 className="text-lg font-semibold mb-4">Report Types</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

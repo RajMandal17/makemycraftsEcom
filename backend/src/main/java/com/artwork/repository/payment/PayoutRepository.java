@@ -14,11 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository for Payout entity.
- * 
- * @author Artwork Platform
- */
+
 @Repository
 public interface PayoutRepository extends JpaRepository<Payout, String> {
     

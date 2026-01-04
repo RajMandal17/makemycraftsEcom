@@ -14,14 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-/**
- * Email testing controller for diagnosing email configuration issues.
- * 
- * Endpoints:
- * - GET /api/test/email-config - Show current email configuration
- * - POST /api/test/send-email-direct?to=xxx - Send email directly via SMTP (synchronous)
- * - POST /api/test/send-email?to=xxx - Send email via event system (async)
- */
+
 @RestController
 @RequestMapping("/api/test")
 @RequiredArgsConstructor
@@ -40,10 +33,7 @@ public class EmailTestController {
     @Value("${spring.mail.port:0}")
     private int mailPort;
     
-    /**
-     * Test email configuration - shows current settings and tests SMTP connection
-     * GET /api/test/email-config
-     */
+    
     @GetMapping("/email-config")
     public ResponseEntity<?> testEmailConfig() {
         Map<String, Object> config = new HashMap<>();
@@ -51,7 +41,7 @@ public class EmailTestController {
         log.info("📧 Testing email configuration...");
         
         try {
-            // Get mail properties
+            
             JavaMailSenderImpl senderImpl = (JavaMailSenderImpl) mailSender;
             
             config.put("host", senderImpl.getHost());
@@ -61,7 +51,7 @@ public class EmailTestController {
             config.put("passwordConfigured", senderImpl.getPassword() != null && !senderImpl.getPassword().isEmpty());
             config.put("mailFrom", mailFrom);
             
-            // Get SMTP properties
+            
             Properties props = senderImpl.getJavaMailProperties();
             Map<String, String> smtpProps = new HashMap<>();
             smtpProps.put("smtp.auth", props.getProperty("mail.smtp.auth", "not-set"));
@@ -72,7 +62,7 @@ public class EmailTestController {
             smtpProps.put("smtp.debug", props.getProperty("mail.debug", "false"));
             config.put("smtpProperties", smtpProps);
             
-            // Test connection
+            
             log.info("📧 Testing SMTP connection to {}:{}...", senderImpl.getHost(), senderImpl.getPort());
             try {
                 senderImpl.testConnection();
@@ -96,12 +86,7 @@ public class EmailTestController {
         }
     }
     
-    /**
-     * Send test email DIRECTLY via SMTP (synchronous - will wait for result)
-     * POST /api/test/send-email-direct?to=your-email@example.com
-     * 
-     * This bypasses the async event system and sends directly, providing immediate feedback.
-     */
+    
     @PostMapping("/send-email-direct")
     public ResponseEntity<?> sendTestEmailDirect(@RequestParam String to) {
         Map<String, Object> response = new HashMap<>();
@@ -111,7 +96,7 @@ public class EmailTestController {
         try {
             JavaMailSenderImpl senderImpl = (JavaMailSenderImpl) mailSender;
             
-            // Build a simple message
+            
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(mailFrom);
             message.setTo(to);
@@ -131,7 +116,7 @@ public class EmailTestController {
             
             log.info("📤 Attempting to send via {}:{}...", senderImpl.getHost(), senderImpl.getPort());
             
-            // Send synchronously
+            
             long startTime = System.currentTimeMillis();
             mailSender.send(message);
             long duration = System.currentTimeMillis() - startTime;
@@ -186,10 +171,7 @@ public class EmailTestController {
         }
     }
     
-    /**
-     * Send test email via async event system
-     * POST /api/test/send-email?to=your-email@example.com
-     */
+    
     @PostMapping("/send-email")
     public ResponseEntity<?> sendTestEmail(@RequestParam String to) {
         Map<String, Object> response = new HashMap<>();

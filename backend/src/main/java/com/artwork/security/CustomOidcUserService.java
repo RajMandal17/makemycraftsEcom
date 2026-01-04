@@ -19,9 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * Custom OIDC user service that handles loading or creating users from OIDC providers (like Google)
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -47,7 +45,7 @@ public class CustomOidcUserService extends OidcUserService {
     private OidcUser processOidcUser(OidcUserRequest userRequest, OidcUser oidcUser) {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         
-        // Extract user info from OIDC user
+        
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, oidcUser.getAttributes());
         
         if (oAuth2UserInfo.getEmail() == null || oAuth2UserInfo.getEmail().isEmpty()) {
@@ -65,7 +63,7 @@ public class CustomOidcUserService extends OidcUserService {
             user = createNewUser(oAuth2UserInfo, registrationId);
         }
         
-        // Return a CustomOAuth2User wrapped as OidcUser
+        
         return new CustomOidcUser(oidcUser, user);
     }
     
@@ -73,7 +71,7 @@ public class CustomOidcUserService extends OidcUserService {
         log.info("Creating new OIDC user with email: {}", oAuth2UserInfo.getEmail());
         
         try {
-            // Split name into first and last name
+            
             String fullName = oAuth2UserInfo.getName();
             String firstName = fullName;
             String lastName = "";
@@ -83,7 +81,7 @@ public class CustomOidcUserService extends OidcUserService {
                 lastName = nameParts[1];
             }
             
-            // Generate unique username from email
+            
             String username = usernameGenerator.generateUniqueUsername(
                 oAuth2UserInfo.getEmail(), 
                 firstName
@@ -94,13 +92,13 @@ public class CustomOidcUserService extends OidcUserService {
                 .firstName(firstName)
                 .lastName(lastName)
                 .username(username)
-                .password("") // OAuth2 users don't need password
+                .password("") 
                 .profilePictureUrl(oAuth2UserInfo.getImageUrl())
                 .oauth2Provider(registrationId)
                 .oauth2Id(oAuth2UserInfo.getId())
-                .emailVerified(true) // OAuth2 providers typically verify emails
-                .role(Role.PENDING) // OAuth2 users need to select their role
-                .status(UserStatus.APPROVED) // Set status to APPROVED
+                .emailVerified(true) 
+                .role(Role.PENDING) 
+                .status(UserStatus.APPROVED) 
                 .isActive(true)
                 .enabled(true)
                 .createdAt(java.time.LocalDateTime.now())
@@ -113,7 +111,7 @@ public class CustomOidcUserService extends OidcUserService {
             user = userRepository.save(user);
             log.info("Successfully created new OIDC user with ID: {}, email: {}", user.getId(), user.getEmail());
             
-            // Verify user was saved by checking if we can fetch it back
+            
             Optional<User> verifyUser = userRepository.findByEmail(user.getEmail());
             if (verifyUser.isPresent()) {
                 log.info("User save verification successful: User found with ID: {}", verifyUser.get().getId());
@@ -134,7 +132,7 @@ public class CustomOidcUserService extends OidcUserService {
         try {
             boolean updated = false;
             
-            // Always update OAuth2 info to ensure it's current
+            
             if (existingUser.getOauth2Provider() == null || 
                 !existingUser.getOauth2Provider().equals(registrationId) ||
                 existingUser.getOauth2Id() == null) {
@@ -144,7 +142,7 @@ public class CustomOidcUserService extends OidcUserService {
                 updated = true;
             }
             
-            // Update profile picture if available and different
+            
             if (oAuth2UserInfo.getImageUrl() != null && 
                 !oAuth2UserInfo.getImageUrl().equals(existingUser.getProfilePictureUrl())) {
                 existingUser.setProfilePictureUrl(oAuth2UserInfo.getImageUrl());
@@ -152,14 +150,14 @@ public class CustomOidcUserService extends OidcUserService {
                 updated = true;
             }
             
-            // Update email verification status if not already verified
+            
             if (!existingUser.getEmailVerified()) {
                 existingUser.setEmailVerified(true);
                 log.info("Marked email as verified via OAuth2");
                 updated = true;
             }
             
-            // Update name if not set or if it's empty
+            
             if ((existingUser.getFirstName() == null || existingUser.getFirstName().isEmpty()) && 
                 oAuth2UserInfo.getName() != null) {
                 String fullName = oAuth2UserInfo.getName();
@@ -191,9 +189,7 @@ public class CustomOidcUserService extends OidcUserService {
         }
     }
     
-    /**
-     * Custom OIDC User that wraps the original OidcUser and includes our User entity
-     */
+    
     public static class CustomOidcUser extends DefaultOidcUser {
         private final User user;
         

@@ -19,9 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * Controller to provide OAuth2 provider information to frontend
- */
+
 @RestController
 @RequestMapping("/api/oauth2")
 @RequiredArgsConstructor
@@ -37,20 +35,17 @@ public class OAuth2Controller {
     @Value("${server.port:8081}")
     private String serverPort;
     
-    /**
-     * Get available OAuth2 providers with their authorization URLs
-     * Frontend can use this to display social login buttons
-     */
+    
     @GetMapping("/providers")
     public ResponseEntity<Map<String, Object>> getOAuth2Providers() {
         log.info("Fetching OAuth2 providers");
         
         Map<String, Object> response = new HashMap<>();
         
-        // Base URL for OAuth2 authorization
+        
         String baseUrl = contextPath.isEmpty() ? "" : contextPath;
         
-        // Google provider
+        
         Map<String, String> google = new HashMap<>();
         google.put("name", "Google");
         google.put("authorizationUrl", baseUrl + "oauth2/authorization/google");
@@ -58,7 +53,7 @@ public class OAuth2Controller {
         google.put("iconClass", "fab fa-google");
         google.put("buttonColor", "#4285f4");
         
-        // Facebook provider
+        
         Map<String, String> facebook = new HashMap<>();
         facebook.put("name", "Facebook");
         facebook.put("authorizationUrl", baseUrl + "oauth2/authorization/facebook");
@@ -66,7 +61,7 @@ public class OAuth2Controller {
         facebook.put("iconClass", "fab fa-facebook-f");
         facebook.put("buttonColor", "#1877f2");
         
-        // GitHub provider
+        
         Map<String, String> github = new HashMap<>();
         github.put("name", "GitHub");
         github.put("authorizationUrl", baseUrl + "oauth2/authorization/github");
@@ -81,26 +76,24 @@ public class OAuth2Controller {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Complete OAuth2 registration with role selection
-     */
+    
     @PostMapping("/complete-registration")
     public ResponseEntity<?> completeRegistration(@Valid @RequestBody OAuth2CompleteRegistrationRequest request) {
         try {
-            // Validate and extract temporary token
+            
             Claims claims = jwtUtil.getClaims(request.getTempToken());
             
-            // Verify it's a temporary auth token
+            
             Object tempAuthObj = claims.get("tempAuth");
             if (tempAuthObj == null || !Boolean.valueOf(tempAuthObj.toString())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Invalid temporary token"));
             }
             
-            // Get user ID from token
+            
             String userId = claims.get("userId").toString();
             
-            // Find user
+            
             Optional<User> userOptional = userRepository.findById(userId);
             if (userOptional.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -109,21 +102,21 @@ public class OAuth2Controller {
             
             User user = userOptional.get();
             
-            // Update user with selected role
+            
             user.setRole(Role.valueOf(request.getRole()));
             user.setUpdatedAt(LocalDateTime.now());
             
-            // If artist role, update bio if provided
+            
             if (request.getRole().equals("ARTIST") && request.getBio() != null) {
                 user.setBio(request.getBio());
             }
             
-            // Save updated user
+            
             userRepository.save(user);
             
             log.info("Completed OAuth2 registration for user: {} with role: {}", user.getEmail(), request.getRole());
             
-            // Generate full JWT tokens
+            
             Map<String, Object> tokenClaims = new HashMap<>();
             tokenClaims.put("userId", user.getId());
             tokenClaims.put("firstName", user.getFirstName());
@@ -142,7 +135,7 @@ public class OAuth2Controller {
                 user.getRole().name()
             );
             
-            // Build response with dashboard redirect URL
+            
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "Registration completed successfully");
@@ -173,9 +166,7 @@ public class OAuth2Controller {
         return userMap;
     }
     
-        /**
-     * Debug endpoint to check OAuth2 configuration
-     */
+        
     @GetMapping("/debug/config")
     public ResponseEntity<Map<String, Object>> debugConfig() {
         Map<String, Object> debug = new HashMap<>();
@@ -185,19 +176,17 @@ public class OAuth2Controller {
         return ResponseEntity.ok(debug);
     }
     
-    /**
-     * Debug endpoint to check all users in the database
-     */
+    
     @GetMapping("/debug/users")
     public ResponseEntity<Map<String, Object>> debugUsers() {
         Map<String, Object> debug = new HashMap<>();
         
         try {
-            // Get total user count
+            
             long totalUsers = userRepository.count();
             debug.put("totalUsers", totalUsers);
             
-            // Get recent users (last 10)
+            
             java.util.List<User> recentUsers = userRepository.findAll()
                 .stream()
                 .sorted((u1, u2) -> u2.getCreatedAt().compareTo(u1.getCreatedAt()))
@@ -231,26 +220,24 @@ public class OAuth2Controller {
         return ResponseEntity.ok(debug);
     }
     
-    /**
-     * Test database connection and create a test user
-     */
+    
     @PostMapping("/debug/test-user-creation")
     public ResponseEntity<Map<String, Object>> testUserCreation() {
         Map<String, Object> result = new HashMap<>();
         
         try {
-            // Test database connection
+            
             long userCount = userRepository.count();
             result.put("initialUserCount", userCount);
             
-            // Create a test OAuth2 user
+            
             String testEmail = "oauth2test+" + System.currentTimeMillis() + "@example.com";
             
             User testUser = User.builder()
                 .email(testEmail)
                 .firstName("OAuth2")
                 .lastName("Test")
-                .password("") // OAuth2 users don't need password
+                .password("") 
                 .oauth2Provider("google")
                 .oauth2Id("test_" + System.currentTimeMillis())
                 .emailVerified(true)
@@ -270,7 +257,7 @@ public class OAuth2Controller {
             result.put("testUserId", savedUser.getId());
             result.put("testUserEmail", savedUser.getEmail());
             
-            // Verify the user was saved
+            
             Optional<User> verifyUser = userRepository.findByEmail(testEmail);
             result.put("userFoundAfterSave", verifyUser.isPresent());
             
@@ -287,15 +274,13 @@ public class OAuth2Controller {
         return ResponseEntity.ok(result);
     }
     
-    /**
-     * Get dashboard URL based on user role
-     */
+    
     private String getDashboardUrlByRole(Role role) {
         return switch (role) {
             case ADMIN -> "/dashboard/admin";
             case ARTIST -> "/dashboard/artist";
             case CUSTOMER -> "/dashboard/customer";
-            case PENDING -> "/select-role"; // Should not happen after role selection
+            case PENDING -> "/select-role"; 
         };
     }
 }

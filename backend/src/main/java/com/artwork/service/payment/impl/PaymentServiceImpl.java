@@ -19,14 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-/**
- * Payment service implementation.
- * 
- * Single Responsibility: Orchestrate payment operations.
- * Dependency Inversion: Depends on PaymentGateway interface, not concrete implementation.
- * 
- * @author Artwork Platform
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -40,7 +33,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Qualifier("razorpay")
     private final PaymentGateway paymentGateway;
     
-    // Platform commission rate (5%)
+    
     private static final BigDecimal PLATFORM_COMMISSION_RATE = new BigDecimal("0.05");
     
     @Override
@@ -48,7 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponse createPayment(CreatePaymentRequest request) {
         log.info("Creating payment for order: {}", request.getOrderId());
         
-        // Check for idempotency
+        
         if (request.getIdempotencyKey() != null) {
             Optional<Payment> existing = paymentRepository.findByIdempotencyKey(request.getIdempotencyKey());
             if (existing.isPresent()) {
@@ -57,12 +50,12 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
         
-        // Calculate split amounts for Route transfer
+        
         String linkedAccountId = null;
         BigDecimal artistAmount = request.getAmount();
         
         if (request.getArtistId() != null && !request.getArtistId().isEmpty()) {
-            // Look up artist's linked account
+            
             SellerLinkedAccount linkedAccount = linkedAccountRepository
                 .findBySellerId(request.getArtistId())
                 .orElse(null);
@@ -70,7 +63,7 @@ public class PaymentServiceImpl implements PaymentService {
             if (linkedAccount != null) {
                 linkedAccountId = linkedAccount.getRazorpayAccountId();
                 
-                // Calculate: Platform gets 5%, Artist gets 95%
+                
                 BigDecimal platformCommission = request.getAmount()
                     .multiply(PLATFORM_COMMISSION_RATE)
                     .setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -84,7 +77,7 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
         
-        // Create order in payment gateway (with or without Route transfer)
+        
         PaymentGateway.PaymentOrderResponse orderResponse;
         
         if (linkedAccountId != null) {
@@ -107,7 +100,7 @@ public class PaymentServiceImpl implements PaymentService {
             throw new RuntimeException("Failed to create payment order: " + orderResponse.errorMessage());
         }
         
-        // Create payment entity
+        
         Payment payment = Payment.builder()
             .orderId(request.getOrderId())
             .customerId(request.getCustomerId())
@@ -132,7 +125,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentVerificationResponse verifyPayment(PaymentVerificationRequest request) {
         log.info("Verifying payment: {}", request.getGatewayPaymentId());
         
-        // Verify signature
+        
         boolean isValid = paymentGateway.verifyPayment(
             request.getGatewayOrderId(),
             request.getGatewayPaymentId(),
@@ -148,7 +141,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
         }
         
-        // Find payment by gateway order ID
+        
         Optional<Payment> paymentOpt = paymentRepository.findAll().stream()
             .filter(p -> p.getGatewayOrderId().equals(request.getGatewayOrderId()))
             .findFirst();
@@ -207,7 +200,7 @@ public class PaymentServiceImpl implements PaymentService {
             throw new RuntimeException("Cannot refund payment with status: " + payment.getPaymentStatus());
         }
         
-        // Initiate refund with gateway
+        
         PaymentGateway.RefundResponse gatewayResponse = paymentGateway.initiateRefund(
             payment.getGatewayPaymentId(),
             amount,
@@ -218,7 +211,7 @@ public class PaymentServiceImpl implements PaymentService {
             throw new RuntimeException("Gateway refund failed: " + gatewayResponse.errorMessage());
         }
         
-        // Create refund entity
+        
         boolean isPartial = amount.compareTo(payment.getAmount()) < 0;
         
         Refund refund = Refund.builder()
@@ -236,7 +229,7 @@ public class PaymentServiceImpl implements PaymentService {
         
         refund = refundRepository.save(refund);
         
-        // Update payment status
+        
         if (isPartial) {
             payment.setPaymentStatus(PaymentStatus.PARTIALLY_REFUNDED);
         } else {
@@ -251,7 +244,7 @@ public class PaymentServiceImpl implements PaymentService {
     
     @Override
     public PaymentAnalyticsResponse getPaymentAnalytics(LocalDateTime startDate, LocalDateTime endDate) {
-        // Get all payments in date range
+        
         long totalTransactions = paymentRepository.count();
         long successfulTransactions = paymentRepository.countByPaymentStatus(PaymentStatus.CAPTURED);
         long failedTransactions = paymentRepository.countByPaymentStatus(PaymentStatus.FAILED);
@@ -267,7 +260,7 @@ public class PaymentServiceImpl implements PaymentService {
             ? totalRevenue.divide(BigDecimal.valueOf(successfulTransactions), 2, BigDecimal.ROUND_HALF_UP)
             : BigDecimal.ZERO;
         
-        // Get refund stats
+        
         long refundCount = refundRepository.countByStatus(RefundStatus.COMPLETED);
         
         return PaymentAnalyticsResponse.builder()

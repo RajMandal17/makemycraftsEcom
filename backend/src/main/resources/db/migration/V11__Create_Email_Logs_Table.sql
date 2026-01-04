@@ -1,4 +1,4 @@
--- Create email_logs table for tracking email delivery
+
 CREATE TABLE IF NOT EXISTS email_logs (
     id VARCHAR(36) PRIMARY KEY,
     recipient VARCHAR(255) NOT NULL,

@@ -12,9 +12,7 @@ const resolveProfileImage = (profileImage?: string | null, profilePictureUrl?: s
 };
 
 export const artistsAPI = {
-  /**
-   * Get all artists with pagination and search
-   */
+  
   getAllArtists: async (params?: {
     page?: number;
     size?: number;
@@ -26,7 +24,7 @@ export const artistsAPI = {
       const response = await apiClient.get('/artists', { params });
       console.log('Artists response:', response.data);
 
-      // Process image URLs
+      
       const artists = response.data.artists.map((artist: Artist) => ({
         ...artist,
         profileImage: resolveProfileImage(artist.profileImage, artist.profilePictureUrl)
@@ -44,15 +42,13 @@ export const artistsAPI = {
     }
   },
 
-  /**
-   * Get artist by ID
-   */
+  
   getArtistById: async (id: string): Promise<Artist> => {
     try {
       const response = await apiClient.get(`/artists/${id}`);
       const artist = response.data;
 
-      // Process image URL
+      
       artist.profileImage = resolveProfileImage(artist.profileImage, artist.profilePictureUrl);
 
       return artist;
@@ -62,14 +58,12 @@ export const artistsAPI = {
     }
   },
 
-  /**
-   * Get featured artists
-   */
+  
   getFeaturedArtists: async (): Promise<Artist[]> => {
     try {
       const response = await apiClient.get('/artists/featured');
 
-      // Process image URLs
+      
       const artists = response.data.artists.map((artist: Artist) => ({
         ...artist,
         profileImage: resolveProfileImage(artist.profileImage, artist.profilePictureUrl)
@@ -82,15 +76,13 @@ export const artistsAPI = {
     }
   },
 
-  /**
-   * Get artist by username (LinkedIn-style profile URL)
-   */
+  
   getArtistByUsername: async (username: string): Promise<Artist> => {
     try {
       const response = await apiClient.get(`/artists/username/${username}`);
       const artist = response.data;
 
-      // Process image URL
+      
       artist.profileImage = resolveProfileImage(artist.profileImage, artist.profilePictureUrl);
 
       return artist;
@@ -100,9 +92,7 @@ export const artistsAPI = {
     }
   },
 
-  /**
-   * Check if username is available
-   */
+  
   checkUsernameAvailability: async (username: string): Promise<{ available: boolean; message: string }> => {
     try {
       const response = await apiClient.get('/artists/username-available', {

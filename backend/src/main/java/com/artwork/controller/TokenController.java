@@ -27,7 +27,7 @@ public class TokenController {
             return ResponseEntity.status(401).body(Map.of("success", false, "message", "Invalid refresh token"));
         }
         
-        // Optionally check Redis blacklist if available
+        
         try {
             if (redisTemplate != null) {
                 Boolean isBlacklisted = redisTemplate.hasKey("BLACKLIST:" + refreshToken);
@@ -52,7 +52,7 @@ public class TokenController {
         String accessToken = authHeader != null && authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
         String refreshToken = tokenDto.getRefreshToken();
         
-        // Try to blacklist tokens in Redis if available
+        
         try {
             if (redisTemplate != null) {
                 if (accessToken != null) {

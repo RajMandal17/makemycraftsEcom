@@ -79,7 +79,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                             leaveTo="opacity-0 scale-95"
                         >
                             <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
-                                {/* Close Button */}
+                                {}
                                 <button
                                     onClick={onClose}
                                     className="absolute top-4 right-4 z-10 p-2 bg-white rounded-full shadow-lg hover:bg-neutral-100 transition-colors"
@@ -88,7 +88,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                                 </button>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-                                    {/* Image Gallery */}
+                                    {}
                                     <div className="relative">
                                         <div className="aspect-square rounded-lg overflow-hidden bg-neutral-100">
                                             <img
@@ -98,7 +98,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                                             />
                                         </div>
 
-                                        {/* Image Navigation */}
+                                        {}
                                         {artwork.images.length > 1 && (
                                             <>
                                                 <button
@@ -114,7 +114,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                                                     <ChevronRight className="h-5 w-5 text-neutral-600" />
                                                 </button>
 
-                                                {/* Image Indicators */}
+                                                {}
                                                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                                                     {artwork.images.map((_, index) => (
                                                         <button
@@ -131,13 +131,13 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                                         )}
                                     </div>
 
-                                    {/* Product Details */}
+                                    {}
                                     <div className="flex flex-col">
                                         <Dialog.Title className="text-2xl font-display font-bold text-neutral-900 mb-2">
                                             {artwork.title}
                                         </Dialog.Title>
 
-                                        {/* Artist */}
+                                        {}
                                         <div className="flex items-center gap-2 mb-4">
                                             {artwork.artist.profileImage ? (
                                                 <img
@@ -157,12 +157,12 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                                             </span>
                                         </div>
 
-                                        {/* Price */}
+                                        {}
                                         <div className="text-3xl font-bold text-primary-600 mb-4">
                                             ₹{artwork.price.toLocaleString()}
                                         </div>
 
-                                        {/* Rating */}
+                                        {}
                                         {artwork.averageRating > 0 && (
                                             <div className="flex items-center gap-2 mb-4">
                                                 <div className="flex">
@@ -186,12 +186,12 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                                             </div>
                                         )}
 
-                                        {/* Description */}
+                                        {}
                                         <p className="text-neutral-700 mb-4 flex-1">
                                             {artwork.description}
                                         </p>
 
-                                        {/* Details */}
+                                        {}
                                         <div className="space-y-2 mb-6 text-sm">
                                             <div className="flex justify-between">
                                                 <span className="text-neutral-600">Medium:</span>
@@ -206,7 +206,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                                             </div>
                                         </div>
 
-                                        {/* Tags */}
+                                        {}
                                         {artwork.tags.length > 0 && (
                                             <div className="flex flex-wrap gap-2 mb-6">
                                                 {artwork.tags.map((tag, index) => (
@@ -220,7 +220,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                                             </div>
                                         )}
 
-                                        {/* Actions */}
+                                        {}
                                         <div className="flex gap-3">
                                             <button
                                                 onClick={onAddToCart}

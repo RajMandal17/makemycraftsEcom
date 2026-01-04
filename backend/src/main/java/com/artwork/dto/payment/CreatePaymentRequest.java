@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-/**
- * Request to create a new payment.
- */
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,7 +15,7 @@ import java.math.BigDecimal;
 public class CreatePaymentRequest {
     private String orderId;
     private String customerId;
-    private String artistId;  // Required for Route split payments
+    private String artistId;  
     private BigDecimal amount;
     private String currency;
     private String idempotencyKey;

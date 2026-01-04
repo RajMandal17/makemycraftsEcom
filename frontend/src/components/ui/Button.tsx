@@ -29,10 +29,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         },
         ref
     ) => {
-        // Base styles
+        
         const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
-        // Variant styles
+        
         const variantStyles: Record<ButtonVariant, string> = {
             primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 shadow-sm hover:shadow-md',
             secondary: 'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500 shadow-sm hover:shadow-md',
@@ -41,7 +41,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-sm hover:shadow-md',
         };
 
-        // Size styles
+        
         const sizeStyles: Record<ButtonSize, string> = {
             xs: 'text-xs px-2.5 py-1.5 rounded',
             sm: 'text-sm px-3 py-2 rounded-md',
@@ -50,10 +50,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             xl: 'text-xl px-8 py-4 rounded-lg',
         };
 
-        // Width style
+        
         const widthStyle = fullWidth ? 'w-full' : '';
 
-        // Icon size based on button size
+        
         const iconSizeMap: Record<ButtonSize, string> = {
             xs: 'h-3 w-3',
             sm: 'h-4 w-4',

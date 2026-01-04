@@ -9,10 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * DTO for artwork summary information
- * Used for listing artworks without circular references
- */
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -36,6 +33,6 @@ public class ArtworkSummaryDto {
     private Double averageRating;
     private Integer reviewCount;
     private Integer stock;
-    private String imageUrl; // First image for backward compatibility
+    private String imageUrl; 
     private LocalDateTime createdAt;
 }

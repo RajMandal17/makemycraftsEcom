@@ -7,10 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-/**
- * UserDetails implementation for service account authentication.
- * Used for inter-service communication where no database user exists.
- */
+
 @Getter
 public class ServiceAccountUserDetails implements UserDetails {
     private final String serviceAccountId;
@@ -23,13 +20,13 @@ public class ServiceAccountUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Spring Security requires "ROLE_" prefix for roles
+        
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override
     public String getPassword() {
-        return null; // Service accounts don't have passwords
+        return null; 
     }
 
     @Override

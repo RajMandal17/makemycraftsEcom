@@ -37,18 +37,18 @@ const ImageZoom: React.FC<ImageZoomProps> = ({
 
     const { left, top } = containerRef.current.getBoundingClientRect();
     
-    // Calculate position as percentage
+    
     const x = (e.clientX - left) / containerBounds.width;
     const y = (e.clientY - top) / containerBounds.height;
     
-    // Keep within bounds
+    
     const boundedX = Math.max(0, Math.min(1, x));
     const boundedY = Math.max(0, Math.min(1, y));
 
     setPosition({ x: boundedX, y: boundedY });
   };
 
-  // Calculate transform for zoomed image
+  
   const zoomStyle = {
     transform: isZoomed 
       ? `scale(${maxZoom}) translate(${-position.x * 100}%, ${-position.y * 100}%)` 

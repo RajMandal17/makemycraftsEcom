@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Payment response DTO.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

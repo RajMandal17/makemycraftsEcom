@@ -26,21 +26,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         },
         ref
     ) => {
-        // Base input styles
+        
         const baseInputStyles = 'px-4 py-2.5 border rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
 
-        // State styles
+        
         const stateStyles = error
             ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
             : 'border-neutral-300 focus:border-primary-500 focus:ring-primary-500';
 
-        // Width style
+        
         const widthStyle = fullWidth ? 'w-full' : '';
 
-        // Icon padding
+        
         const iconPadding = icon ? 'pl-11' : '';
 
-        // Get icon based on variant
+        
         const getVariantIcon = () => {
             switch (variant) {
                 case 'search':
@@ -54,7 +54,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
         const displayIcon = getVariantIcon();
 
-        // Get input type based on variant
+        
         const getInputType = () => {
             switch (variant) {
                 case 'email':

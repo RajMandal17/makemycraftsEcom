@@ -34,14 +34,14 @@ const ArtistProfile: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5000000) { // 5MB limit
+    if (file.size > 5000000) { 
       toast.error('Image size must be less than 5MB');
       return;
     }
 
     setSelectedImage(file);
 
-    // Create a preview
+    
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreviewImage(reader.result as string);
@@ -55,7 +55,7 @@ const ArtistProfile: React.FC = () => {
     setLoading(true);
 
     try {
-      // Prepare the update data
+      
       const updateData = {
         firstName: formValues.firstName,
         lastName: formValues.lastName,
@@ -68,10 +68,10 @@ const ArtistProfile: React.FC = () => {
         }
       };
 
-      // Call the API to update the profile
+      
       const updatedUser = await userAPI.updateProfile(updateData);
 
-      // Update local state with the response
+      
       dispatch({
         type: 'AUTH_SUCCESS',
         payload: {
@@ -84,13 +84,13 @@ const ArtistProfile: React.FC = () => {
         }
       });
 
-      // If we have a new profile image, upload it
+      
       if (selectedImage) {
         const formData = new FormData();
         formData.append('image', selectedImage);
         const imageUrl = await userAPI.updateProfileWithImage(formData);
 
-        // Update the user state with the new image URL
+        
         dispatch({
           type: 'AUTH_SUCCESS',
           payload: {
@@ -138,7 +138,7 @@ const ArtistProfile: React.FC = () => {
       <div className="bg-white rounded-lg shadow-sm border p-6">
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row gap-6">
-            {/* Profile Image */}
+            {}
             <div className="flex flex-col items-center space-y-3">
               <div className="relative">
                 <div className="h-28 w-28 rounded-full overflow-hidden bg-gray-100">
@@ -179,7 +179,7 @@ const ArtistProfile: React.FC = () => {
               )}
             </div>
 
-            {/* Profile Details */}
+            {}
             <div className="flex-1 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>

@@ -1,52 +1,46 @@
-/**
- * Global Styles - MakeMyCrafts
- * 
- * Base styles, CSS custom properties, and global utilities
- */
 
-/* Import Google Fonts */
+
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* Tailwind Base Styles */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================
-   CSS CUSTOM PROPERTIES (CSS Variables)
-   ============================================ */
+
 :root {
-    /* Colors - Primary */
+    
     --color-primary-50: #ECFDF5;
     --color-primary-500: #10B981;
     --color-primary-600: #059669;
     --color-primary-700: #047857;
 
-    /* Colors - Secondary */
+    
     --color-secondary-500: #6366F1;
     --color-secondary-600: #4F46E5;
 
-    /* Colors - Accent */
+    
     --color-accent-warm: #F59E0B;
     --color-accent-cool: #06B6D4;
     --color-accent-rose: #F43F5E;
 
-    /* Spacing */
+    
     --spacing-unit: 0.25rem;
-    /* 4px base */
+    
 
-    /* Transitions */
+    
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    /* Z-index */
+    
     --z-dropdown: 1000;
     --z-sticky: 1020;
     --z-modal: 1050;
 }
 
-/* Dark mode variables */
+
 .dark {
     --color-bg-primary: #0F172A;
     --color-bg-secondary: #1E293B;
@@ -54,24 +48,22 @@
     --color-text-secondary: #CBD5E1;
 }
 
-/* ============================================
-   BASE STYLES
-   ============================================ */
+
 @layer base {
 
-    /* Smooth scrolling */
+    
     html {
         scroll-behavior: smooth;
     }
 
-    /* Body defaults */
+    
     body {
         @apply font-sans text-neutral-900 antialiased;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Headings */
+    
     h1,
     h2,
     h3,
@@ -97,38 +89,36 @@
         @apply text-xl md:text-2xl leading-snug;
     }
 
-    /* Links */
+    
     a {
         @apply transition-colors duration-300;
     }
 
-    /* Focus visible for accessibility */
+    
     *:focus-visible {
         @apply outline-none ring-2 ring-primary-500 ring-offset-2;
     }
 
-    /* Remove default button styles */
+    
     button {
         @apply focus:outline-none;
     }
 
-    /* Image defaults */
+    
     img {
         @apply max-w-full h-auto;
     }
 }
 
-/* ============================================
-   COMPONENT UTILITIES
-   ============================================ */
+
 @layer components {
 
-    /* Container with max-width */
+    
     .container-custom {
         @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
     }
 
-    /* Card base */
+    
     .card {
         @apply bg-white rounded-lg shadow-md overflow-hidden;
     }
@@ -137,7 +127,7 @@
         @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
     }
 
-    /* Gradient backgrounds */
+    
     .gradient-primary {
         @apply bg-gradient-to-r from-primary-600 to-primary-500;
     }
@@ -150,7 +140,7 @@
         @apply bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600;
     }
 
-    /* Text gradients */
+    
     .text-gradient-primary {
         @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-400;
     }
@@ -159,18 +149,18 @@
         @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary-600 to-secondary-400;
     }
 
-    /* Backdrop blur */
+    
     .backdrop-blur-custom {
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
     }
 
-    /* Skeleton loader */
+    
     .skeleton {
         @apply animate-pulse bg-neutral-200 rounded;
     }
 
-    /* Truncate text */
+    
     .line-clamp-1 {
         display: -webkit-box;
         -webkit-line-clamp: 1;
@@ -193,12 +183,10 @@
     }
 }
 
-/* ============================================
-   UTILITY CLASSES
-   ============================================ */
+
 @layer utilities {
 
-    /* Scrollbar styling */
+    
     .scrollbar-hide {
         -ms-overflow-style: none;
         scrollbar-width: none;
@@ -229,7 +217,7 @@
         @apply bg-neutral-400;
     }
 
-    /* Aspect ratios */
+    
     .aspect-square {
         aspect-ratio: 1 / 1;
     }
@@ -242,7 +230,7 @@
         aspect-ratio: 16 / 9;
     }
 
-    /* Safe area for mobile */
+    
     .safe-top {
         padding-top: env(safe-area-inset-top);
     }
@@ -252,9 +240,7 @@
     }
 }
 
-/* ============================================
-   ANIMATIONS
-   ============================================ */
+
 @keyframes shimmer {
     0% {
         background-position: -1000px 0;
@@ -275,9 +261,7 @@
     background-size: 1000px 100%;
 }
 
-/* ============================================
-   PRINT STYLES
-   ============================================ */
+
 @media print {
     .no-print {
         display: none !important;

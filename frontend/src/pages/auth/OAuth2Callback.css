@@ -54,7 +54,7 @@
   margin-top: 1rem;
 }
 
-/* Animations */
+
 @keyframes scaleIn {
   0% {
     transform: scale(0);
@@ -81,7 +81,7 @@
   }
 }
 
-/* Dark mode support */
+
 @media (prefers-color-scheme: dark) {
   .oauth2-callback-content {
     background: #1e1e1e;
@@ -96,7 +96,7 @@
   }
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .oauth2-callback-content {
     padding: 2rem;

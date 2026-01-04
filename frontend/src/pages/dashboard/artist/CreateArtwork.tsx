@@ -28,14 +28,14 @@ const CreateArtwork: React.FC = () => {
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  // AI Suggestion states
+  
   const [showSuggestionPanel, setShowSuggestionPanel] = useState(false);
   const [currentSuggestion, setCurrentSuggestion] = useState<ArtworkSuggestion | null>(null);
   const [analyzingImage, setAnalyzingImage] = useState(false);
   const [appliedFields, setAppliedFields] = useState<Set<string>>(new Set());
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
 
-  // Categories from admin backend
+  
   const [categories, setCategories] = useState<PublicCategory[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [useCustomCategory, setUseCustomCategory] = useState(false);
@@ -56,7 +56,7 @@ const CreateArtwork: React.FC = () => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
 
-      // Validate files (only images, max 5MB each)
+      
       const validFiles = newFiles.filter(file => {
         if (!file.type.startsWith('image/')) {
           toast.error(`${file.name} is not an image file`);
@@ -72,10 +72,10 @@ const CreateArtwork: React.FC = () => {
       });
 
       if (validFiles.length > 0) {
-        // Add to selected images
+        
         setImages(prev => [...prev, ...validFiles]);
 
-        // Generate previews
+        
         validFiles.forEach(file => {
           const reader = new FileReader();
           reader.onload = () => {
@@ -84,7 +84,7 @@ const CreateArtwork: React.FC = () => {
           reader.readAsDataURL(file);
         });
 
-        // If this is the first image, trigger AI analysis after uploading to Cloudinary
+        
         if (images.length === 0 && validFiles.length > 0) {
           await uploadAndAnalyzeImage(validFiles[0]);
         }
@@ -96,24 +96,24 @@ const CreateArtwork: React.FC = () => {
     try {
       setAnalyzingImage(true);
 
-      // First upload image to get Cloudinary URL
+      
       const tempFormData = new FormData();
       tempFormData.append('images', file);
 
-      // Upload to a temporary endpoint or directly get URL (simplified here)
-      // In a real scenario, you'd want a dedicated endpoint for image upload
-      // For now, we'll simulate with a blob URL - in production, upload to Cloudinary first
+      
+      
+      
       const reader = new FileReader();
       reader.onload = async () => {
         const imageDataUrl = reader.result as string;
 
-        // In production, replace this with actual Cloudinary URL after upload
-        // For now, we'll use a placeholder that the backend will need to handle
+        
+        
         toast.info('Analyzing artwork with AI...', { autoClose: 2000 });
 
         try {
           const suggestion = await analyzeArtwork({
-            imageUrl: imageDataUrl, // In production, use Cloudinary URL
+            imageUrl: imageDataUrl, 
             includeAdvancedAnalysis: true
           });
 
@@ -137,10 +137,10 @@ const CreateArtwork: React.FC = () => {
   const handleApplySuggestion = (suggestion: ArtworkSuggestion) => {
     if (!suggestion) return;
 
-    // Check if this is a partial application (single field) or full application
+    
     const partialSuggestion = suggestion as any;
     if (partialSuggestion.appliedField && partialSuggestion.appliedValue) {
-      // Apply single field
+      
       const field = partialSuggestion.appliedField;
       const value = partialSuggestion.appliedValue;
 
@@ -152,7 +152,7 @@ const CreateArtwork: React.FC = () => {
       setAppliedFields(prev => new Set(prev).add(field));
       toast.success(`Applied ${field} suggestion`);
     } else {
-      // Apply all fields
+      
       setFormData(prev => ({
         ...prev,
         title: suggestion.suggestedTitle || prev.title,
@@ -185,13 +185,13 @@ const CreateArtwork: React.FC = () => {
     try {
       setLoading(true);
 
-      // Parse tags
+      
       const tagsList = formData.tags
         .split(',')
         .map(tag => tag.trim())
         .filter(tag => tag.length > 0);
 
-      // Create FormData for API
+      
       const apiFormData = new FormData();
       apiFormData.append('title', formData.title);
       apiFormData.append('description', formData.description);
@@ -205,21 +205,21 @@ const CreateArtwork: React.FC = () => {
         apiFormData.append('depth', formData.depth);
       }
 
-      // Add tags
+      
       tagsList.forEach(tag => {
         apiFormData.append('tags', tag);
       });
 
-      // Add images
+      
       images.forEach(image => {
         apiFormData.append('images', image);
       });
 
-      // Submit to API
+      
       const response: any = await artworkAPI.create(apiFormData);
 
-      // Check if artwork is pending approval (new category used)
-      // Response could be the artwork object directly or wrapped in { data: ... }
+      
+      
       const artworkData = response?.approvalStatus ? response : (response?.data || response);
       if (artworkData?.approvalStatus === 'PENDING') {
         toast.success(
@@ -241,10 +241,10 @@ const CreateArtwork: React.FC = () => {
   };
 
   useEffect(() => {
-    // Run auth diagnostics when component mounts
+    
     runAuthDiagnostics();
 
-    // Fetch active categories from backend
+    
     const fetchCategories = async () => {
       try {
         setCategoriesLoading(true);
@@ -267,7 +267,7 @@ const CreateArtwork: React.FC = () => {
       <AuthDebugger />
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Title & Price */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -299,14 +299,14 @@ const CreateArtwork: React.FC = () => {
           </div>
         </div>
 
-        {/* Category & Medium */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Category *
             </label>
 
-            {/* Toggle between existing and custom category */}
+            {}
             <div className="flex items-center mb-2">
               <label className="inline-flex items-center cursor-pointer">
                 <input
@@ -389,7 +389,7 @@ const CreateArtwork: React.FC = () => {
           </div>
         </div>
 
-        {/* Dimensions */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -437,7 +437,7 @@ const CreateArtwork: React.FC = () => {
           </div>
         </div>
 
-        {/* Description */}
+        {}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Description *
@@ -452,7 +452,7 @@ const CreateArtwork: React.FC = () => {
           ></textarea>
         </div>
 
-        {/* Tags */}
+        {}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Tags <span className="text-gray-400">(comma separated)</span>
@@ -467,14 +467,14 @@ const CreateArtwork: React.FC = () => {
           />
         </div>
 
-        {/* Image Upload */}
+        {}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Artwork Images * <span className="text-gray-400">(max 5 images, 5MB each)</span>
           </label>
 
           <div className="flex flex-wrap gap-4 mb-4">
-            {/* Image previews */}
+            {}
             {imagePreviews.map((preview, index) => (
               <div key={index} className="relative">
                 <img
@@ -492,7 +492,7 @@ const CreateArtwork: React.FC = () => {
               </div>
             ))}
 
-            {/* Upload button */}
+            {}
             <label className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
               <Upload className="h-8 w-8 text-gray-400 mb-2" />
               <span className="text-xs text-gray-500">Upload Images</span>
@@ -510,7 +510,7 @@ const CreateArtwork: React.FC = () => {
             <p className="text-sm text-red-500">At least one image is required</p>
           )}
 
-          {/* AI Analysis Button */}
+          {}
           {images.length > 0 && !analyzingImage && (
             <button
               type="button"
@@ -530,7 +530,7 @@ const CreateArtwork: React.FC = () => {
           )}
         </div>
 
-        {/* Submit Button */}
+        {}
         <div className="flex justify-end">
           <button
             type="submit"
@@ -549,7 +549,7 @@ const CreateArtwork: React.FC = () => {
         </div>
       </form>
 
-      {/* AI Suggestion Panel */}
+      {}
       <SuggestionPanel
         isOpen={showSuggestionPanel}
         onClose={() => setShowSuggestionPanel(false)}
@@ -559,7 +559,7 @@ const CreateArtwork: React.FC = () => {
         appliedFields={appliedFields}
       />
 
-      {/* Debug tools */}
+      {}
       <div className="mt-8">
         <h3 className="text-lg font-semibold mb-2">Debug Tools</h3>
         <AuthDebugger />

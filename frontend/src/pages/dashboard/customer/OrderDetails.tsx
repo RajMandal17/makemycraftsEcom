@@ -27,7 +27,7 @@ const OrderDetails: React.FC = () => {
       const orderData = await orderAPI.getById(id);
       setOrder(orderData);
 
-      // Initialize review form data
+      
       const initialReviewData: { [key: string]: { rating: number; comment: string } } = {};
       orderData.items.forEach(item => {
         initialReviewData[item.artwork.id] = { rating: 5, comment: '' };
@@ -69,7 +69,7 @@ const OrderDetails: React.FC = () => {
     try {
       setReviewSubmitting(prev => ({ ...prev, [artworkId]: true }));
       await reviewAPI.create({
-        orderItemId,  // Pass orderItemId to verify purchase
+        orderItemId,  
         rating: reviewData.rating,
         comment: reviewData.comment
       });
@@ -167,7 +167,7 @@ const OrderDetails: React.FC = () => {
         </span>
       </div>
 
-      {/* Order Summary */}
+      {}
       <div className="bg-white rounded-lg border mb-6">
         <div className="bg-gray-50 px-4 py-3 border-b">
           <h2 className="text-lg font-medium">Order Summary</h2>
@@ -194,7 +194,7 @@ const OrderDetails: React.FC = () => {
         </div>
       </div>
 
-      {/* Shipping Address */}
+      {}
       <div className="bg-white rounded-lg border mb-6">
         <div className="bg-gray-50 px-4 py-3 border-b">
           <h2 className="text-lg font-medium">Shipping Address</h2>
@@ -207,7 +207,7 @@ const OrderDetails: React.FC = () => {
         </div>
       </div>
 
-      {/* Order Items */}
+      {}
       <div className="bg-white rounded-lg border">
         <div className="bg-gray-50 px-4 py-3 border-b">
           <h2 className="text-lg font-medium">Order Items</h2>
@@ -238,7 +238,7 @@ const OrderDetails: React.FC = () => {
                 <div className="mt-4 md:mt-0 md:ml-6">
                   <p className="text-lg font-medium text-gray-900">₹{(item.price * item.quantity).toFixed(2)}</p>
 
-                  {/* Only show review button for delivered orders */}
+                  {}
                   {order.status === 'DELIVERED' && (
                     <button
                       onClick={() => handleReviewToggle(item.artwork.id)}
@@ -251,7 +251,7 @@ const OrderDetails: React.FC = () => {
                 </div>
               </div>
 
-              {/* Review Form */}
+              {}
               {showReviewForm[item.artwork.id] && (
                 <div className="p-4 bg-blue-50 border-t">
                   <h4 className="font-medium mb-3">Write a Review</h4>

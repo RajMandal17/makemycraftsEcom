@@ -1,13 +1,6 @@
 import apiClient from './api';
 
-/**
- * Review API Service
- * 
- * Production-level review system:
- * - Only customers who purchased the product can review
- * - Reviews must be submitted within 7 days of delivery
- * - One review per order item
- */
+
 
 export interface ReviewDto {
     id?: string;
@@ -66,19 +59,9 @@ export interface ApiResponse<T> {
     averageRating?: number;
 }
 
-/**
- * Review API client
- */
+
 export const reviewAPI = {
-    /**
-     * Submit a new review for a purchased item
-     * 
-     * Requirements:
-     * - Must be logged in as CUSTOMER
-     * - Must have purchased the item
-     * - Order must be DELIVERED
-     * - Within 7-day review window
-     */
+    
     submitReview: async (review: Pick<ReviewDto, 'orderItemId' | 'rating' | 'comment'>): Promise<ReviewDto> => {
         const response = await apiClient.post<ApiResponse<ReviewDto>>('/reviews', review);
         if (!response.data.success) {
@@ -87,9 +70,7 @@ export const reviewAPI = {
         return response.data.data!;
     },
 
-    /**
-     * Update an existing review (within edit window)
-     */
+    
     updateReview: async (reviewId: string, review: Pick<ReviewDto, 'rating' | 'comment'>): Promise<ReviewDto> => {
         const response = await apiClient.put<ApiResponse<ReviewDto>>(`/reviews/${reviewId}`, review);
         if (!response.data.success) {
@@ -98,9 +79,7 @@ export const reviewAPI = {
         return response.data.data!;
     },
 
-    /**
-     * Delete a review
-     */
+    
     deleteReview: async (reviewId: string): Promise<void> => {
         const response = await apiClient.delete<ApiResponse<void>>(`/reviews/${reviewId}`);
         if (!response.data.success) {
@@ -108,9 +87,7 @@ export const reviewAPI = {
         }
     },
 
-    /**
-     * Get all reviews for an artwork (public)
-     */
+    
     getArtworkReviews: async (artworkId: string): Promise<{ reviews: ReviewDto[]; total: number }> => {
         const response = await apiClient.get<ApiResponse<never>>(`/reviews/artwork/${artworkId}`);
         return {
@@ -119,9 +96,7 @@ export const reviewAPI = {
         };
     },
 
-    /**
-     * Get rating summary for an artwork (public)
-     */
+    
     getArtworkRatingSummary: async (artworkId: string): Promise<ArtworkRatingSummaryDto> => {
         const response = await apiClient.get<ApiResponse<ArtworkRatingSummaryDto>>(`/reviews/artwork/${artworkId}/summary`);
         if (!response.data.success || !response.data.data) {
@@ -130,9 +105,7 @@ export const reviewAPI = {
         return response.data.data;
     },
 
-    /**
-     * Check if customer can review a specific order item
-     */
+    
     checkEligibility: async (orderItemId: string): Promise<ReviewEligibilityDto> => {
         const response = await apiClient.get<ApiResponse<ReviewEligibilityDto>>(`/reviews/eligibility/${orderItemId}`);
         if (!response.data.success || !response.data.data) {
@@ -141,9 +114,7 @@ export const reviewAPI = {
         return response.data.data;
     },
 
-    /**
-     * Get all items the customer can review
-     */
+    
     getReviewableItems: async (): Promise<ReviewEligibilityDto[]> => {
         const response = await apiClient.get<ApiResponse<ReviewEligibilityDto[]> & { data: ReviewEligibilityDto[] }>('/reviews/reviewable-items');
         if (!response.data.success) {
@@ -152,17 +123,13 @@ export const reviewAPI = {
         return response.data.data || [];
     },
 
-    /**
-     * Get customer's own reviews
-     */
+    
     getMyReviews: async (): Promise<ReviewDto[]> => {
         const response = await apiClient.get<ApiResponse<never>>('/reviews/my-reviews');
         return response.data.reviews || [];
     },
 
-    /**
-     * Get all reviews for an artist (artist only)
-     */
+    
     getArtistReviews: async (artistId: string): Promise<{ reviews: ReviewDto[]; total: number; averageRating: number }> => {
         const response = await apiClient.get<ApiResponse<never>>(`/reviews/artist/${artistId}`);
         return {

@@ -13,13 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-/**
- * Payment controller for payment operations.
- * 
- * Single Responsibility: Handle HTTP requests for payments.
- * 
- * @author Artwork Platform
- */
+
 @RestController
 @RequestMapping("/api/payment")
 @RequiredArgsConstructor

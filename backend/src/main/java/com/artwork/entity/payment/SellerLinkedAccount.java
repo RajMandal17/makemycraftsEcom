@@ -8,12 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * SellerLinkedAccount entity for storing Razorpay Route linked account IDs.
- * Each verified seller gets a linked account for receiving split payments.
- * 
- * @author Artwork Platform
- */
+
 @Entity
 @Table(name = "seller_linked_accounts", indexes = {
     @Index(name = "idx_linked_seller_id", columnList = "sellerId"),
@@ -41,10 +36,10 @@ public class SellerLinkedAccount {
     @Builder.Default
     private LinkedAccountStatus accountStatus = LinkedAccountStatus.CREATED;
     
-    // Razorpay contact ID for Razorpay X payouts
+    
     private String razorpayContactId;
     
-    // Razorpay fund account ID (linked bank account)
+    
     private String razorpayFundAccountId;
     
     private String email;

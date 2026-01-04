@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @org.springframework.beans.factory.annotation.Value("${admin.email:mail@makemycrafts.com}")
     private String adminEmail;
     
-    private static final double HIGH_VALUE_THRESHOLD = 10000.0; // ₹10,000
+    private static final double HIGH_VALUE_THRESHOLD = 10000.0; 
 
     @Override
     @Transactional
@@ -76,13 +76,13 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setOrderId(order.getId());
             orderItemRepository.save(orderItem);
         }
-        // Optionally clear cart
+        
         List<CartItem> cartItems = cartItemRepository.findAll().stream()
                 .filter(item -> item.getUserId().equals(userId))
                 .collect(Collectors.toList());
         cartItemRepository.deleteAll(cartItems);
         
-        // Send order confirmation email to customer
+        
         userRepository.findById(userId).ifPresent(user -> {
             Map<String, Object> variables = new HashMap<>();
             variables.put("name", user.getFirstName());
@@ -98,10 +98,10 @@ public class OrderServiceImpl implements OrderService {
             ));
         });
         
-        // Send notifications to artists whose artworks were purchased
+        
         notifyArtistsAboutOrder(order, orderItems);
         
-        // Send notification to admin
+        
         notifyAdminAboutOrder(order, userId);
 
         return convertToDto(order);
@@ -133,8 +133,8 @@ public class OrderServiceImpl implements OrderService {
             new RuntimeException("Order not found with id: " + id)
         );
         
-        // Check if the order belongs to this user or if user is admin
-        // This is a simplified check; in real implementation, you'd check for admin role
+        
+        
         if (!order.getCustomerId().equals(userId)) {
             throw new RuntimeException("You don't have permission to access this order");
         }
@@ -153,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setCreatedAt(order.getCreatedAt() != null ? order.getCreatedAt().toString() : null);
         orderDto.setUpdatedAt(order.getUpdatedAt() != null ? order.getUpdatedAt().toString() : null);
         
-        // Fetch and set customer details
+        
         userRepository.findById(order.getCustomerId()).ifPresent(user -> {
             OrderDto.CustomerInfo customerInfo = new OrderDto.CustomerInfo();
             customerInfo.setFirstName(user.getFirstName());
@@ -162,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setCustomer(customerInfo);
         });
         
-        // Fetch order items and populate with artwork details
+        
         List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
         List<OrderItemDto> itemDtos = orderItems.stream()
                 .map(this::convertItemToDto)
@@ -179,7 +179,7 @@ public class OrderServiceImpl implements OrderService {
         dto.setPrice(item.getPrice());
         dto.setQuantity(item.getQuantity());
         
-        // Fetch artwork details
+        
         artworkRepository.findById(item.getArtworkId()).ifPresent(artwork -> {
             dto.setTitle(artwork.getTitle());
             dto.setArtwork(modelMapper.map(artwork, ArtworkDto.class));
@@ -189,7 +189,7 @@ public class OrderServiceImpl implements OrderService {
     }
     
     private void notifyArtistsAboutOrder(Order order, List<OrderItem> orderItems) {
-        // Group items by artist
+        
         Map<String, List<OrderItem>> itemsByArtist = new HashMap<>();
         
         for (OrderItem item : orderItems) {
@@ -199,14 +199,14 @@ public class OrderServiceImpl implements OrderService {
             });
         }
         
-        // Send email to each artist
+        
         itemsByArtist.forEach((artistId, items) -> {
             userRepository.findById(artistId).ifPresent(artist -> {
                 double artistTotal = items.stream()
                     .mapToDouble(item -> item.getPrice() * item.getQuantity())
                     .sum();
                 
-                // Calculate artist earnings (assuming 85% commission, 15% platform fee)
+                
                 double artistEarnings = artistTotal * 0.85;
                 
                 List<Map<String, Object>> itemDetails = new ArrayList<>();
@@ -224,7 +224,7 @@ public class OrderServiceImpl implements OrderService {
                 variables.put("artistName", artist.getFirstName());
                 variables.put("orderId", order.getId());
                 variables.put("orderDate", java.time.LocalDateTime.now().toLocalDate().toString());
-                variables.put("customerName", "Customer"); // Will be filled from order
+                variables.put("customerName", "Customer"); 
                 variables.put("items", itemDetails);
                 variables.put("artistEarnings", String.format("%.2f", artistEarnings));
                 variables.put("orderUrl", frontendBaseUrl + "/dashboard/artist/orders/" + order.getId());

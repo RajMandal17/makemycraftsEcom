@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# ===========================================
-# Setup Script for Docker Database
-# ===========================================
-# This script helps you set up Docker MySQL for local development
-# ===========================================
+
+
+
+
+
 
 set -e
 
-# Colors
+
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
@@ -19,7 +19,7 @@ echo "🐳 Docker MySQL Setup for Local Dev"
 echo "==========================================${NC}"
 echo ""
 
-# Check if Docker is running
+
 if ! docker info > /dev/null 2>&1; then
     echo -e "${YELLOW}⚠️  Docker is not running!${NC}"
     echo ""
@@ -34,7 +34,7 @@ fi
 echo -e "${GREEN}✅ Docker is running${NC}"
 echo ""
 
-# Check if .env file exists
+
 if [ ! -f .env ]; then
     echo -e "${YELLOW}Creating .env file from template...${NC}"
     cp .env.example .env
@@ -49,7 +49,7 @@ echo ""
 echo -e "${BLUE}Step 2: Waiting for MySQL to be healthy...${NC}"
 echo "This may take 10-20 seconds..."
 
-# Wait for MySQL to be healthy
+
 attempt=0
 max_attempts=30
 while [ $attempt -lt $max_attempts ]; do

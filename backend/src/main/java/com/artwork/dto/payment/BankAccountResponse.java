@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * Bank account response DTO.
- */
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,7 +17,7 @@ import java.time.LocalDateTime;
 public class BankAccountResponse {
     private String id;
     private String accountHolderName;
-    private String maskedAccountNumber;  // Only last 4 digits shown
+    private String maskedAccountNumber;  
     private String ifscCode;
     private String bankName;
     private String branchName;

@@ -3,13 +3,10 @@ import { Link } from 'react-router-dom';
 import { Heart, Users, Shield, Truck, Palette, Star, ArrowRight } from 'lucide-react';
 import { updateMetaTags } from '../components/common/SEO';
 
-/**
- * About Page - SEO Optimized for target keywords
- * Keywords: makemycrafts, handmade artwork, custom made crafts, homemade art, Indian artists
- */
+
 const AboutPage: React.FC = () => {
     useEffect(() => {
-        // SEO Meta Tags
+        
         updateMetaTags({
             title: 'About MakeMyCrafts - India\'s Premier Handmade Artwork & Custom Crafts Marketplace',
             description: 'Learn about MakeMyCrafts - India\'s leading marketplace for handmade artwork, custom made crafts, and homemade art. We connect skilled Indian artists with art lovers worldwide. Buy unique handcrafted paintings, sculptures & custom artwork.',
@@ -18,7 +15,7 @@ const AboutPage: React.FC = () => {
             type: 'website',
         });
 
-        // Inject Organization Schema
+        
         const orgSchema = {
             '@context': 'https://schema.org',
             '@type': 'Organization',
@@ -61,7 +58,7 @@ const AboutPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Hero Section */}
+            {}
             <section className="bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 text-white py-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -73,7 +70,7 @@ const AboutPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Mission Section */}
+            {}
             <section className="py-16 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -119,7 +116,7 @@ const AboutPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Why Choose Us */}
+            {}
             <section className="py-16 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
@@ -160,7 +157,7 @@ const AboutPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* What We Offer */}
+            {}
             <section className="py-16 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
@@ -191,7 +188,7 @@ const AboutPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* For Artists Section */}
+            {}
             <section className="py-16 bg-gradient-to-r from-amber-50 to-orange-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12">
@@ -231,7 +228,7 @@ const AboutPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* CTA Section */}
+            {}
             <section className="py-16 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -260,7 +257,7 @@ const AboutPage: React.FC = () => {
     );
 };
 
-// Feature Card Component
+
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description: string }> = ({
     icon,
     title,
@@ -273,7 +270,7 @@ const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description:
     </div>
 );
 
-// Category Card Component
+
 const CategoryCard: React.FC<{ title: string; description: string; emoji: string }> = ({
     title,
     description,

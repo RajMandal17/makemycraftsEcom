@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
-/**
- * Entity representing AI-generated artwork suggestions
- */
+
 @Entity
 @Table(name = "artwork_suggestions")
 @Data
@@ -64,9 +62,7 @@ public class ArtworkSuggestion {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
     
-    /**
-     * Get tags as a list by splitting the comma-separated string
-     */
+    
     public java.util.List<String> getSuggestedTagsList() {
         if (suggestedTags == null || suggestedTags.isEmpty()) {
             return java.util.Collections.emptyList();

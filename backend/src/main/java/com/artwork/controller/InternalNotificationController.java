@@ -20,19 +20,16 @@ public class InternalNotificationController {
     private final ApplicationEventPublisher eventPublisher;
     private final UserRepository userRepository;
     
-    /**
-     * Internal endpoint for payment service to trigger payment confirmation emails
-     * This should be secured with internal service authentication in production
-     */
+    
     @PostMapping("/payment-confirmation")
     public ResponseEntity<?> sendPaymentConfirmationEmail(
             @RequestHeader(value = "X-Service-Token", required = false) String serviceToken,
             @RequestBody Map<String, Object> request) {
         
-        // TODO: Validate service token in production
-        // if (!"payment-service-internal-token".equals(serviceToken)) {
-        //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        // }
+        
+        
+        
+        
         
         try {
             String email = (String) request.get("email");
@@ -78,7 +75,7 @@ public class InternalNotificationController {
             String orderId = (String) request.get("orderId");
             String reason = (String) request.get("reason");
             
-            // TODO: Create payment-failed.html template
+            
             Map<String, Object> variables = new HashMap<>();
             variables.put("name", name);
             variables.put("orderId", orderId);

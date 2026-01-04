@@ -25,9 +25,7 @@ interface ArtistDashboardStats {
 }
 
 export const artistAPI = {
-  /**
-   * Get artist dashboard statistics
-   */
+  
   getDashboardStats: async (): Promise<ArtistDashboardStats> => {
     try {
       console.log('Fetching artist dashboard stats...');
@@ -40,9 +38,7 @@ export const artistAPI = {
     }
   },
 
-  /**
-   * Get artworks for the logged-in artist
-   */
+  
   getMyArtworks: async (params?: {
     page?: number;
     limit?: number;
@@ -71,9 +67,7 @@ export const artistAPI = {
     }
   },
   
-  /**
-   * Create a new artwork
-   */
+  
   createArtwork: async (artworkData: FormData): Promise<Artwork> => {
     const response = await apiClient.post('/artworks', artworkData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -81,9 +75,7 @@ export const artistAPI = {
     return response.data;
   },
   
-  /**
-   * Update an existing artwork
-   */
+  
   updateArtwork: async (id: string, artworkData: FormData): Promise<Artwork> => {
     const response = await apiClient.put(`/artworks/${id}`, artworkData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -91,9 +83,7 @@ export const artistAPI = {
     return response.data;
   },
   
-  /**
-   * Delete an artwork
-   */
+  
   deleteArtwork: async (id: string): Promise<void> => {
     await apiClient.delete(`/artworks/${id}`);
   }

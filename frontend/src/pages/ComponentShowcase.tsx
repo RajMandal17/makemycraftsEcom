@@ -8,12 +8,7 @@ import Modal, { ConfirmModal } from '../components/ui/Modal';
 import Carousel, { HeroSlide } from '../components/ui/Carousel';
 import MasonryGrid, { MasonryItem } from '../components/ui/MasonryGrid';
 
-/**
- * Component Showcase Page
- * 
- * Demonstrates all UI components from the design system
- * This page can be accessed at /showcase for testing and reference
- */
+
 const ComponentShowcase: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
@@ -27,7 +22,7 @@ const ComponentShowcase: React.FC = () => {
     return (
         <div className="min-h-screen bg-neutral-50 py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Header */}
+                {}
                 <div className="text-center mb-12">
                     <h1 className="text-5xl font-display font-bold text-neutral-900 mb-4">
                         MakeMyCrafts Design System
@@ -37,7 +32,7 @@ const ComponentShowcase: React.FC = () => {
                     </p>
                 </div>
 
-                {/* Color Palette */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Color Palette
@@ -71,7 +66,7 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Typography */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Typography
@@ -93,13 +88,13 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Buttons */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Buttons
                     </h2>
                     <div className="bg-white rounded-lg shadow-md p-8">
-                        {/* Variants */}
+                        {}
                         <div className="mb-8">
                             <h3 className="text-xl font-semibold mb-4">Variants</h3>
                             <div className="flex flex-wrap gap-4">
@@ -111,7 +106,7 @@ const ComponentShowcase: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Sizes */}
+                        {}
                         <div className="mb-8">
                             <h3 className="text-xl font-semibold mb-4">Sizes</h3>
                             <div className="flex flex-wrap items-center gap-4">
@@ -123,7 +118,7 @@ const ComponentShowcase: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* With Icons */}
+                        {}
                         <div className="mb-8">
                             <h3 className="text-xl font-semibold mb-4">With Icons</h3>
                             <div className="flex flex-wrap gap-4">
@@ -136,7 +131,7 @@ const ComponentShowcase: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* States */}
+                        {}
                         <div>
                             <h3 className="text-xl font-semibold mb-4">States</h3>
                             <div className="flex flex-wrap gap-4">
@@ -148,7 +143,7 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Badges */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Badges
@@ -177,7 +172,7 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Inputs */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Inputs
@@ -210,13 +205,13 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Cards */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Cards
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* Product Card */}
+                        {}
                         <Card variant="product" hover>
                             <CardImage
                                 src="https://images.pexels.com/photos/1183992/pexels-photo-1183992.jpeg"
@@ -242,7 +237,7 @@ const ComponentShowcase: React.FC = () => {
                             </CardContent>
                         </Card>
 
-                        {/* Artist Card */}
+                        {}
                         <Card variant="artist" hover>
                             <CardContent>
                                 <div className="flex items-center mb-4">
@@ -265,7 +260,7 @@ const ComponentShowcase: React.FC = () => {
                             </CardContent>
                         </Card>
 
-                        {/* Collection Card */}
+                        {}
                         <Card variant="collection" hover>
                             <CardImage
                                 src="https://images.pexels.com/photos/8953363/pexels-photo-8953363.jpeg"
@@ -286,7 +281,7 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Animations */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Animations
@@ -309,7 +304,7 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Modals */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Modals
@@ -324,7 +319,7 @@ const ComponentShowcase: React.FC = () => {
                             </Button>
                         </div>
 
-                        {/* Regular Modal */}
+                        {}
                         <Modal
                             isOpen={modalOpen}
                             onClose={() => setModalOpen(false)}
@@ -348,7 +343,7 @@ const ComponentShowcase: React.FC = () => {
                             </p>
                         </Modal>
 
-                        {/* Confirm Modal */}
+                        {}
                         <ConfirmModal
                             isOpen={confirmOpen}
                             onClose={() => setConfirmOpen(false)}
@@ -363,7 +358,7 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Carousel */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Carousel
@@ -425,7 +420,7 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Masonry Grid */}
+                {}
                 <section className="mb-16">
                     <h2 className="text-3xl font-display font-bold text-neutral-900 mb-6">
                         Masonry Grid
@@ -463,7 +458,7 @@ const ComponentShowcase: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Footer */}
+                {}
                 <div className="text-center text-neutral-600 mt-16">
                     <p>MakeMyCrafts Design System v1.0</p>
                     <p className="text-sm mt-2">Built with ❤️ using React, TypeScript, and Tailwind CSS</p>

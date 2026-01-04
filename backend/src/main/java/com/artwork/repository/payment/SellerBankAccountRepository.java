@@ -8,11 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository for SellerBankAccount entity.
- * 
- * @author Artwork Platform
- */
+
 @Repository
 public interface SellerBankAccountRepository extends JpaRepository<SellerBankAccount, String> {
     

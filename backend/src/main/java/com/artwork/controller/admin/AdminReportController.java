@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Admin Report Controller
- * Handles report generation, download, and format listing for admin users
- */
+
 @RestController
 @RequestMapping({"/api/admin/reports", "/api/v1/admin/reports"})
 @RequiredArgsConstructor
@@ -26,9 +23,7 @@ public class AdminReportController {
 
     private final AdminReportService adminReportService;
 
-    /**
-     * Generate a report
-     */
+    
     @PostMapping("/generate")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ReportGenerationResponse> generateReport(@RequestBody ReportGenerationRequest request) {
@@ -39,9 +34,7 @@ public class AdminReportController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Download a generated report
-     */
+    
     @GetMapping("/download/{reportId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<byte[]> downloadReport(@PathVariable String reportId) {
@@ -59,9 +52,7 @@ public class AdminReportController {
                 .body(reportData);
     }
 
-    /**
-     * Get available report formats
-     */
+    
     @GetMapping("/formats")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<String>> getReportFormats() {

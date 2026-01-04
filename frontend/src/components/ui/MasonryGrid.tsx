@@ -39,7 +39,7 @@ const MasonryGrid: React.FC<MasonryGridProps> = ({
         triggerOnce: false,
     });
 
-    // Load more items when scrolling
+    
     useEffect(() => {
         if (inView && lazyLoad && visibleItems < children.length) {
             const timer = setTimeout(() => {
@@ -71,7 +71,7 @@ const MasonryGrid: React.FC<MasonryGridProps> = ({
                 ))}
             </Masonry>
 
-            {/* Load More Trigger */}
+            {}
             {lazyLoad && visibleItems < children.length && (
                 <div ref={loadMoreRef} className="h-20 flex items-center justify-center">
                     <div className="flex gap-2">
@@ -85,7 +85,7 @@ const MasonryGrid: React.FC<MasonryGridProps> = ({
     );
 };
 
-// Masonry Item Wrapper with Hover Effect
+
 export const MasonryItem: React.FC<{
     children: React.ReactNode;
     className?: string;

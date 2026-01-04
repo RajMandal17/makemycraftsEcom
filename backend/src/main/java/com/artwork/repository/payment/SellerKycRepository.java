@@ -9,11 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * Repository for SellerKyc entity.
- * 
- * @author Artwork Platform
- */
+
 @Repository
 public interface SellerKycRepository extends JpaRepository<SellerKyc, String> {
     

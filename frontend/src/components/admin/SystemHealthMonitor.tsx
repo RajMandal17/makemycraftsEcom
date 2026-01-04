@@ -1,13 +1,4 @@
-/**
- * System Health Monitor Component
- * 
- * Features:
- * - Real-time service status monitoring
- * - CPU and memory usage display
- * - Uptime tracking
- * - Color-coded health indicators
- * - Auto-refresh with WebSocket updates
- */
+
 
 import React, { useState, useEffect } from 'react';
 import { adminWebSocketClient, DashboardUpdate } from '../../services/adminWebSocketClient';
@@ -42,24 +33,22 @@ const SystemHealthMonitor: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    // Connect to WebSocket
+    
     connectWebSocket();
 
     return () => {
-      // Cleanup: disconnect WebSocket
+      
       adminWebSocketClient.disconnect();
     };
   }, []);
 
-  /**
-   * Connect to WebSocket for real-time updates
-   */
+  
   const connectWebSocket = async () => {
     try {
       await adminWebSocketClient.connect();
       setIsConnected(true);
 
-      // Subscribe to dashboard updates
+      
       adminWebSocketClient.subscribeToDashboard((data: DashboardUpdate) => {
         if (data.systemHealth) {
           setHealthData({
@@ -68,7 +57,7 @@ const SystemHealthMonitor: React.FC = () => {
             totalServices: data.systemHealth.totalServices,
             cpuUsage: data.systemHealth.cpuUsage,
             memoryUsage: data.systemHealth.memoryUsage,
-            uptime: 0, // TODO: Add uptime to DashboardUpdate
+            uptime: 0, 
           });
         }
       });
@@ -78,9 +67,7 @@ const SystemHealthMonitor: React.FC = () => {
     }
   };
 
-  /**
-   * Get status icon
-   */
+  
   const getStatusIcon = (status: string) => {
     switch (status.toUpperCase()) {
       case 'HEALTHY':
@@ -97,9 +84,7 @@ const SystemHealthMonitor: React.FC = () => {
     }
   };
 
-  /**
-   * Get status color
-   */
+  
   const getStatusColor = (status: string) => {
     switch (status.toUpperCase()) {
       case 'HEALTHY':
@@ -116,18 +101,14 @@ const SystemHealthMonitor: React.FC = () => {
     }
   };
 
-  /**
-   * Get usage color based on percentage
-   */
+  
   const getUsageColor = (usage: number) => {
     if (usage >= 90) return 'bg-red-500';
     if (usage >= 70) return 'bg-yellow-500';
     return 'bg-green-500';
   };
 
-  /**
-   * Format uptime
-   */
+  
   const formatUptime = (seconds: number): string => {
     const days = Math.floor(seconds / 86400);
     const hours = Math.floor((seconds % 86400) / 3600);
@@ -157,7 +138,7 @@ const SystemHealthMonitor: React.FC = () => {
         </div>
       </div>
 
-      {/* Overall Status */}
+      {}
       <div className="mb-6 p-4 rounded-lg bg-gray-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -178,9 +159,9 @@ const SystemHealthMonitor: React.FC = () => {
         </div>
       </div>
 
-      {/* Metrics Grid */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        {/* CPU Usage */}
+        {}
         <div className="p-4 rounded-lg border border-gray-200">
           <div className="flex items-center space-x-2 mb-2">
             <Cpu className="text-blue-500" size={16} />
@@ -197,7 +178,7 @@ const SystemHealthMonitor: React.FC = () => {
           </div>
         </div>
 
-        {/* Memory Usage */}
+        {}
         <div className="p-4 rounded-lg border border-gray-200">
           <div className="flex items-center space-x-2 mb-2">
             <HardDrive className="text-purple-500" size={16} />
@@ -214,7 +195,7 @@ const SystemHealthMonitor: React.FC = () => {
           </div>
         </div>
 
-        {/* Uptime */}
+        {}
         <div className="p-4 rounded-lg border border-gray-200">
           <div className="flex items-center space-x-2 mb-2">
             <Clock className="text-green-500" size={16} />
@@ -227,7 +208,7 @@ const SystemHealthMonitor: React.FC = () => {
         </div>
       </div>
 
-      {/* Service Status List */}
+      {}
       {healthData.services && healthData.services.length > 0 && (
         <div>
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Service Status</h3>
@@ -255,7 +236,7 @@ const SystemHealthMonitor: React.FC = () => {
         </div>
       )}
 
-      {/* No Services Message */}
+      {}
       {(!healthData.services || healthData.services.length === 0) && (
         <div className="text-center py-4 text-gray-500">
           <p className="text-sm">Service details will appear here</p>

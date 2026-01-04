@@ -45,7 +45,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
                                   LocalDateTime startDate, LocalDateTime endDate) {
         Pageable pageable = PageRequest.of(page - 1, limit);
         
-        // This filtering logic should ideally be in the repository using Specifications
+        
         if ((status != null && !status.isEmpty()) || (userId != null && !userId.isEmpty()) || 
             startDate != null || endDate != null) {
             
@@ -110,7 +110,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
         
-        // Check if order can be cancelled
+        
         if (order.getStatus() == OrderStatus.DELIVERED || order.getStatus() == OrderStatus.CANCELLED) {
             throw new IllegalStateException("Cannot cancel order with status: " + order.getStatus());
         }
@@ -120,7 +120,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         order.setUpdatedAt(LocalDateTime.now());
         
         if (issueRefund && order.getTotalAmount() != null) {
-            // Issue full refund
+            
             order.setRefunded(true);
             order.setRefundAmount(order.getTotalAmount());
             order.setRefundTransactionId("REFUND-" + UUID.randomUUID().toString());
@@ -143,14 +143,14 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         
         Map<String, Object> result = new HashMap<>();
         
-        // Validate refund amount
+        
         if (amount <= 0 || (order.getTotalAmount() != null && amount > order.getTotalAmount())) {
             result.put("success", false);
             result.put("message", "Invalid refund amount");
             return result;
         }
         
-        // Process refund
+        
         String transactionId = "REFUND-" + UUID.randomUUID().toString();
         order.setRefunded(true);
         order.setRefundAmount(amount);
@@ -208,15 +208,15 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderDto> getOrdersByArtwork(String artworkId) {
-        // Find all order items containing this artwork
+        
         List<OrderItem> orderItems = orderItemRepository.findByArtworkId(artworkId);
         
-        // Get unique order IDs
+        
         Set<String> orderIds = orderItems.stream()
             .map(OrderItem::getOrderId)
             .collect(Collectors.toSet());
         
-        // Fetch all orders
+        
         List<Order> orders = orderRepository.findAllById(orderIds);
         
         return orders.stream()
@@ -227,7 +227,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     @Override
     @Transactional(readOnly = true)
     public Map<String, Object> getRevenueAnalytics(LocalDateTime startDate, LocalDateTime endDate, String groupBy) {
-        // Get orders in date range with completed statuses
+        
         List<OrderStatus> completedStatuses = Arrays.asList(
             OrderStatus.DELIVERED, 
             OrderStatus.CONFIRMED
@@ -237,7 +237,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
             startDate, endDate, completedStatuses
         );
         
-        // Calculate total revenue and average order value
+        
         double totalRevenue = orders.stream()
             .filter(o -> o.getTotalAmount() != null)
             .mapToDouble(Order::getTotalAmount)
@@ -246,7 +246,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         int orderCount = orders.size();
         double averageOrderValue = orderCount > 0 ? totalRevenue / orderCount : 0.0;
         
-        // Group data points by time period
+        
         List<Map<String, Object>> dataPoints = new ArrayList<>();
         
         if ("DAY".equalsIgnoreCase(groupBy)) {
@@ -269,14 +269,14 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     private List<Map<String, Object>> groupByDay(List<Order> orders, LocalDateTime start, LocalDateTime end) {
         Map<LocalDateTime, List<Order>> grouped = new TreeMap<>();
         
-        // Initialize all days in range
+        
         LocalDateTime current = start.truncatedTo(ChronoUnit.DAYS);
         while (!current.isAfter(end)) {
             grouped.put(current, new ArrayList<>());
             current = current.plusDays(1);
         }
         
-        // Group orders by day
+        
         for (Order order : orders) {
             LocalDateTime day = order.getCreatedAt().truncatedTo(ChronoUnit.DAYS);
             grouped.computeIfAbsent(day, k -> new ArrayList<>()).add(order);
@@ -290,7 +290,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     private List<Map<String, Object>> groupByWeek(List<Order> orders, LocalDateTime start, LocalDateTime end) {
         Map<LocalDateTime, List<Order>> grouped = new TreeMap<>();
         
-        // Group orders by week
+        
         for (Order order : orders) {
             LocalDateTime weekStart = order.getCreatedAt().truncatedTo(ChronoUnit.DAYS)
                 .minusDays(order.getCreatedAt().getDayOfWeek().getValue() - 1);
@@ -305,7 +305,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     private List<Map<String, Object>> groupByMonth(List<Order> orders, LocalDateTime start, LocalDateTime end) {
         Map<LocalDateTime, List<Order>> grouped = new TreeMap<>();
         
-        // Group orders by month
+        
         for (Order order : orders) {
             LocalDateTime monthStart = order.getCreatedAt().withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS);
             grouped.computeIfAbsent(monthStart, k -> new ArrayList<>()).add(order);
@@ -352,7 +352,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     public Map<String, Object> getRevenueStats() {
         Map<String, Object> stats = new HashMap<>();
         stats.put("totalRevenue", orderRepository.getTotalSalesAmount());
-        // Add more revenue stats as needed
+        
         return stats;
     }
     
@@ -378,10 +378,10 @@ public class AdminOrderServiceImpl implements AdminOrderService {
                 variables.put("deliveredDate", LocalDateTime.now().toLocalDate().toString());
                 variables.put("orderUrl", frontendBaseUrl + "/dashboard/customer/orders/" + order.getId());
                 
-                // Schedule review request email (send after 3 days)
+                
                 scheduleReviewRequest(order, user);
             } else {
-                // For other statuses, we can add more templates later
+                
                 return;
             }
             
@@ -406,7 +406,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
             variables.put("reason", reason != null ? reason : "As per your request");
             variables.put("refundInfo", Boolean.TRUE.equals(order.getRefunded()) ? "A refund has been initiated to your original payment method." : "Please contact support for refund details.");
             
-            // Use the proper order-cancelled template
+            
             eventPublisher.publishEvent(new com.artwork.event.EmailEvent(
                 this,
                 user.getEmail(),
@@ -420,13 +420,13 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     }
     
     private void scheduleReviewRequest(Order order, com.artwork.entity.User user) {
-        // Note: In production, this should use a scheduled task or message queue
-        // For now, we'll send immediately as a demonstration
-        // TODO: Implement proper scheduling with @Scheduled or message queue
+        
+        
+        
         
         log.info("Review request scheduled for order {} (will be sent after 3 days)", order.getId());
         
-        // Immediate send for demonstration (remove in production)
+        
         sendReviewRequestEmail(order, user);
     }
     

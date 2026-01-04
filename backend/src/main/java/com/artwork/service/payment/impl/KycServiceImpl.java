@@ -18,13 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * KYC service implementation.
- * 
- * Single Responsibility: Handle KYC verification logic only.
- * 
- * @author Artwork Platform
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,24 +32,24 @@ public class KycServiceImpl implements KycService {
     public KycResponse submitKyc(String userId, KycSubmissionRequest request) {
         log.info("Submitting KYC for user: {}", userId);
         
-        // Check if KYC already exists
+        
         SellerKyc existingKyc = sellerKycRepository.findByUserId(userId).orElse(null);
         if (existingKyc != null) {
-            // Allow resubmission only if status is REJECTED
+            
             if (existingKyc.getKycStatus() != KycStatus.REJECTED) {
                 throw new RuntimeException("KYC already submitted for user: " + userId);
             }
-            // Delete the rejected KYC to allow fresh resubmission
+            
             sellerKycRepository.delete(existingKyc);
             log.info("Deleted rejected KYC for user: {} to allow resubmission", userId);
         }
         
-        // Validate PAN number format (basic validation)
+        
         if (!isValidPanNumber(request.getPanNumber())) {
             throw new RuntimeException("Invalid PAN number format");
         }
         
-        // Check for duplicate PAN
+        
         if (sellerKycRepository.findByPanNumber(request.getPanNumber()).isPresent()) {
             throw new RuntimeException("PAN number already registered");
         }
@@ -138,7 +132,7 @@ public class KycServiceImpl implements KycService {
             kyc.setVerifiedBy(verifiedBy);
             kyc.setRejectionReason(null);
             
-            // Create Razorpay linked account for split payments
+            
             try {
                 razorpayRouteService.createLinkedAccount(kyc);
                 log.info("Created Razorpay linked account for seller: {}", userId);
@@ -219,7 +213,7 @@ public class KycServiceImpl implements KycService {
         if (pan == null || pan.length() != 10) {
             return false;
         }
-        // PAN format: AAAAA9999A
+        
         return pan.matches("[A-Z]{5}[0-9]{4}[A-Z]{1}");
     }
     

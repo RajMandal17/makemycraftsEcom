@@ -72,16 +72,16 @@ const SuggestionPanel: React.FC<SuggestionPanelProps> = ({
 
   return (
     <>
-      {/* Overlay */}
+      {}
       <div 
         className="fixed inset-0 bg-black bg-opacity-30 z-40 transition-opacity"
         onClick={onClose}
       />
       
-      {/* Panel */}
+      {}
       <div className="fixed right-0 top-0 h-full w-full md:w-[500px] bg-white shadow-2xl z-50 transform transition-transform">
         <div className="h-full flex flex-col">
-          {/* Header */}
+          {}
           <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-purple-600 to-blue-600">
             <div className="flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-white" />
@@ -95,7 +95,7 @@ const SuggestionPanel: React.FC<SuggestionPanelProps> = ({
             </button>
           </div>
 
-          {/* Content */}
+          {}
           <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-12">
@@ -105,7 +105,7 @@ const SuggestionPanel: React.FC<SuggestionPanelProps> = ({
               </div>
             ) : suggestion ? (
               <>
-                {/* Image Preview */}
+                {}
                 {suggestion.imageUrl && (
                   <div className="rounded-lg overflow-hidden border border-gray-200">
                     <img
@@ -116,7 +116,7 @@ const SuggestionPanel: React.FC<SuggestionPanelProps> = ({
                   </div>
                 )}
 
-                {/* Confidence Score */}
+                {}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-blue-900">
@@ -134,7 +134,7 @@ const SuggestionPanel: React.FC<SuggestionPanelProps> = ({
                   </div>
                 </div>
 
-                {/* Suggestions */}
+                {}
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-900">Suggested Fields</h3>
                   
@@ -182,7 +182,7 @@ const SuggestionPanel: React.FC<SuggestionPanelProps> = ({
                   </div>
                 </div>
 
-                {/* Advanced Analysis */}
+                {}
                 {suggestion.metadata && (
                   <div className="border-t border-gray-200 pt-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -240,7 +240,7 @@ const SuggestionPanel: React.FC<SuggestionPanelProps> = ({
                   </div>
                 )}
 
-                {/* Apply All Button */}
+                {}
                 <div className="sticky bottom-0 bg-white pt-4 border-t border-gray-200">
                   <button
                     onClick={() => onApplySuggestion(suggestion)}

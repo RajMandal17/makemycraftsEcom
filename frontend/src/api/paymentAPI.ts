@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_CONFIG } from '../config/api';
 
-// Payment Service API Client - Uses centralized configuration
+
 const paymentAPI = axios.create({
     baseURL: API_CONFIG.PAYMENT_SERVICE_URL,
     headers: {
@@ -9,10 +9,10 @@ const paymentAPI = axios.create({
     },
 });
 
-// Add auth token to requests
-// Add auth token to requests
+
+
 paymentAPI.interceptors.request.use((config) => {
-    // Try to get token from TokenManager key 'access_token' first, then fallback to 'token'
+    
     const token = localStorage.getItem('access_token') || localStorage.getItem('token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -20,7 +20,7 @@ paymentAPI.interceptors.request.use((config) => {
     return config;
 });
 
-// KYC Types
+
 export interface KycSubmitRequest {
     businessName?: string;
     businessType?: 'INDIVIDUAL' | 'SOLE_PROPRIETORSHIP' | 'PARTNERSHIP' | 'PRIVATE_LIMITED' | 'PUBLIC_LIMITED';
@@ -39,7 +39,7 @@ export interface KycDto {
     businessType?: string;
     panNumber: string;
     panDocumentUrl?: string;
-    aadhaarNumber?: string; // Masked
+    aadhaarNumber?: string; 
     aadhaarDocumentUrl?: string;
     gstNumber?: string;
     gstCertificateUrl?: string;
@@ -55,7 +55,7 @@ export interface KycStatusResponse {
     userId: string;
     status: 'PENDING' | 'UNDER_REVIEW' | 'VERIFIED' | 'REJECTED' | null;
     message: string;
-    rejectionReason?: string; // Reason for rejection if status is REJECTED
+    rejectionReason?: string; 
     canSubmit: boolean;
     canAddBankAccount: boolean;
 }
@@ -66,7 +66,7 @@ export interface KycVerificationRequest {
     rejectionReason?: string;
 }
 
-// Bank Account Types
+
 export interface BankAccountRequest {
     accountHolderName: string;
     accountNumber: string;
@@ -104,9 +104,9 @@ export interface PennyDropResponse {
     success: boolean;
 }
 
-// KYC API Methods
+
 export const kycAPI = {
-    // Seller APIs
+    
     submitKyc: (data: KycSubmitRequest) =>
         paymentAPI.post<KycDto>('/api/payment/kyc/submit', data),
 
@@ -116,7 +116,7 @@ export const kycAPI = {
     getKycDetails: () =>
         paymentAPI.get<KycDto>('/api/payment/kyc/details'),
 
-    // Admin APIs
+    
     getPendingKyc: () =>
         paymentAPI.get<KycDto[]>('/api/payment/kyc/pending'),
 
@@ -137,7 +137,7 @@ export const kycAPI = {
         paymentAPI.get<KycDto>(`/api/payment/kyc/user/${userId}`),
 };
 
-// Bank Account API Methods
+
 export const bankAccountAPI = {
     addBankAccount: (data: BankAccountRequest) =>
         paymentAPI.post<BankAccountDto>('/api/payment/bank-accounts', data),

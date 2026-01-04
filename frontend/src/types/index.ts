@@ -1,14 +1,14 @@
 export interface User {
   id: string;
   email: string;
-  username?: string; // LinkedIn-style unique username for profile sharing
+  username?: string; 
   firstName: string;
   lastName: string;
   role: 'CUSTOMER' | 'ARTIST' | 'ADMIN';
   profileImage?: string;
   profilePictureUrl?: string;
   createdAt: string;
-  // Address fields
+  
   address?: string;
   city?: string;
   state?: string;
@@ -38,7 +38,7 @@ export interface Artwork {
   artistId: string;
   artist: {
     id: string;
-    username?: string; // LinkedIn-style username for profile URLs
+    username?: string; 
     firstName: string;
     lastName: string;
     profileImage?: string;

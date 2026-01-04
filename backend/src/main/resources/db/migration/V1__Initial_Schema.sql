@@ -1,7 +1,7 @@
--- V1__Initial_Schema.sql
--- Initial database schema for the Artwork E-commerce application
 
--- Create users table
+
+
+
 CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Create social_links table
+
 CREATE TABLE IF NOT EXISTS social_links (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     user_id VARCHAR(36) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS social_links (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Create artworks table
+
 CREATE TABLE IF NOT EXISTS artworks (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS artworks (
     FOREIGN KEY (artist_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Create orders table
+
 CREATE TABLE IF NOT EXISTS orders (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     customer_id VARCHAR(36) NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS orders (
     FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Create order_items table
+
 CREATE TABLE IF NOT EXISTS order_items (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     order_id VARCHAR(36) NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (artwork_id) REFERENCES artworks(id) ON DELETE CASCADE
 );
 
--- Create cart_items table
+
 CREATE TABLE IF NOT EXISTS cart_items (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     user_id VARCHAR(36) NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS cart_items (
     FOREIGN KEY (artwork_id) REFERENCES artworks(id) ON DELETE CASCADE
 );
 
--- Create wishlist_items table
+
 CREATE TABLE IF NOT EXISTS wishlist_items (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     user_id VARCHAR(36) NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS wishlist_items (
     FOREIGN KEY (artwork_id) REFERENCES artworks(id) ON DELETE CASCADE
 );
 
--- Create reviews table
+
 CREATE TABLE IF NOT EXISTS reviews (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     artwork_id VARCHAR(36) NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Create indexes for frequently queried fields
+
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_artworks_artist ON artworks(artist_id);
 CREATE INDEX idx_artworks_category ON artworks(category);

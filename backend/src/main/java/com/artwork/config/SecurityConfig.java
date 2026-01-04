@@ -28,7 +28,7 @@ public class SecurityConfig {
     private final BCryptPasswordEncoder passwordEncoder;
     private final com.artwork.config.RateLimitFilter rateLimitFilter;
     
-    // OAuth2 components
+    
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOidcUserService customOidcUserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
@@ -56,98 +56,98 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf
-                // Disable CSRF for authentication endpoints and API endpoints using JWT
+                
                 .ignoringRequestMatchers(
                     "/api/auth/**", 
                     "/api/artworks", 
                     "/api/artists/**", 
-                    "/api/categories/**", // Category API endpoints are public
+                    "/api/categories/**", 
                     "/api/health/**", 
                     "/health",
                     "/actuator/**",
-                    "/oauth2/**",  // OAuth2 endpoints
-                    "/login/oauth2/**",  // OAuth2 callback endpoints
-                    "/api/oauth2/**", // OAuth2 API endpoints
-                    "/api/v1/artwork-query/**", // CQRS read-only endpoints are safe from CSRF
-                    "/api/users/**", // User API endpoints use JWT authentication
-                    "/api/cart/**", // Cart API endpoints use JWT authentication
-                    "/api/orders/**", // Order API endpoints use JWT authentication
-                    "/api/wishlist/**", // Wishlist API endpoints use JWT authentication
-                    "/api/dashboard/**", // Dashboard API endpoints use JWT authentication
-                    "/api/suggestions/**", // AI Suggestion API endpoints use JWT authentication
-                    "/api/admin/**", // Admin API endpoints use JWT authentication
-                    "/api/v1/admin/**", // Admin API v1 endpoints use JWT authentication
-                    "/api/artist/**", // Artist API endpoints use JWT authentication
-                    "/api/files/**", // File upload endpoints use JWT authentication
-                    "/api/payment/**", // Payment API endpoints use JWT authentication
-                    "/api/webhooks/**", // Webhook endpoints from payment gateways
-                    "/api/internal/**", // Internal service-to-service endpoints
-                    "/api/test/**", // Email testing endpoints
-                    "/api/reviews/**", // Review endpoints use JWT authentication
-                    "/ws/**" // WebSocket endpoints
+                    "/oauth2/**",  
+                    "/login/oauth2/**",  
+                    "/api/oauth2/**", 
+                    "/api/v1/artwork-query/**", 
+                    "/api/users/**", 
+                    "/api/cart/**", 
+                    "/api/orders/**", 
+                    "/api/wishlist/**", 
+                    "/api/dashboard/**", 
+                    "/api/suggestions/**", 
+                    "/api/admin/**", 
+                    "/api/v1/admin/**", 
+                    "/api/artist/**", 
+                    "/api/files/**", 
+                    "/api/payment/**", 
+                    "/api/webhooks/**", 
+                    "/api/internal/**", 
+                    "/api/test/**", 
+                    "/api/reviews/**", 
+                    "/ws/**" 
                 )
-                // Enable CSRF for web form endpoints (if any)
+                
                 .csrfTokenRepository(new org.springframework.security.web.csrf.CookieCsrfTokenRepository())
             )
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Public endpoints
-                .requestMatchers("/", "/api/auth/login", "/api/auth/register", "/api/auth/forgot-password", "/api/auth/reset-password", "/swagger-ui.html", "/swagger-ui/**", "/api-docs/**").permitAll()
-                .requestMatchers("/api/health/**", "/health", "/actuator/health", "/actuator/**").permitAll() // Allow Railway health checks
-                .requestMatchers("/api/test/**").permitAll() // Email testing endpoints
-                .requestMatchers("/api/home/**").permitAll() // Allow public access to home page statistics
-                .requestMatchers("/uploads/**").permitAll() // Allow public access to uploaded images
-                .requestMatchers("/api/artworks").permitAll() // Allow public access to list artworks
-                .requestMatchers("/api/artworks/{id:[\\w-]+}").permitAll() // Public access to view single artwork
-                .requestMatchers("/api/artworks/artist/**").permitAll() // Public access to artist's artworks gallery
-                .requestMatchers("/api/artists/**").permitAll() // Public access to artists
-                .requestMatchers("/api/categories/**").permitAll() // Public access to categories
-                .requestMatchers("/api/reviews/artwork/**").permitAll() // Public access to view artwork reviews
-                // SEO endpoints - must be publicly accessible for search engines
-                .requestMatchers("/sitemap.xml").permitAll() // Sitemap for search engines
-                .requestMatchers("/robots.txt").permitAll() // Robots.txt for search engines
-                // OAuth2 endpoints
-                .requestMatchers("/oauth2/**", "/login/oauth2/**", "/api/oauth2/**").permitAll()
-                // CQRS query endpoints (read-only, public access)
-                .requestMatchers("/api/v1/artwork-query/**").permitAll() // Public access to all query endpoints
-                // Webhook endpoints (for payment gateway callbacks)
-                .requestMatchers("/api/webhooks/**").permitAll() // Razorpay webhooks don't have JWT
-                // WebSocket endpoints (for real-time notifications)
-                .requestMatchers("/ws/**").permitAll() // WebSocket/SockJS endpoints
                 
-                // Auth verification endpoint - requires authentication but doesn't check role
+                .requestMatchers("/", "/api/auth/login", "/api/auth/register", "/api/auth/forgot-password", "/api/auth/reset-password", "/swagger-ui.html", "/swagger-ui/**", "/api-docs/**").permitAll()
+                .requestMatchers("/api/health/**", "/health", "/actuator/health", "/actuator/**").permitAll() 
+                .requestMatchers("/api/test/**").permitAll() 
+                .requestMatchers("/api/home/**").permitAll() 
+                .requestMatchers("/uploads/**").permitAll() 
+                .requestMatchers("/api/artworks").permitAll() 
+                .requestMatchers("/api/artworks/{id:[\\w-]+}").permitAll() 
+                .requestMatchers("/api/artworks/artist/**").permitAll() 
+                .requestMatchers("/api/artists/**").permitAll() 
+                .requestMatchers("/api/categories/**").permitAll() 
+                .requestMatchers("/api/reviews/artwork/**").permitAll() 
+                
+                .requestMatchers("/sitemap.xml").permitAll() 
+                .requestMatchers("/robots.txt").permitAll() 
+                
+                .requestMatchers("/oauth2/**", "/login/oauth2/**", "/api/oauth2/**").permitAll()
+                
+                .requestMatchers("/api/v1/artwork-query/**").permitAll() 
+                
+                .requestMatchers("/api/webhooks/**").permitAll() 
+                
+                .requestMatchers("/ws/**").permitAll() 
+                
+                
                 .requestMatchers("/api/auth/verify").authenticated()
                 
-                // Debug endpoint for troubleshooting authentication issues
+                
                 .requestMatchers("/api/debug/**").authenticated()
                 
-                // Role-specific endpoints
-                .requestMatchers("/api/artworks/my-artworks").hasAuthority("ROLE_ARTIST") // Only artists can access their own artworks
-                .requestMatchers("/api/artist/**").hasAuthority("ROLE_ARTIST") // Artist-specific API endpoints
-                .requestMatchers("/api/orders/**").hasAnyAuthority("ROLE_CUSTOMER", "ROLE_ARTIST") // Allow both customers and artists to access orders
-                .requestMatchers("/api/cart/**").hasAuthority("ROLE_CUSTOMER") // Cart access for customers only
-                .requestMatchers("/api/wishlist/**").hasAuthority("ROLE_CUSTOMER") // Wishlist access for customers only
-                .requestMatchers("/api/users/**").authenticated() // User profile access requires authentication
-                .requestMatchers("/api/dashboard/artist/**").hasAuthority("ROLE_ARTIST") // Artist dashboard access
-                .requestMatchers("/api/dashboard/admin/**").hasAuthority("ROLE_ADMIN") // Admin dashboard access
-                .requestMatchers("/api/dashboard/customer/**").hasAuthority("ROLE_CUSTOMER") // Customer dashboard access
-                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/artworks").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN") // Create artwork
-                .requestMatchers("/api/files/**").authenticated() // File upload requires authentication
                 
-                // Payment endpoints - role-based access
-                .requestMatchers("/api/payment/create", "/api/payment/verify").authenticated() // Payment creation/verification
-                .requestMatchers("/api/payment/*/refund", "/api/payment/analytics").hasAuthority("ROLE_ADMIN") // Admin only
-                .requestMatchers("/api/payment/kyc/**").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN") // KYC for artists and admin
-                .requestMatchers("/api/payment/bank-accounts/**").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN") // Bank accounts for artists
-                .requestMatchers("/api/payment/payouts/**").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN") // Payouts for artists
+                .requestMatchers("/api/artworks/my-artworks").hasAuthority("ROLE_ARTIST") 
+                .requestMatchers("/api/artist/**").hasAuthority("ROLE_ARTIST") 
+                .requestMatchers("/api/orders/**").hasAnyAuthority("ROLE_CUSTOMER", "ROLE_ARTIST") 
+                .requestMatchers("/api/cart/**").hasAuthority("ROLE_CUSTOMER") 
+                .requestMatchers("/api/wishlist/**").hasAuthority("ROLE_CUSTOMER") 
+                .requestMatchers("/api/users/**").authenticated() 
+                .requestMatchers("/api/dashboard/artist/**").hasAuthority("ROLE_ARTIST") 
+                .requestMatchers("/api/dashboard/admin/**").hasAuthority("ROLE_ADMIN") 
+                .requestMatchers("/api/dashboard/customer/**").hasAuthority("ROLE_CUSTOMER") 
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/artworks").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN") 
+                .requestMatchers("/api/files/**").authenticated() 
                 
-                // All other endpoints require authentication
+                
+                .requestMatchers("/api/payment/create", "/api/payment/verify").authenticated() 
+                .requestMatchers("/api/payment/*/refund", "/api/payment/analytics").hasAuthority("ROLE_ADMIN") 
+                .requestMatchers("/api/payment/kyc/**").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN") 
+                .requestMatchers("/api/payment/bank-accounts/**").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN") 
+                .requestMatchers("/api/payment/payouts/**").hasAnyAuthority("ROLE_ARTIST", "ROLE_ADMIN") 
+                
+                
                 .anyRequest().authenticated()
             )
-            // Disable form login
+            
             .formLogin(form -> form.disable())
-            // OAuth2 Login Configuration
+            
             .oauth2Login(oauth2 -> oauth2
                 .authorizationEndpoint(authorization -> 
                     authorization.baseUri("/oauth2/authorization"))
@@ -162,10 +162,10 @@ public class SecurityConfig {
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(rateLimitFilter, JwtAuthenticationFilter.class)
-            // Custom exception handling to prevent redirect to /login
+            
             .exceptionHandling(exceptions -> exceptions
                 .authenticationEntryPoint((request, response, authException) -> {
-                    // For OAuth2 related requests, return 401 instead of redirect
+                    
                     if (request.getRequestURI().startsWith("/oauth2/") || 
                         request.getRequestURI().startsWith("/login/oauth2/")) {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

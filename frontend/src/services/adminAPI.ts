@@ -1,9 +1,9 @@
-// Admin API Service
+
 import { adminApiClient } from './api';
 import { User, Artwork, Order, ApiResponse } from '../types';
 
 export const adminAPI = {
-  // User Management
+  
   getUsers: async (params?: {
     page?: number;
     limit?: number;
@@ -16,7 +16,7 @@ export const adminAPI = {
     currentPage: number;
   }> => {
     try {
-      // Filter out empty string values from params
+      
       const cleanParams = Object.entries(params || {}).reduce((acc, [key, value]) => {
         if (value !== '' && value !== null && value !== undefined) {
           acc[key] = value;
@@ -28,15 +28,15 @@ export const adminAPI = {
       const response = await adminApiClient.get<any>('/v1/admin/users', { params: cleanParams });
       console.log('Admin users API raw response:', response);
 
-      // Handle different response formats
+      
       if (response.data?.data) {
-        // Backend returns { data: { users: [], total: ... }, success: true, message: ... }
+        
         return response.data.data;
       } else if (response.data?.users) {
-        // Direct data format
+        
         return response.data;
       } else if (Array.isArray(response.data)) {
-        // Array response
+        
         return {
           users: response.data,
           total: response.data.length,
@@ -71,19 +71,19 @@ export const adminAPI = {
       { status: normalizedStatus }
     );
 
-    // Backend returns { data: UserDto, success: true, message: ... }
+    
     return response.data.data;
   },
 
   updateUserRole: async (userId: string, role: string): Promise<User> => {
     const response = await adminApiClient.put<any>(`/v1/admin/users/${userId}/role`, {
-      role: role,  // Backend expects 'role', not 'newRole'
+      role: role,  
     });
-    // Backend returns { data: UserDto, success: true, message: ... }
+    
     return response.data.data;
   },
 
-  // Artwork Management
+  
   getArtworks: async (params?: {
     page?: number;
     limit?: number;
@@ -96,7 +96,7 @@ export const adminAPI = {
     currentPage: number;
   }> => {
     try {
-      // Filter out empty string values from params
+      
       const cleanParams = Object.entries(params || {}).reduce((acc, [key, value]) => {
         if (value !== '' && value !== null && value !== undefined) {
           acc[key] = value;
@@ -108,15 +108,15 @@ export const adminAPI = {
       const response = await adminApiClient.get<any>('/v1/admin/artworks', { params: cleanParams });
       console.log('Admin artworks API raw response:', response);
 
-      // Handle different response formats
+      
       if (response.data?.data) {
-        // Backend returns { data: { artworks: [], total: ... }, success: true, message: ... }
+        
         return response.data.data;
       } else if (response.data?.artworks) {
-        // Direct data format
+        
         return response.data;
       } else if (Array.isArray(response.data)) {
-        // Array response
+        
         return {
           artworks: response.data,
           total: response.data.length,
@@ -141,7 +141,7 @@ export const adminAPI = {
 
   updateArtwork: async (artworkId: string, artworkData: any): Promise<Artwork> => {
     const response = await adminApiClient.put<any>(`/v1/admin/artworks/${artworkId}`, artworkData);
-    // Backend returns { data: ArtworkDto, success: true, message: ... }
+    
     return response.data.data;
   },
 
@@ -149,7 +149,7 @@ export const adminAPI = {
     await adminApiClient.delete(`/v1/admin/artworks/${artworkId}`);
   },
 
-  // Pending Artwork Approvals
+  
   getPendingArtworks: async (): Promise<Artwork[]> => {
     try {
       const response = await adminApiClient.get<any>('/v1/admin/artworks/pending');
@@ -195,7 +195,7 @@ export const adminAPI = {
     return response.data.data;
   },
 
-  // Order Management
+  
   getOrders: async (params?: {
     page?: number;
     limit?: number;
@@ -207,7 +207,7 @@ export const adminAPI = {
     currentPage: number;
   }> => {
     const response = await adminApiClient.get<any>('/v1/admin/orders', { params });
-    // Backend returns { data: { orders: [], total: ... }, success: true, message: ... }
+    
     return response.data.data;
   },
 
@@ -215,11 +215,11 @@ export const adminAPI = {
     const response = await adminApiClient.put<any>(`/v1/admin/orders/${orderId}/status`, {
       status,
     });
-    // Backend returns { data: OrderDto, success: true, message: ... }
+    
     return response.data.data;
   },
 
-  // Analytics
+  
   getAnalytics: async (): Promise<{
     totalUsers: number;
     totalArtworks: number;
@@ -229,7 +229,7 @@ export const adminAPI = {
     const response = await adminApiClient.get<ApiResponse<any>>('/v1/admin/dashboard/overview');
     const data = response.data.data;
 
-    // Map the backend response to the expected frontend format
+    
     return {
       totalUsers: data.userStats?.totalUsers || 0,
       totalArtworks: data.artworkStats?.totalArtworks || 0,
@@ -238,13 +238,13 @@ export const adminAPI = {
     };
   },
 
-  // Dashboard Overview (NEW - Admin Dashboard Service)
+  
   getDashboardOverview: async (): Promise<any> => {
     const response = await adminApiClient.get<ApiResponse<any>>('/v1/admin/dashboard/overview');
     return response.data.data;
   },
 
-  // Report Generation (NEW - Admin Dashboard Service)
+  
   generateReport: async (request: {
     type: string;
     format: string;
@@ -258,7 +258,7 @@ export const adminAPI = {
     return response.data.reportId;
   },
 
-  // Download Report (NEW - Admin Dashboard Service)
+  
   downloadReport: async (reportId: string): Promise<Blob> => {
     const response = await adminApiClient.get(`/v1/admin/reports/download/${reportId}`, {
       responseType: 'blob',
@@ -266,14 +266,14 @@ export const adminAPI = {
     return response.data;
   },
 
-  // Get Report Formats (NEW - Admin Dashboard Service)
+  
   getReportFormats: async (): Promise<string[]> => {
     const response = await adminApiClient.get<ApiResponse<string[]>>('/v1/admin/reports/formats');
     return response.data.data;
   },
 };
 
-// Export types
+
 export type ReportType = 'SALES' | 'USER_ACTIVITY' | 'ARTWORK_PERFORMANCE' | 'REVENUE';
 export type ReportFormat = 'PDF' | 'EXCEL' | 'CSV';
 

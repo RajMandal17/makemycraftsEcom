@@ -13,11 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Bank account controller for managing seller bank accounts.
- * 
- * @author Artwork Platform
- */
+
 @RestController
 @RequestMapping("/api/payment/bank-accounts")
 @RequiredArgsConstructor

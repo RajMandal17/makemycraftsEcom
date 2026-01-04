@@ -17,10 +17,10 @@ const Card: React.FC<CardProps> = ({
     className = '',
     onClick,
 }) => {
-    // Base styles
+    
     const baseStyles = 'bg-white rounded-lg overflow-hidden';
 
-    // Variant styles
+    
     const variantStyles: Record<CardVariant, string> = {
         default: 'shadow-md',
         product: 'shadow-md',
@@ -29,12 +29,12 @@ const Card: React.FC<CardProps> = ({
         testimonial: 'shadow-soft border border-neutral-100',
     };
 
-    // Hover styles
+    
     const hoverStyles = hover
         ? 'transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer'
         : '';
 
-    // Click handler
+    
     const clickableStyles = onClick ? 'cursor-pointer' : '';
 
     return (
@@ -53,7 +53,7 @@ const Card: React.FC<CardProps> = ({
     );
 };
 
-// Card sub-components for better composition
+
 export const CardImage: React.FC<{
     src: string;
     alt: string;

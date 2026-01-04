@@ -21,7 +21,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roles }) => {
     hasToken: !!state.auth.token
   });
 
-  // Show loading spinner while authentication is being verified
+  
   if (state.auth.loading) {
     console.log('⏳ ProtectedRoute: Showing loading spinner');
     return (
@@ -31,16 +31,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roles }) => {
     );
   }
 
-  // If not authenticated and not loading, redirect to login
+  
   if (!state.auth.isAuthenticated || !state.auth.user || !state.auth.token) {
     console.log('❌ ProtectedRoute: Not authenticated, redirecting to login');
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Check role permissions if roles are specified
+  
   if (roles && !roles.includes(state.auth.user.role)) {
     console.log('🚫 ProtectedRoute: Role mismatch, redirecting based on user role');
-    // Redirect to appropriate dashboard based on user role
+    
     if (state.auth.user.role === 'ADMIN') {
       return <Navigate to="/dashboard/admin" replace />;
     } else if (state.auth.user.role === 'ARTIST') {
@@ -48,7 +48,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roles }) => {
     } else if (state.auth.user.role === 'CUSTOMER') {
       return <Navigate to="/dashboard/customer" replace />;
     } else {
-      // Fallback to login if role is unrecognized
+      
       console.error('🚫 ProtectedRoute: Unrecognized role, redirecting to login');
       return <Navigate to="/login" replace />;
     }
