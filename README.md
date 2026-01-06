@@ -76,8 +76,8 @@ The application relies on several environment variables for security and integra
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/makemycrafts.git
-   cd makemycrafts
+   git clone https://github.com/RajMandal17/makemycraftsEcom.git
+   cd makemycraftsEcom
    ```
 
 2. **Backend Setup**
@@ -122,4 +122,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📞 Contact
 
-Project Link: [https://github.com/yourusername/makemycrafts](https://github.com/yourusername/makemycrafts)
+Project Link: [https://github.com/RajMandal17/makemycraftsEcom](https://github.com/RajMandal17/makemycraftsEcom)
+
+Email: rajmandal147@gmail.com
+linkedin: https://www.linkedin.com/in/rajkumarmandal17/
+whatsapp: +91 8793148668
