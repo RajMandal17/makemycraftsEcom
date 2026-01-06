@@ -1,0 +1,42 @@
+# ==============================================================
+# Development Configuration Template
+# ==============================================================
+# 1. Copy this file to 'application-dev.properties'
+# 2. Update the values with your local credentials
+# ==============================================================
+
+# --- Database Configuration ---
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/localbackend?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+spring.datasource.username=${MYSQLUSER:root}
+spring.datasource.password=${MYSQLPASSWORD:password}
+
+# --- Redis Configuration ---
+spring.data.redis.host=${REDISHOST:localhost}
+spring.data.redis.port=${REDISPORT:6379}
+spring.data.redis.password=${REDISPASSWORD:password}
+
+# --- JWT Configuration ---
+# Generate a secure secret for local development
+jwt.secret=${JWT_SECRET:CHANGE_ME_IN_WORK_ENVIRONMENT_FOR_SECURITY}
+jwt.expiration=86400000
+
+# --- Third Party Services (Optional for Basic Dev) ---
+
+# Cloudinary (Image Uploads)
+cloudinary.cloud-name=${CLOUDINARY_CLOUD_NAME:your_cloud_name}
+cloudinary.api-key=${CLOUDINARY_API_KEY:your_api_key}
+cloudinary.api-secret=${CLOUDINARY_API_SECRET:your_api_secret}
+
+# Google Gemini AI
+gemini.api.key=${GEMINI_API_KEY:your_gemini_key}
+
+# Razorpay (Payments)
+razorpay.key.id=${RAZORPAY_KEY_ID:your_razorpay_id}
+razorpay.key.secret=${RAZORPAY_KEY_SECRET:your_razorpay_secret}
+
+# SendGrid (Email)
+sendgrid.api.key=${SENDGRID_API_KEY:your_sendgrid_key}
+
+# --- App Settings ---
+app.base-url=http://localhost:8080
+frontend.base-url=http://localhost:3000

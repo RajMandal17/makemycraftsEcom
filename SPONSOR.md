@@ -16,10 +16,7 @@ Sponsoring this project enables us to:
 
 You can support us through the following platforms:
 
-- **GitHub Sponsors**: [Link to your GitHub Sponsors profile]
-- **Patreon**: [Link to your Patreon]
-- **Open Collective**: [Link to your Open Collective]
-- **Ko-fi**: [Link to your Ko-fi]
+- **GitHub Sponsors**: [https://github.com/sponsors/RajMandal17](https://github.com/sponsors/RajMandal17)
 
 ## Enterprise Sponsorship
 
@@ -28,7 +25,7 @@ For companies using MakeMyCrafts in production, we offer enterprise sponsorship 
 - Logo placement on our README and website
 - Direct access to the core team
 
-Contact us at [your-email@example.com] for more details.
+Contact us at rajmandal147@gmail.com for more details.
 
 ---
 
