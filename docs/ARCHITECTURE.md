@@ -562,3 +562,6 @@ frontend/src/
 ---
 
 *This document is maintained alongside the codebase. For implementation details, refer to the source files in the locations mentioned above.*
+ 
+
+ 

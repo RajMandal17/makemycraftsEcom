@@ -19,4 +19,7 @@ public class EmailEvent extends ApplicationEvent {
         this.templateName = templateName;
         this.variables = variables;
     }
+
+
+    //
 }
