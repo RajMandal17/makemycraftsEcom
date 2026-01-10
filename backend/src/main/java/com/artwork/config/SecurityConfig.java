@@ -116,6 +116,8 @@ public class SecurityConfig {
                 
                 .requestMatchers("/ws/**").permitAll() 
                 
+                .requestMatchers("/api/guest/**").permitAll() 
+                
                 
                 .requestMatchers("/api/auth/verify").authenticated()
                 

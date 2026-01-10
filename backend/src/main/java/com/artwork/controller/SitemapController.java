@@ -35,8 +35,9 @@ public class SitemapController {
         
         StringBuilder xml = new StringBuilder();
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        xml.append("<urlset xmlns=\"http:
-        xml.append("        xmlns:image=\"http:
+        xml.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"\n");
+        xml.append("        xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\">\n");
+        
         
         
         addUrl(xml, "/", "1.0", "daily");
