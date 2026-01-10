@@ -5,6 +5,7 @@ import { Artwork } from '../../types';
 import { useAppContext } from '../../context/AppContext';
 import { getFullImageUrl } from '../../services/api';
 import { toast } from 'react-toastify';
+import {motion} from 'framer-motion';
 import Badge from '../ui/Badge';
 import Button from '../ui/Button';
 import QuickViewModal from './QuickViewModal';
