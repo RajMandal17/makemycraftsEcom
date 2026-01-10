@@ -6,7 +6,7 @@
 
 A comprehensive open-source monolithic e-commerce platform for artwork marketplaces, built with Spring Boot and React.
 
-## 🚀 Features
+## 🚀 Features 
 
 - **User Roles**: Admin, Artist, Customer
 - **Authentication**: JWT-based auth with Google OAuth2 support
