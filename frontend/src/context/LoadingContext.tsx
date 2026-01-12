@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import DeerLoadingAnimation from '../components/common/DeerLoadingAnimation';
+import React, { createContext, useContext, useState, useCallback } from "react";
+import ShimmerSkeletonLoader from "../components/ui/ShimmerSkeletonLoader";
 
 interface LoadingContextType {
   isLoading: boolean;
@@ -10,13 +10,17 @@ interface LoadingContextType {
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 
-export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState('Loading beautiful artworks...');
+  const [loadingMessage, setLoadingMessage] = useState(
+    "Loading beautiful artworks..."
+  );
   const [loadingCount, setLoadingCount] = useState(0);
 
   const showLoading = useCallback((message?: string) => {
-    setLoadingCount(prev => prev + 1);
+    setLoadingCount((prev) => prev + 1);
     if (message) {
       setLoadingMessage(message);
     }
@@ -24,13 +28,12 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   const hideLoading = useCallback(() => {
-    setLoadingCount(prev => {
+    setLoadingCount((prev) => {
       const newCount = Math.max(0, prev - 1);
       if (newCount === 0) {
-        
         setTimeout(() => {
           setIsLoading(false);
-          setLoadingMessage('Loading beautiful artworks...');
+          setLoadingMessage("Loading beautiful artworks...");
         }, 300);
       }
       return newCount;
@@ -38,9 +41,11 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   return (
-    <LoadingContext.Provider value={{ isLoading, loadingMessage, showLoading, hideLoading }}>
+    <LoadingContext.Provider
+      value={{ isLoading, loadingMessage, showLoading, hideLoading }}
+    >
       {children}
-      {isLoading && <DeerLoadingAnimation message={loadingMessage} />}
+      {isLoading && <ShimmerSkeletonLoader message={loadingMessage} />}
     </LoadingContext.Provider>
   );
 };
@@ -48,7 +53,7 @@ export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 export const useLoading = (): LoadingContextType => {
   const context = useContext(LoadingContext);
   if (!context) {
-    throw new Error('useLoading must be used within a LoadingProvider');
+    throw new Error("useLoading must be used within a LoadingProvider");
   }
   return context;
 };
